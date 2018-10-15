@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import {Button,Card,CardSection,Input} from './common';
 import {Actions} from 'react-native-router-flux';
-import Router from './Router';
-import App from './../../App';
+
 
 
 
@@ -42,7 +41,6 @@ class LoginForm extends Component{
                 </CardSection>
                 
            
-
                 <CardSection >
                     <Button
                     onPress={()=>this.onButtonPress()}>

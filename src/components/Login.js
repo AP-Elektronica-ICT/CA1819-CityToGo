@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import {View,Text,ImageBackground} from 'react-native';
-import {Header} from './common';
 import LoginForm from './LoginForm';
-import SignUp from './SignUp';
-import RouterComponent from './Router';
-import Router from './Router';
 import {Actions} from 'react-native-router-flux';
-import App from './../../App';
+;
 
 
 
@@ -22,14 +18,15 @@ class Login extends Component{
 
     render(){
         return(
-            <ImageBackground source={require('./../assets/antwerp2.png')}style={ styles.background}> 
+             
             <View style={ styles.loginCard}>   
                 <LoginForm />
                 <Text style={styles.textStyle}>Don't have an account sign up <Text 
                   onPress={()=>this.onButtonPress()}
                 style={styles.hereStyle}>here</Text></Text>
             </View>
-            </ImageBackground>
+          
+           
         );
     }
 
@@ -37,16 +34,15 @@ class Login extends Component{
 const styles={
     loginCard:{
         marginTop:60,
+     
         
      
         
     },
     background:{
-        flex: 1,
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center'
+      backgroundColor:"#FFFFFF"
+      
+        
     },
     textStyle:{
         fontSize:16,
