@@ -59,17 +59,14 @@ export default class App extends Component<Props> {
 
     SensorManager.startOrientation(100);
     this.emitterID = DeviceEventEmitter.addListener('Orientation', orientation => {
-     // this.refs.map.animateToBearing(Math.round(orientation.azimuth), 200);
+      this.refs.map.animateToBearing(Math.round(orientation.azimuth), 200);
     });
     SensorManager.stopAccelerometer();
   }
-
-
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchID)
-    DeviceEventEmitter.removeAllListeners('Orientation')
+    DeviceEventEmitter.removeSubscription(this.emitterID)
   }
-
   render() {
     return (
       <View style={styles.container}>
