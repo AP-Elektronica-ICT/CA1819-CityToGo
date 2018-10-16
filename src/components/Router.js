@@ -9,9 +9,9 @@ const RouterComponent=()=>{
     return(
         <Router navigationBarStyle={{backgroundColor:'transparnet'}}>
             <Scene key='root'>
-                <Scene key="StartPage" component={StartPage} hideNavBar={true} initial />   
+                <Scene key="StartPage" component={StartPage} hideNavBar={true}  />   
                 <Scene key="Login" component={Login} hideNavBar={true}  />
-                <Scene key="App" component={App} hideNavBar={true}/>
+                <Scene key="App" component={App} hideNavBar={true} initial/>
                 <Scene key="SignUp" component={SignUp} hideNavBar={true} />
             </Scene>
         </Router>
