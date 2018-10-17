@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Platform,
   StyleSheet,
-  Text,
   View,
   DeviceEventEmitter,
   Dimensions
@@ -63,6 +61,7 @@ export default class App extends Component<Props> {
     });
     SensorManager.stopAccelerometer();
   }
+
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchID)
     DeviceEventEmitter.removeSubscription(this.emitterID)
