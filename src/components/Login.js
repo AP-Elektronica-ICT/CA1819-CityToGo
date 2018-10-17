@@ -15,9 +15,6 @@ class Login extends Component {
 
             <View style={styles.loginCard}>
                 <LoginForm />
-                <Text style={styles.textStyle}>Don't have an account sign up <Text
-                    onPress={() => this.onButtonPress()}
-                    style={styles.hereStyle}>here</Text></Text>
             </View>
         );
     }

@@ -11,7 +11,7 @@ class LoginForm extends Component{
 
     onButtonPress(){
         if(this.state.email=="mj" && this.state.password=="mj"){
-    Actions.App();
+    Actions.Maps();
     this.state.email='';
     this.state.password='';
     }
