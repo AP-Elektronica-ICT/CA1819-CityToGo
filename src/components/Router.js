@@ -4,12 +4,13 @@ import StartPage from './StartPage';
 import Login from './Login';
 import SignUp from './SignUp';
 import Maps from  './Maps';
+import uniLogin from './uniLogin';
 
 const RouterComponent=()=>{
     return(
         <Router navigationBarStyle={{backgroundColor:'transparnet'}}>
             <Scene key='root'>
-                <Scene key="StartPage" component={StartPage} hideNavBar={true}  initial/>   
+                <Scene key="uniLogin" component={uniLogin} hideNavBar={true} initial />   
                 <Scene key="Login" component={Login} hideNavBar={true}  />
                 <Scene key="Maps" component={Maps} hideNavBar={true} />
                 <Scene key="SignUp" component={SignUp} hideNavBar={true} />
