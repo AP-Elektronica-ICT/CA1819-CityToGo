@@ -15,6 +15,7 @@ import {
   View
 } from 'react-native';
 import Auth0 from 'react-native-auth0';
+import {Actions} from 'react-native-router-flux';
 
 var credentials = require('./auth0-credentials');
 const auth0 = new Auth0(credentials);
@@ -36,13 +37,14 @@ export default class Auth0Sample extends Component {
         audience: 'https://' + credentials.domain + '/userinfo'
       })
       .then(credentials => {
-        Alert.alert(
-          'Success',
-          'AccessToken: ' + credentials.accessToken,
-          [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
-          { cancelable: false }
-        );
+        // Alert.alert(
+        //   'Success',
+        //   'AccessToken: ' + credentials.accessToken,
+        //   [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
+        //   { cancelable: false }
+        // );
         this.setState({ accessToken: credentials.accessToken });
+        Actions.MainScreen()
       })
       .catch(error => console.log(error));
   };
@@ -61,16 +63,16 @@ export default class Auth0Sample extends Component {
   };
 
   render() {
-    let loggedIn = this.state.accessToken === null ? false : true;
+    //let loggedIn = this.state.accessToken === null ? false : true;
     return (
       <View style={styles.container}>
         <Text style={styles.header}>Auth0Sample - Login</Text>
         <Text>
-          You are {loggedIn ? '' : 'not '}logged in.
+         
         </Text>
         <Button
-          onPress={loggedIn ? this._onLogout : this._onLogin}
-          title={loggedIn ? 'Log Out' : 'Log In'}
+          onPress={this._onLogin}
+          title={'Log In'}
         />
       </View>
     );

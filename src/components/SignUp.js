@@ -6,7 +6,7 @@ import RouterComponent from './Router';
 import Router from './Router';
 import { Actions } from 'react-native-router-flux';
 import { Button, Card, CardSection, Input } from './common';
-import App from './../../App';
+import App from '../../App';
 
 
 
