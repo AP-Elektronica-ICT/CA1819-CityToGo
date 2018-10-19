@@ -26,7 +26,7 @@ export default class Auth0Sample extends Component {
     this.state = { accessToken: null };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this._onLogin();
   }
 
