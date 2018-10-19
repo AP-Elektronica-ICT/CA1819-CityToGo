@@ -15,7 +15,7 @@ import {
   View
 } from 'react-native';
 import Auth0 from 'react-native-auth0';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 
 var credentials = require('./auth0-credentials');
 const auth0 = new Auth0(credentials);
@@ -26,7 +26,7 @@ export default class Auth0Sample extends Component {
     this.state = { accessToken: null };
   }
 
-  componentWillMount(){
+  componentWillMount() {
     this._onLogin();
   }
 
@@ -63,13 +63,9 @@ export default class Auth0Sample extends Component {
   };
 
   render() {
-    //let loggedIn = this.state.accessToken === null ? false : true;
     return (
       <View style={styles.container}>
         <Text style={styles.header}>Auth0Sample - Login</Text>
-        <Text>
-         
-        </Text>
         <Button
           onPress={this._onLogin}
           title={'Log In'}

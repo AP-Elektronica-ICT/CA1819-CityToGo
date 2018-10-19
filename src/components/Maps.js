@@ -49,7 +49,7 @@ class Maps extends Component {
 
             this.setState({ initialRegion: lastRegion })
         },
-            (error) => alert(JSON.stringify(error)),
+           // (error) => alert(JSON.stringify(error)),
             { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 })
 
         SensorManager.startOrientation(100);
