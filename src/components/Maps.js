@@ -54,14 +54,14 @@ class Maps extends Component {
 
         SensorManager.startOrientation(100);
         this.emitterID = DeviceEventEmitter.addListener('Orientation', orientation => {
-            this.refs.map.animateToBearing(Math.round(orientation.azimuth), 200);
+            //this.refs.map.animateToBearing(Math.round(orientation.azimuth), 200);
         });
         SensorManager.stopAccelerometer();
     }
 
     componentWillUnmount() {
         navigator.geolocation.clearWatch(this.watchID)
-        DeviceEventEmitter.removeSubscription(this.emitterID)
+        //DeviceEventEmitter.removeSubscription(this.emitterID)
     }
 
     render() {
