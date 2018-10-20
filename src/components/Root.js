@@ -1,11 +1,11 @@
 import React from "react";
-import { StackNavigator } from "react-navigation";
+import { StackNavigator, createStackNavigator } from "react-navigation";
 
 import uniLogin from './uniLogin';
 import MainScreen from './MainScreen'
 
 
-const Stack = StackNavigator(
+const Stack = createStackNavigator(
     {
         Login: {
             screen: uniLogin
