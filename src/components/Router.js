@@ -10,12 +10,12 @@ import MainScreen from './MainScreen'
 const RouterComponent=()=>{
     return(
         <Router navigationBarStyle={{backgroundColor:'transparnet'}}>
-            <Scene key='root'>
-                <Scene key="uniLogin" component={uniLogin} hideNavBar={true} initial />   
+             <Scene key='root'>
+                <Scene key="uniLogin" component={uniLogin} hideNavBar={true} />   
                 <Scene key="Login" component={Login} hideNavBar={true}  />
                 <Scene key="MainScreen" component={MainScreen} hideNavBar={true} />
                 <Scene key="SignUp" component={SignUp} hideNavBar={true} />
-            </Scene>
+            </Scene> 
         </Router>
     )
 }
