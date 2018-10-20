@@ -3,6 +3,10 @@ package com.newtestnative;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.avishayil.rnrestart.ReactNativeRestartPackage;
+import br.com.classapp.RNSensitiveInfo.RNSensitiveInfoPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.auth0.react.A0Auth0Package;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.facebook.react.ReactNativeHost;
@@ -26,7 +30,11 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new A0Auth0Package(),
+          new ReactNativeRestartPackage(),
+          new RNSensitiveInfoPackage(),
+          new RNDeviceInfo(),
+          new ReactNativeConfigPackage(),
+          new A0Auth0Package(),
           new SensorManagerPackage(),
           new MapsPackage()
       );
