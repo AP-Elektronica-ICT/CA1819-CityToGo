@@ -3,10 +3,8 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+
 import Root from "././src/components/Root"
-
-
-
 
 export default class App extends Component {
 
