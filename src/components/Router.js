@@ -5,7 +5,7 @@ import Login from './Login';
 import SignUp from './SignUp';
 import Maps from  './Maps';
 import uniLogin from './uniLogin';
-import MainScreen from '../../App.js'
+import MainScreen from './MainScreen'
 
 const RouterComponent=()=>{
     return(
