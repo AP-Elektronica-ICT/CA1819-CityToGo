@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, DeviceEventEmitter } from "react-native";
 import MapView, { AnimatedRegion } from "react-native-maps";
 import { SensorManager } from 'NativeModules';
-import { mapStyle } from "../styles/jsons/mapstyle";
+import mapStyle from "../styles/jsons/mapstyle";
 
 const LATITUDE = 29.95539;
 const LONGITUDE = 78.07513;
