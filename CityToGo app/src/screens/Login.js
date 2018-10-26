@@ -16,8 +16,8 @@ import {
 import styles from "../styles/Login";
 
 const auth0 = new Auth0({
-  domain: "citytogo.eu.auth0.com",
-  clientId: "P0ZwC7v0doNCMxnupXWFw72QEl3anJYs"
+  domain: "shakir01.eu.auth0.com",
+  clientId: "1b5iyvAzLoy2GKGYbhXaeGcYRbyDIKn8"
 });
 
 export default class uniLogin extends Component {
@@ -93,7 +93,7 @@ export default class uniLogin extends Component {
     auth0.webAuth
       .authorize({
         scope: "openid offline_access profile email",
-        audience: "https://citytogo.eu.auth0.com/userinfo",
+        audience: "https://shakir01.eu.auth0.com/userinfo",
         device: "lqf6ddg6dfsg6",
         prompt: "login"
       })

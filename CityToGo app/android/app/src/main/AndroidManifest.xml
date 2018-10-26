@@ -29,7 +29,7 @@ android:windowSoftInputMode="adjustResize">
     <category android:name="android.intent.category.DEFAULT" />
     <category android:name="android.intent.category.BROWSABLE" />
     <data
-        android:host="citytogo.eu.auth0.com"
+        android:host="shakir01.eu.auth0.com"
         android:pathPrefix="/android/${applicationId}/callback"
         android:scheme="${applicationId}" />
 </intent-filter>
