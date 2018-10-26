@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View, Text, Button, ActivityIndicator } from "react-native";
 import { NavigationActions, StackActions } from "react-navigation";
 import Auth0 from "react-native-auth0";
-import Config from "react-native-config";
+//import Config from "react-native-config";
 //import DeviceInfo from "react-native-device-info";
 import SInfo from "react-native-sensitive-info";
 import RNRestart from "react-native-restart";
@@ -14,10 +14,11 @@ import {
 } from "../styles/colors";
 
 import styles from "../styles/Login";
+import Config from "../config/config"
 
 const auth0 = new Auth0({
-  domain: "citytogo.eu.auth0.com",
-  clientId: "P0ZwC7v0doNCMxnupXWFw72QEl3anJYs"
+  domain: Config.AUTH0_DOMAIN,
+  clientId: Config.AUTH0_CLIENT_ID
 });
 
 export default class uniLogin extends Component {
@@ -93,8 +94,8 @@ export default class uniLogin extends Component {
   login = () => {
     auth0.webAuth
       .authorize({
-        scope: "openid offline_access profile email",
-        audience: "https://citytogo.eu.auth0.com/userinfo",
+        scope: Config.AUTH0_SCOPE,
+        audience: Config.AUTH0_AUDIENCE,
         device: "lqf6ddg6dfsg6",
         prompt: "login"
       })
