@@ -19,15 +19,9 @@ var jwtCheck = jwt({
 
 app.use(jwtCheck);
 
-//debugger
 app.get('/', (req, res) => {
-    //console.log(req),
     res.send('Hello World!') 
-    //debugger
 })
-
-
-
 
 
 

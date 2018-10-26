@@ -63,6 +63,7 @@ export default class uniLogin extends Component {
                   console.log(err2);
                 });
             });
+            console.log(err)
           });
       } else {
         
