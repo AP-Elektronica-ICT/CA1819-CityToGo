@@ -122,18 +122,23 @@ export default class uniLogin extends Component {
     this.setState({
       hasInitialized: true
     });
-
+debugger;
     const resetAction = StackActions.reset({
       index: 0,
+      
       actions: [
+        
         NavigationActions.navigate({
           routeName: "Home",
+          
           params: {
+            
             name: data.name,
             picture: data.picture
           }
         })
       ]
+      
     });
     this.props.navigation.dispatch(resetAction);
   };
