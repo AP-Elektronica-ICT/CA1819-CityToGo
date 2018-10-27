@@ -22,7 +22,7 @@ var jwtCheck = jwt({
 //app.use(jwtCheck);
 
 
-app.get('/', (req, res) => {
+app.get('/api/monumenten', (req, res) => {
     fetch('https://opendata.arcgis.com/datasets/628ded9e05184e76b69719eb8ce0e0aa_207.geojson')
         .then(res => res.json())
         .then(json => res.send(json.features) )

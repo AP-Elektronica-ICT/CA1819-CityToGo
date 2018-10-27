@@ -126,13 +126,9 @@ export default class uniLogin extends Component {
   };
 
   gotoHome = data => {
-    //debugger
-    //this.getJWLToken()
-
     this.setState({
       hasInitialized: true
     });
-    //debugger
     const resetAction = StackActions.reset({
       index: 0,
       actions: [
@@ -164,15 +160,11 @@ export default class uniLogin extends Component {
       }),
     })
       .then((response) => response.json())
-      
+
       .then((responseJson) => {
-        //debugger
         this.setState({
-          //hasInitialized: false,
           token: responseJson.access_token
         })
-        //console.log(responseJson)
-
       })
       .catch((error) => {
         console.error(error);

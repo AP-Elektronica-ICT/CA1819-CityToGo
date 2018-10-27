@@ -26,13 +26,11 @@ class Home extends Component {
     }
 
     render() {
-        const { navigation } = this.props;
-        const token = navigation.getParam("token");
-        const picture = navigation.getParam("picture");
+        //const { navigation } = this.props;
+        //const token = navigation.getParam("token");
         return (
             <View style={styles.container}>
                 <Maps />
-                <Text>{token}</Text>
                 <View style={styles.bottomView}>
                     <Button
                         onPress={this.getData}
