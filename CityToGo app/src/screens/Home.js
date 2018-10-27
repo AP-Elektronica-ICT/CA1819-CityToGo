@@ -10,19 +10,19 @@ class Home extends Component {
 
 
     getData() {
-
-        fetch('http://192.168.1.15:3000', {
-            method: 'GET',
-            headers: {
-                authorization: 'Bearer '
-            }
-        })
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        console.log("fetch monumenten from server")
+        // fetch('http://192.168.1.15:3000', {
+        //     method: 'GET',
+        //     headers: {
+        //         authorization: 'Bearer '
+        //     }
+        // })
+        //     .then((response) => {
+        //         console.log(response);
+        //     })
+        //     .catch((error) => {
+        //         console.error(error);
+        //     });
     }
 
     render() {
