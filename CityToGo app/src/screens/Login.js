@@ -48,7 +48,7 @@ export default class uniLogin extends Component {
         auth0.auth
           .userInfo({ token: accessToken })
           .then(data => {
-            this.gotoAccount(data);
+            this.gotoHome(data);
           })
           .catch(err => {
             
@@ -103,7 +103,7 @@ export default class uniLogin extends Component {
         auth0.auth
           .userInfo({ token: res.accessToken })
           .then(data => {
-            this.gotoAccount(data);
+            this.gotoHome(data);
           })
           .catch(err => {
             console.log("err: ");
@@ -119,7 +119,9 @@ export default class uniLogin extends Component {
       });
   };
   
-  gotoAccount = data => {
+  gotoHome = data => {
+    //debugger
+    this.getJWLToken()
     
     this.setState({
       hasInitialized: true
@@ -139,4 +141,29 @@ export default class uniLogin extends Component {
     });
     this.props.navigation.dispatch(resetAction);
   };
+
+  getJWLToken() {
+    fetch('https://citytogo.eu.auth0.com/oauth/token', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            client_id: '5FWBdAaaZg8DeUmzKNt3W0tBY7PeMnmu',
+            client_secret: "MAJZxQIq5cxodpvdorCRIdNhzVyaofVfBwTDLvo7v5GrOUO0ezD4cyjOR3QIhC12",
+            audience: "http://localhost:3000/",
+            grant_type: "client_credentials",
+        }),
+    })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          console.log(responseJson)
+            return responseJson.access_token
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+}
+
 }
