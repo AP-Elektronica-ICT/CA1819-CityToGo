@@ -1,6 +1,6 @@
 import React, { Component, } from "react";
 import {
-    StyleSheet, View
+    StyleSheet, View, Text
 } from "react-native";
 
 import { Button } from 'react-native-elements'
@@ -10,11 +10,11 @@ class Home extends Component {
 
 
     getData() {
-        
+
         fetch('http://192.168.1.15:3000', {
             method: 'GET',
             headers: {
-                authorization: 'Bearer ' 
+                authorization: 'Bearer '
             }
         })
             .then((response) => {
@@ -26,10 +26,13 @@ class Home extends Component {
     }
 
     render() {
+        const { navigation } = this.props;
+        const token = navigation.getParam("token");
+        const picture = navigation.getParam("picture");
         return (
             <View style={styles.container}>
-                <Maps>
-                </Maps>
+                <Maps />
+                <Text>{token}</Text>
                 <View style={styles.bottomView}>
                     <Button
                         onPress={this.getData}
