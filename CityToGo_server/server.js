@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 var jwt = require('express-jwt');
 var jwks = require('jwks-rsa');
+const fetch = require('node-fetch');
 
 var port = process.env.PORT || 3000;
 
@@ -17,10 +18,15 @@ var jwtCheck = jwt({
     algorithms: ['RS256']
 });
 
-app.use(jwtCheck);
+//Disabled jwl token to prevent unathorezed request 
+//app.use(jwtCheck);
+
 
 app.get('/', (req, res) => {
-    res.send('Hello World!') 
+    fetch('https://opendata.arcgis.com/datasets/628ded9e05184e76b69719eb8ce0e0aa_207.geojson')
+        .then(res => res.json())
+        .then(json => res.send(json.features) )
+        .catch(err=>console.error(err));
 })
 
 
