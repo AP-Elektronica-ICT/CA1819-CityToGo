@@ -22,7 +22,7 @@ const auth0 = new Auth0({
 });
 
 export default class uniLogin extends Component {
-  
+
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: "Login",
@@ -35,14 +35,19 @@ export default class uniLogin extends Component {
     };
   };
 
-  state = {
-    hasInitialized: false
-  };
+  constructor(props) {
+    super(props)
+    this.state = {
+      hasInitialized: false
+    };
+  }
 
   componentDidMount() {
-    
+
     console.log("boom panes!");
-    
+
+    this.getJWLToken()
+
     SInfo.getItem("accessToken", {}).then(accessToken => {
       if (accessToken) {
         auth0.auth
@@ -51,7 +56,7 @@ export default class uniLogin extends Component {
             this.gotoHome(data);
           })
           .catch(err => {
-            
+
             SInfo.getItem("refreshToken", {}).then(refreshToken => {
               auth0.auth
                 .refreshToken({ refreshToken: refreshToken })
@@ -67,13 +72,14 @@ export default class uniLogin extends Component {
             console.log(err)
           });
       } else {
-        
+
         this.setState({
           hasInitialized: true
         });
         console.log("no access token");
       }
     });
+
   }
 
   render() {
@@ -118,15 +124,15 @@ export default class uniLogin extends Component {
         console.log(error);
       });
   };
-  
+
   gotoHome = data => {
     //debugger
-    this.getJWLToken()
-    
+    //this.getJWLToken()
+
     this.setState({
       hasInitialized: true
     });
-
+    //debugger
     const resetAction = StackActions.reset({
       index: 0,
       actions: [
@@ -134,7 +140,8 @@ export default class uniLogin extends Component {
           routeName: "Home",
           params: {
             name: data.name,
-            picture: data.picture
+            picture: data.picture,
+            token: this.state.token
           }
         })
       ]
@@ -142,28 +149,34 @@ export default class uniLogin extends Component {
     this.props.navigation.dispatch(resetAction);
   };
 
-  getJWLToken() {
-    fetch('https://citytogo.eu.auth0.com/oauth/token', {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            client_id: '5FWBdAaaZg8DeUmzKNt3W0tBY7PeMnmu',
-            client_secret: "MAJZxQIq5cxodpvdorCRIdNhzVyaofVfBwTDLvo7v5GrOUO0ezD4cyjOR3QIhC12",
-            audience: "http://localhost:3000/",
-            grant_type: "client_credentials",
-        }),
+  async getJWLToken() {
+    return fetch('https://citytogo.eu.auth0.com/oauth/token', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        client_id: '5FWBdAaaZg8DeUmzKNt3W0tBY7PeMnmu',
+        client_secret: "MAJZxQIq5cxodpvdorCRIdNhzVyaofVfBwTDLvo7v5GrOUO0ezD4cyjOR3QIhC12",
+        audience: "http://localhost:3000/",
+        grant_type: "client_credentials",
+      }),
     })
-        .then((response) => response.json())
-        .then((responseJson) => {
-          console.log(responseJson)
-            return responseJson.access_token
+      .then((response) => response.json())
+      
+      .then((responseJson) => {
+        //debugger
+        this.setState({
+          //hasInitialized: false,
+          token: responseJson.access_token
         })
-        .catch((error) => {
-            console.error(error);
-        });
-}
+        //console.log(responseJson)
+
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 
 }
