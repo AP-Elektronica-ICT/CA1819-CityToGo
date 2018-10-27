@@ -18,7 +18,7 @@ var jwtCheck = jwt({
     algorithms: ['RS256']
 });
 
-//Disabled jwl token to prevent unathorezed request 
+//Disabled jwl token to prevent unauthorized request 
 //app.use(jwtCheck);
 
 
