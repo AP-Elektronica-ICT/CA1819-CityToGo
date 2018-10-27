@@ -8,35 +8,13 @@ import Maps from "./Maps";
 
 class Home extends Component {
 
-    getToken() {
-        fetch('https://citytogo.eu.auth0.com/oauth/token', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                client_id: '5FWBdAaaZg8DeUmzKNt3W0tBY7PeMnmu',
-                client_secret: "MAJZxQIq5cxodpvdorCRIdNhzVyaofVfBwTDLvo7v5GrOUO0ezD4cyjOR3QIhC12",
-                audience: "http://localhost:3000/",
-                grant_type: "client_credentials",
-            }),
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                return responseJson.access_token
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }
 
     getData() {
-        token = getToken()
-        return fetch('http://192.168.1.15:3000', {
+        
+        fetch('http://192.168.1.15:3000', {
             method: 'GET',
             headers: {
-                authorization: 'Bearer ' + token
+                authorization: 'Bearer ' 
             }
         })
             .then((response) => {
