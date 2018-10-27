@@ -3,9 +3,10 @@
 const express = require('express');
 const app = express();
 const port = 3000;
+const bodyparser = require('body-parser');
 const haversine = require('haversine');
 
-
+app.use(bodyparser.json());
 let Location=[{
     Name: "Lange wapper",
     Longitude: 51.204962,
@@ -79,10 +80,17 @@ function calculateLocation(locationUser,locationDest){
 }
 
 
-app.get('/api/getNextLocation', (req, res) => {
+app.post('/api/getNextLocation', (req, res) => {
+    
+    currentUserLocation.latitude = req.body.latitude;
+    currentUserLocation.longitude =req.body.longitude;
+    
+
     Location.forEach(element => {
         calculateLocation(currentUserLocation,element);
     });
+
+
 let shortestDistance={
     Name: Location[0].Name,
     Longitude:Location[0].Longitude,
