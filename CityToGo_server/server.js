@@ -32,21 +32,12 @@ app.get('/api/monumenten', (req, res) => {
     fetch('https://opendata.arcgis.com/datasets/628ded9e05184e76b69719eb8ce0e0aa_207.geojson')
         .then(res => res.json())
         .then(json => {res.send(json.features); arr=[];  json.features.forEach(element => {
-            let des ={
-                id:"",
-                latitude:"",
-                longitude:"",
-                Distance:""
+    
 
-            }
-
-           des.id= element.properties.OBJECTID;
-           des.latitude=element.geometry.coordinates[0][0][0];
-           des.longitude =element.geometry.coordinates[0][0][1];
-            arr.push(des);
+            arr.push(element);
 
             
-        }); console.log(arr)} )
+        }); } )
         .catch(err=>console.error(err));
 })
 
@@ -54,56 +45,7 @@ app.get('/api/monumenten', (req, res) => {
 
 
 
-/*let Location=[{
-    Name: "Lange wapper",
-    Longitude: 51.204962,
-    Latitude:4.474973,
-    Distance:"",
-    Picture:"langeWapper.jpg"
-},
 
-{Name: "Lange Fapper",
-Longitude: 51.259996,
-Latitude:4.517183,
-Distance:"",
-Picture:"langeFapper.jpg"},
-
-
-{Name: "Lange Chapper",
-Longitude: 51.272885,
-Latitude:4.422812,
-Distance:"",
-Picture:"langeChapper.jpg"},
-
-
-{Name: "Lange kapper",
-Longitude: 51.276885,
-Latitude:4.428892,
-Distance:"",
-Picture:"langeKapper.jpg"},
-
-
-{Name: "Lange Zapper",
-Longitude: 51.273529,
-Latitude:4.370993,
-Distance:"",
-Picture:"langeZapper.jpg"},
-
-
-{Name: "Lange Mapper",
-Longitude: 51.253550,
-Latitude:4.438941,
-Distance:"",
-Picture:"langeMapper.jpg"},
-
-
-{Name: "Lange Papper",
-Longitude: 51.261285,
-Latitude:4.446491,
-Distance:"",
-Picture:"langePapper.jpg"},
-
-]*/
 
 
 let currentUserLocation = {
@@ -118,10 +60,13 @@ let currentUserLocation = {
 function calculateLocation(locationUser,locationDest){
     
     let LocationDS ={
-        latitude: locationDest.latitude,
-        longitude: locationDest.longitude
+        latitude: locationDest.geometry.coordinates[0][0][0],
+        longitude: locationDest.geometry.coordinates[0][0][1]
 }
-    locationDest.Distance= haversine(currentUserLocation,LocationDS)
+console.log("halloooooo")
+
+    locationDest.geometry.coordinates[0][0][2]=(haversine(currentUserLocation,LocationDS));
+    console.log(locationDest.geometry.coordinates[0][0][2]);
     
 
 }
@@ -138,27 +83,25 @@ app.post('/api/getNextLocation', (req, res) => {
     });
 
 
-let shortestDistance={
-    id: arr[0].id,
-    Longitude:arr[0].longitude,
-    Latitude:arr[0].latitude,
-    Distance:arr[0].Distance,
-   
 
 
-}
+
+let shortest=arr[0];
+
+
 
 arr.forEach(element=>{
-    if(element.Distance < shortestDistance.Distance){
-        shortestDistance.id =element.id;
-        shortestDistance.Longitude = element.longitude;
-        shortestDistance.Latitude =element.latitude;
-        shortestDistance.Distance = element.Distance;
-        
+    console.log(element.geometry.coordinates[0][0][2])
+    console.log(shortest.geometry.coordinates[0][0][2])
+    if(element.geometry.coordinates[0][0][2] < shortest.geometry.coordinates[0][0][2]){
+        shortest=[];
+        shortest = element;
+
+
     }
 
 });
-res.json(shortestDistance);
+res.json(shortest);
 
 }
 );
