@@ -27,13 +27,13 @@ var jwtCheck = jwt({
 //app.use(jwtCheck);
 let arr= [];
 
-
+//Haalt alle data van opendata api
 app.get('/api/monumenten', (req, res) => {
     fetch('https://opendata.arcgis.com/datasets/628ded9e05184e76b69719eb8ce0e0aa_207.geojson')
         .then(res => res.json())
         .then(json => {res.send(json.features); arr=[];  json.features.forEach(element => {
     
-
+            // pusht data van api in een variable
             arr.push(element);
 
             
@@ -56,28 +56,28 @@ let currentUserLocation = {
 
 
 
-
+//berekent afstand tussen een monument en de huidige locatie
 function calculateLocation(locationUser,locationDest){
     
     let LocationDS ={
         latitude: locationDest.geometry.coordinates[0][0][0],
         longitude: locationDest.geometry.coordinates[0][0][1]
-}
-console.log("halloooooo")
+            }
 
+//Distance wordt in de array gestoken
     locationDest.geometry.coordinates[0][0][2]=(haversine(currentUserLocation,LocationDS));
     console.log(locationDest.geometry.coordinates[0][0][2]);
     
 
 }
 
-
+// Huidige locatie wordt hier gegeven
 app.post('/api/getNextLocation', (req, res) => {
     
     currentUserLocation.latitude = req.body.latitude;
     currentUserLocation.longitude =req.body.longitude;
     
-
+    // voor elke coordinaat van elke monument wordt de afstand berekend tov de huidige locatie
     arr.forEach(element => {
         calculateLocation(currentUserLocation,element);
     });
@@ -89,10 +89,9 @@ app.post('/api/getNextLocation', (req, res) => {
 let shortest=arr[0];
 
 
-
+// Elke element van de array wordt vergeleken met de huidige dichtbijzijndste locatie
 arr.forEach(element=>{
-    console.log(element.geometry.coordinates[0][0][2])
-    console.log(shortest.geometry.coordinates[0][0][2])
+
     if(element.geometry.coordinates[0][0][2] < shortest.geometry.coordinates[0][0][2]){
         shortest=[];
         shortest = element;
