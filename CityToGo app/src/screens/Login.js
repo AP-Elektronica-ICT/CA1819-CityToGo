@@ -46,7 +46,7 @@ export default class uniLogin extends Component {
 
     console.log("boom panes!");
 
-    this.getJWLToken()
+    this.getJWLToken().then(response => this.setState({ token: response }))
 
     SInfo.getItem("accessToken", {}).then(accessToken => {
       if (accessToken) {
@@ -145,7 +145,7 @@ export default class uniLogin extends Component {
     this.props.navigation.dispatch(resetAction);
   };
 
-  async getJWLToken() {
+  async getJWLToken =() => {
     return fetch('https://citytogo.eu.auth0.com/oauth/token', {
       method: 'POST',
       headers: {
@@ -162,9 +162,7 @@ export default class uniLogin extends Component {
       .then((response) => response.json())
 
       .then((responseJson) => {
-        this.setState({
-          token: responseJson.access_token
-        })
+        return responseJson.access_token
       })
       .catch((error) => {
         console.error(error);
