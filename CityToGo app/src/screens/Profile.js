@@ -1,23 +1,25 @@
-import React, { Component } from 'react';
-import {Button} from './../common';
+import React, { Component } from "react";
+import { 
+    View,
+    Text,
+    StyleSheet
+} from "react-native";
 
-
-
-
-
-
-class Profile extends Component{ 
-   
-
-    render(){
-        return(
-          
-                    <Button>
-                        Log in
-                    </Button>
-          
-        )
+class Profiel extends Component {
+    render() {
+        return (
+            <View style={styles.container}>
+                <Text>Profiel</Text>
+            </View>
+        );
     }
 }
+export default Profiel;
 
-export default Profile;
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
+});
