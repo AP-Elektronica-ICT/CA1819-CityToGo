@@ -6,13 +6,17 @@ import {
 } from "react-native";
 
 import Maps from "./Maps";
+import {Button,Card,CardSection,Input} from './common';
 
 class Home extends Component {
     render() {
         return (
-            //<View style={styles.container}>
+            
+            <View style={styles.container}>
+            <Button>Login</Button>
                 <Maps />
-            //</View>
+                
+            </View>
         );
     }
 }

@@ -20,6 +20,7 @@ const auth0 = new Auth0({
   clientId: "1b5iyvAzLoy2GKGYbhXaeGcYRbyDIKn8"
 });
 
+
 export default class uniLogin extends Component {
   
   static navigationOptions = ({ navigation }) => {
@@ -40,6 +41,14 @@ export default class uniLogin extends Component {
 
   componentDidMount() {
     
+     auth0.webAuth.authorize({scope: 'openid profile email', audience: 'https://shakir01.eu.auth0.com/userinfo'})
+     .then(credentials =>
+       console.log(credentials)
+       // Successfully authenticated
+       // Store the accessToken
+      )
+ 
+     debugger;
     console.log("boom panes!");
     
     SInfo.getItem("accessToken", {}).then(accessToken => {
@@ -122,7 +131,7 @@ export default class uniLogin extends Component {
     this.setState({
       hasInitialized: true
     });
-debugger;
+//debugger;
     const resetAction = StackActions.reset({
       index: 0,
       
