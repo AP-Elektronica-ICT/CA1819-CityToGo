@@ -15,10 +15,7 @@ const Root = createStackNavigator(
             }
         },
         Profile: {
-            screen: Profile,
-            navigationOptions: {
-                header: null
-            }
+            screen: Profile
         },
         Home: {
             screen: Home,
