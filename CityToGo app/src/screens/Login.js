@@ -41,12 +41,12 @@ export default class uniLogin extends Component {
 
   componentDidMount() {
     
-     auth0.webAuth.authorize({scope: 'openid profile email', audience: 'https://shakir01.eu.auth0.com/userinfo'})
-     .then(credentials =>
-       console.log(credentials)
-       // Successfully authenticated
-       // Store the accessToken
-      )
+    //  auth0.webAuth.authorize({scope: 'openid profile email', audience: 'https://shakir01.eu.auth0.com/userinfo'})
+    //  .then(credentials =>
+    //    console.log(credentials.accessToken )
+    //    // Successfully authenticated
+    //    // Store the accessToken
+    //   )
  
     console.log("boom panes!");
     
@@ -137,7 +137,7 @@ export default class uniLogin extends Component {
       actions: [
         
         NavigationActions.navigate({
-          routeName: "Home",
+          routeName: "Profile",
           
           params: {
             
