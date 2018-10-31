@@ -12,23 +12,23 @@ import { NavigationActions, StackActions } from "react-navigation";
 
 
 class Home extends Component {
-    // onButtonPress() {
-    //     const resetAction = StackActions.reset({
-    //         index: 0,
+    onButtonPress() {
+        const resetAction = StackActions.reset({
+            index: 0,
 
-    //         actions: [
+            actions: [
 
-    //             NavigationActions.navigate({
-    //                 routeName: "Profile",
+                NavigationActions.navigate({
+                    routeName: "Profile",
 
-    //                 params: {}
-    //             })
-    //         ]
+                    params: {}
+                })
+            ]
 
-    //     });
-    //     this.props.navigation.dispatch(resetAction);
+        });
+        this.props.navigation.dispatch(resetAction);
 
-    // };
+    };
 
     render() {
         const { navigate } = this.props.navigation;
