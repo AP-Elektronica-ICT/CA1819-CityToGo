@@ -19,7 +19,7 @@ var jwtCheck = jwt({
 });
 
 //Disabled jwl token to prevent unauthorized request 
-//app.use(jwtCheck);
+app.use(jwtCheck);
 
 
 app.get('/api/monumenten', (req, res) => {
