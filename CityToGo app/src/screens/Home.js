@@ -5,31 +5,53 @@ import {
 
 import { Button } from 'react-native-elements'
 import Maps from "./Maps";
+import { withNavigation } from 'react-navigation';
 
 class Home extends Component {
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            token: 0
+        }
+    }
+
+    componentDidMount() {
+        //const { navigation } = this.props;
+        this.token = this.props.navigation.getParam("token");
+
+        //this.setState({ token: token })
+
+        console.log(this.token)
+        //this.getData(token)
+    }
+
 
     getData() {
-
-        fetch('http://192.168.1.15:3000', {
+        
+        console.log(this.token)
+        fetch('http://192.168.1.15:3000/api/monumenten', {
             method: 'GET',
             headers: {
-                authorization: 'Bearer '
+                authorization: 'Bearer ' + this.token 
             }
         })
-            .then((response) => {
-                console.log(response);
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson);
             })
             .catch((error) => {
                 console.error(error);
             });
     }
 
+    
+
     render() {
-        //const { navigation } = this.props;
-        //const token = navigation.getParam("token");
+
         return (
             <View style={styles.container}>
+
                 <Maps />
                 <View style={styles.bottomView}>
                     <Button
