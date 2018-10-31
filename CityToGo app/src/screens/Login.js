@@ -48,7 +48,6 @@ export default class uniLogin extends Component {
        // Store the accessToken
       )
  
-     debugger;
     console.log("boom panes!");
     
     SInfo.getItem("accessToken", {}).then(accessToken => {
