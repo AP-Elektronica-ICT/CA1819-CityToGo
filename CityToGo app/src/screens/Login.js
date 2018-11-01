@@ -132,7 +132,7 @@ export default class uniLogin extends Component {
       actions: [
         
         NavigationActions.navigate({
-          routeName: "Profile",
+          routeName: "Home",
           
           params: {
             
