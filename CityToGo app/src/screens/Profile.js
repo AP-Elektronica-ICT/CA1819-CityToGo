@@ -34,7 +34,7 @@ class Profiel extends Component {
             .then(responseJson => data = responseJson).then(console.log(data.nickname));
 
 
-        const  metadata = data["https://shakir01.eu.auth0.com/user_metadata"]
+        const  metadata = data["https://shakir01.eu.auth0.com/user_metadata"];
         console.log(metadata);  
     
     }
@@ -47,46 +47,47 @@ class Profiel extends Component {
                     <Image style={styles.avatar}
                       source={{uri: 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
     
-                    <Text style={styles.name}>{data.email} </Text>
-                    <Text style={styles.userInfo}>{data.email}</Text>
-                    <Text style={styles.userInfo}> {data.nickname} </Text>
+                    <Text style={styles.name}>{data.name} </Text>
+                 
                 </View>
               </View>
     
               <View style={styles.body}>
                 <View style={styles.item}>
                   <View style={styles.iconContent}>
-                    <Image style={styles.icon} source={{uri: 'https://png.icons8.com/home/win8/50/ffffff'}}/>
+                    <Image style={styles.icon} source={{uri: 'https://cdn3.iconfinder.com/data/icons/black-easy/512/538642-user_512x512.png'}}/>
                   </View>
                   <View style={styles.infoContent}>
-                    <Text style={styles.info}>Home</Text>
+                    <Text style={styles.info}>full_name</Text>
                   </View>
                 </View>
     
                 <View style={styles.item}>
                   <View style={styles.iconContent}>
-                    <Image style={styles.icon} source={{uri: 'https://png.icons8.com/settings/win8/50/ffffff'}}/>
+                    <Image style={styles.icon} source={{uri: 'http://icons.iconarchive.com/icons/icons8/windows-8/256/Users-Age-icon.png'}}/>
                   </View>
                   <View style={styles.infoContent}>
-                    <Text style={styles.info}>Settings</Text>
+                    <Text style={styles.info}>Age</Text>
                   </View>
                 </View>
     
                 <View style={styles.item}>
                   <View style={styles.iconContent}>
-                    <Image style={styles.icon} source={{uri: 'https://png.icons8.com/news/win8/50/ffffff'}}/>
+                    <Image style={styles.icon} source={{uri: 'http://icons.iconarchive.com/icons/graphicloads/100-flat/256/email-2-icon.png'}}/>
                   </View>
+                 
+
                   <View style={styles.infoContent}>
-                    <Text style={styles.info}>News</Text>
+                    <Text style={styles.info}>{data.email}</Text>
                   </View>
                 </View>
     
                 <View style={styles.item}>
                   <View style={styles.iconContent}>
-                    <Image style={styles.icon} source={{uri: 'https://png.icons8.com/shopping-basket/ios11/50/ffffff'}}/>
+                    <Image style={styles.icon} source={{uri: 'https://www.amdtelecom.net/wp-content/uploads/2018/08/loc.png'}}/>
                   </View>
                   <View style={styles.infoContent}>
-                    <Text style={styles.info}>Shop</Text>
+                    <Text style={styles.info}>Location</Text>
                   </View>
                 </View>
     
@@ -137,8 +138,9 @@ class Profiel extends Component {
       },
       iconContent:{
         flex:1,
-        alignItems:'flex-end',
-        paddingRight:5,
+        alignItems:'flex-start',
+        left:"200%",
+        paddingRight:3
       },
       icon:{
         width:30,
