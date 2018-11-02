@@ -11,21 +11,19 @@ const auth0 = new Auth0({
     domain: "shakir01.eu.auth0.com",
     clientId: "1b5iyvAzLoy2GKGYbhXaeGcYRbyDIKn8"
 });
-var token;  //="tMs6er91KNRHATt--cjy3X1aDOuSkVq3";
+var token ="OqTaRFz-o3bp17-hHuMql20UYPC1wGCJ";
 var data = [];
 var metadata;
+var Age;
+var Full_name;
+var location;
 
 class Profiel extends Component {
     constructor(props) {
         super(props)
-        auth0.webAuth.authorize({ scope: 'openid profile email', audience: 'https://shakir01.eu.auth0.com/userinfo' })
-             .then((credentials) => { console.log(credentials); token = credentials.accessToken });
-    }
-
-
-    componentDidMount() {
-
-        console.log(token)
+        // auth0.webAuth.authorize({ scope: 'openid profile email', audience: 'https://shakir01.eu.auth0.com/userinfo' })
+        //      .then((credentials) => { console.log(credentials); token = credentials.accessToken });
+        //      console.log(token)
         let response = fetch('https://shakir01.eu.auth0.com/userinfo', {
             method: 'GET',
             headers: {
@@ -37,8 +35,16 @@ class Profiel extends Component {
 
         metadata =data["https://shakir01.net/user_metadata"];
         console.log(JSON.stringify(metadata));
-        console.log(metadata.Age);  
+        if(typeof metadata !="undefined"){
+        Age=metadata.Age;
+        Full_name=metadata.Full_name;
+        location =metadata.Location;
+        }
+    }
 
+
+    componentDidMount() {
+    
     }
 
     render() {
@@ -49,7 +55,7 @@ class Profiel extends Component {
                     <Image style={styles.avatar}
                       source={{uri: 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
     
-                    <Text style={styles.name}>{} </Text>
+                    <Text style={styles.name}>{Full_name} </Text>
                  
                 </View>
               </View>
@@ -60,7 +66,7 @@ class Profiel extends Component {
                     <Image style={styles.icon} source={{uri: 'https://cdn3.iconfinder.com/data/icons/black-easy/512/538642-user_512x512.png'}}/>
                   </View>
                   <View style={styles.infoContent}>
-                    <Text style={styles.info}>full_name</Text>
+                    <Text style={styles.info}>{Full_name}</Text>
                   </View>
                 </View>
     
@@ -69,7 +75,7 @@ class Profiel extends Component {
                     <Image style={styles.icon} source={{uri: 'http://icons.iconarchive.com/icons/icons8/windows-8/256/Users-Age-icon.png'}}/>
                   </View>
                   <View style={styles.infoContent}>
-                    <Text style={styles.info}>Age</Text>
+                    <Text style={styles.info}>{Age}</Text>
                   </View>
                 </View>
     
@@ -89,7 +95,7 @@ class Profiel extends Component {
                     <Image style={styles.icon} source={{uri: 'https://www.amdtelecom.net/wp-content/uploads/2018/08/loc.png'}}/>
                   </View>
                   <View style={styles.infoContent}>
-                    <Text style={styles.info}>Location</Text>
+                    <Text style={styles.info}>{location}</Text>
                   </View>
                 </View>
     
