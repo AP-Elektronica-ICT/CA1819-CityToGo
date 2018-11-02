@@ -11,14 +11,15 @@ const auth0 = new Auth0({
     domain: "shakir01.eu.auth0.com",
     clientId: "1b5iyvAzLoy2GKGYbhXaeGcYRbyDIKn8"
 });
-var token;
+var token;  //="tMs6er91KNRHATt--cjy3X1aDOuSkVq3";
 var data = [];
+var metadata;
 
 class Profiel extends Component {
     constructor(props) {
         super(props)
         auth0.webAuth.authorize({ scope: 'openid profile email', audience: 'https://shakir01.eu.auth0.com/userinfo' })
-            .then((credentials) => { console.log(credentials); token = credentials.accessToken });
+             .then((credentials) => { console.log(credentials); token = credentials.accessToken });
     }
 
 
@@ -34,9 +35,10 @@ class Profiel extends Component {
             .then(responseJson => data = responseJson).then(console.log(data.nickname));
 
 
-        const  metadata = data["https://shakir01.eu.auth0.com/user_metadata"];
-        console.log(metadata);  
-    
+        metadata =data["https://shakir01.net/user_metadata"];
+        console.log(JSON.stringify(metadata));
+        console.log(metadata.Age);  
+
     }
 
     render() {
@@ -47,7 +49,7 @@ class Profiel extends Component {
                     <Image style={styles.avatar}
                       source={{uri: 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
     
-                    <Text style={styles.name}>{data.name} </Text>
+                    <Text style={styles.name}>{} </Text>
                  
                 </View>
               </View>
