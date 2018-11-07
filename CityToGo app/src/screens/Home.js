@@ -12,7 +12,6 @@ import Maps from "./Maps";
 
 class Home extends Component {
 
-   
 
     constructor(props) {
         super(props)
@@ -24,24 +23,44 @@ class Home extends Component {
             global.token = accessToken
         })
     }
-    
-    
 
-    getMonument(token) {
-        return fetch('http://192.168.1.15:3000/api/monumenten', {
-            method: 'GET',
+
+
+    getMonument = async () => {
+        // return fetch('http://192.168.1.15:3000/api/monumenten', {
+        //     method: 'GET',
+        //     headers: {
+        //         authorization: 'Bearer ' + global.token
+        //     }
+        // })
+        //     .then((response) => response.json())
+        //     .then((responseJson) => {
+        //         console.log(responseJson);
+        //         return responseJson
+        //     })
+        //     .catch((error) => {
+        //         console.error(error);
+        //         throw error
+        //     });
+        //debugger
+        fetch('http://192.168.1.15:3000/api/getNextLocation', {
+            method: 'POST',
             headers: {
-                authorization: 'Bearer ' + global.token
-            }
-        })
-            .then((response) => response.json())
+                authorization: 'Bearer ' + global.token,
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                latitude: "51.25705",
+                longitude: "4.45098"
+            }),
+        }).then((response) => response.json())
             .then((responseJson) => {
-                console.log(responseJson);
-                return responseJson
+                console.log(responseJson)
+                return responseJson;
             })
             .catch((error) => {
                 console.error(error);
-                throw error
             });
     }
 
