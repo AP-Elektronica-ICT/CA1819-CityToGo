@@ -1,51 +1,49 @@
 import React, { Component, } from "react";
 import {
-    StyleSheet, View, Text
+    StyleSheet,
+    View,
+    Text
 } from "react-native";
+import SInfo from "react-native-sensitive-info";
 
 import { Button } from 'react-native-elements'
 import Maps from "./Maps";
-import { withNavigation } from 'react-navigation';
+
 
 class Home extends Component {
 
+   
+
     constructor(props) {
         super(props)
-        this.state = {
-            token: 0
-        }
+
     }
 
     componentDidMount() {
-        //const { navigation } = this.props;
-        this.token = this.props.navigation.getParam("token");
-
-        //this.setState({ token: token })
-
-        console.log(this.token)
-        //this.getData(token)
+        SInfo.getItem("accessTokenServer", {}).then(accessToken => {
+            global.token = accessToken
+        })
     }
+    
+    
 
-
-    getData() {
-        
-        console.log(this.token)
-        fetch('http://192.168.1.15:3000/api/monumenten', {
+    getMonument(token) {
+        return fetch('http://192.168.1.15:3000/api/monumenten', {
             method: 'GET',
             headers: {
-                authorization: 'Bearer ' + this.token 
+                authorization: 'Bearer ' + global.token
             }
         })
             .then((response) => response.json())
             .then((responseJson) => {
                 console.log(responseJson);
+                return responseJson
             })
             .catch((error) => {
                 console.error(error);
+                throw error
             });
     }
-
-    
 
     render() {
 
@@ -55,7 +53,7 @@ class Home extends Component {
                 <Maps />
                 <View style={styles.bottomView}>
                     <Button
-                        onPress={this.getData}
+                        onPress={this.getMonument}
                         buttonStyle={styles.buttonStyle}
                         title="Start"
                     />
