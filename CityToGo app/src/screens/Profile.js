@@ -1,63 +1,58 @@
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-} from "react-native";
+import {View,Text,StyleSheet,ActivityIndicator,Image} from "react-native";
 import Auth0 from "react-native-auth0";
+import SInfo from "react-native-sensitive-info"
 
 const auth0 = new Auth0({
   domain: "shakir01.eu.auth0.com",
   clientId: "1b5iyvAzLoy2GKGYbhXaeGcYRbyDIKn8"
 });
-var token = "OqTaRFz-o3bp17-hHuMql20UYPC1wGCJ";
 var data = [];
 var metadata;
 var Age;
 var Full_name;
 var location;
 
+
 class Profiel extends Component {
+
   constructor(props) {
-    //this.state={profileData:null, fetching:false}
-    
     super(props)
-    // auth0.webAuth.authorize({ scope: 'openid profile email', audience: 'https://shakir01.eu.auth0.com/userinfo' })
-    //      .then((credentials) => { console.log(credentials); token = credentials.accessToken });
-    //      console.log(token)
-
+    this.state = { fetching: false };
   }
 
 
-  componentDidMount() {
-    //Storing fetched data in an object called (data)
-  this.setState({fetching:true},()=>{
-    this.getData().then(JsonData => data=JsonData).then(console.log(data));
-  });
-     
-    metadata = data["https://shakir01.net/user_metadata"];
-    console.log(JSON.stringify(metadata));
-    //Avoiding app crash if metadata is undefined 
-    if (typeof metadata != "undefined") {
+  async componentWillMount() {
+
+    SInfo.getItem("userdata", {}).then(JsonData => {
+      data = JSON.parse(JsonData)
+      console.log(data.nickname)
+      metadata = data["https://shakir01.net/user_metadata"];
       Age = metadata.Age;
-      Full_name = metadata.Full_name;
+      Full_name = metadata.FullName;
       location = metadata.Location;
-    }
- 
+      this.setState({ fetching: true });
+    });
+
   }
-  //Fetching Userinfo here
-  getData(){
-    return fetch('https://shakir01.eu.auth0.com/userinfo', {
-      method: 'GET',
-      headers: {
-        Authorization: 'Bearer ' + token,
-      },
-    }).then((response) => {return response.json()})
-  };
 
   render() {
+    console.log('render ' + data.nickname)
+    if (!this.state.fetching) {
+      return (
+        <View style={styles.container}>
+
+          <ActivityIndicator
+            size="large"
+            color="#05a5d1"
+            animating={!this.state.fetching}
+          />
+        </View>
+
+      )
+    }
     return (
+
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.headerContent}>
@@ -109,10 +104,15 @@ class Profiel extends Component {
           </View>
 
         </View>
+
       </View>
+
     );
   }
 }
+
+
+
 
 const styles = StyleSheet.create({
   header: {
@@ -171,3 +171,23 @@ const styles = StyleSheet.create({
   }
 });
 export default Profiel;
+
+
+
+//Extra's
+
+  //   auth0.webAuth.authorize({ scope: 'openid profile email', audience: 'https://shakir01.eu.auth0.com/userinfo' })
+  //   .then((credentials) => { console.log(credentials); token = credentials.accessToken });
+  // console.log(token)
+   // this.componentDidMount = this.componentDidMount.bind(this);
+
+
+     //Fetching Userinfo here
+  // getData(token) {
+  //   return fetch('https://shakir01.eu.auth0.com/userinfo', {
+  //     method: 'GET',
+  //     headers: {
+  //       Authorization: 'Bearer ' + token,
+  //     },
+  //   }).then((response) => { return response.json() })
+  // };

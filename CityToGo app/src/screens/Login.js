@@ -121,7 +121,8 @@ export default class uniLogin extends Component {
   };
   
   gotoAccount = data => {
-    
+    SInfo.setItem("userdata", JSON.stringify(data), {});
+    console.log(data)
     this.setState({
       hasInitialized: true
     });
@@ -137,7 +138,9 @@ export default class uniLogin extends Component {
           params: {
             
             name: data.name,
-            picture: data.picture
+            picture: data.picture,
+            token: data.token,
+            
           }
         })
       ]
