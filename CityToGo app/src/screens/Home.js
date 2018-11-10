@@ -9,40 +9,67 @@ import SInfo from "react-native-sensitive-info";
 import { Button } from 'react-native-elements'
 import Maps from "./Maps";
 
+const LATITUDE = 29.95539;
+const LONGITUDE = 78.07513;
+const LATITUDE_DELTA = 0.009;
+const LONGITUDE_DELTA = 0.009;
+
 
 class Home extends Component {
 
 
     constructor(props) {
-        super(props)
-
+        super(props);
+        this.state = {
+            latitude: LATITUDE,
+            longitude: LONGITUDE,
+            // coordinate: new AnimatedRegion({
+            //     latitude: LATITUDE,
+            //     longitude: LONGITUDE
+            // })
+        };
     }
 
     componentDidMount() {
+        this.watchID = navigator.geolocation.watchPosition(
+            position => {
+                //const { coordinate } = this.state;
+                const { latitude, longitude } = position.coords;
+
+                this.setState({
+                    latitude,
+                    longitude,
+                });
+            },
+            error => console.log(error),
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+        );
+
         SInfo.getItem("accessTokenServer", {}).then(accessToken => {
             global.token = accessToken
         })
     }
 
+    componentWillMount() {
+        navigator.geolocation.getCurrentPosition(
+            //position => { },
+            error => alert(error.message),
+            {
+                enableHighAccuracy: true,
+                timeout: 20000,
+                maximumAge: 1000
+            }
+        );
+
+    }
+
+    componentWillUnmount() {
+        navigator.geolocation.clearWatch(this.watchID);
+        //DeviceEventEmitter.removeCurrentListener()
+    }
 
 
     getMonument = async () => {
-        // return fetch('http://192.168.1.15:3000/api/monumenten', {
-        //     method: 'GET',
-        //     headers: {
-        //         authorization: 'Bearer ' + global.token
-        //     }
-        // })
-        //     .then((response) => response.json())
-        //     .then((responseJson) => {
-        //         console.log(responseJson);
-        //         return responseJson
-        //     })
-        //     .catch((error) => {
-        //         console.error(error);
-        //         throw error
-        //     });
-        //debugger
         fetch('http://192.168.1.15:3000/api/getNextLocation', {
             method: 'POST',
             headers: {
@@ -51,8 +78,8 @@ class Home extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                latitude: "51.25705",
-                longitude: "4.45098"
+                latitude: String(this.state.latitude),
+                longitude: String(this.state.longitude)
             }),
         }).then((response) => response.json())
             .then((responseJson) => {
@@ -62,14 +89,23 @@ class Home extends Component {
             .catch((error) => {
                 console.error(error);
             });
+
     }
+
+
+    getMapRegion = () => ({
+        latitude: this.state.latitude,
+        longitude: this.state.longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA
+    });
 
     render() {
 
         return (
             <View style={styles.container}>
 
-                <Maps />
+                <Maps getMapRegion={this.getMapRegion.bind(this)} />
                 <View style={styles.bottomView}>
                     <Button
                         onPress={this.getMonument}

@@ -48,8 +48,6 @@ export default class uniLogin extends Component {
 
     this.getJWToken()
 
-    //this.getJWToken().then(response => this.setState({ token: response }))
-
     SInfo.getItem("accessToken", {}).then(accessToken => {
       if (accessToken) {
         auth0.auth
@@ -131,6 +129,8 @@ export default class uniLogin extends Component {
   };
 
   gotoHome = data => {
+
+    
     this.setState({
       hasInitialized: true
     });
