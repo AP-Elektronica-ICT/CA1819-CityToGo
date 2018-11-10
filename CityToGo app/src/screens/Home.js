@@ -23,17 +23,13 @@ class Home extends Component {
         this.state = {
             latitude: LATITUDE,
             longitude: LONGITUDE,
-            // coordinate: new AnimatedRegion({
-            //     latitude: LATITUDE,
-            //     longitude: LONGITUDE
-            // })
+            polygons:[]
         };
     }
 
     componentDidMount() {
         this.watchID = navigator.geolocation.watchPosition(
             position => {
-                //const { coordinate } = this.state;
                 const { latitude, longitude } = position.coords;
 
                 this.setState({
@@ -52,7 +48,6 @@ class Home extends Component {
 
     componentWillMount() {
         navigator.geolocation.getCurrentPosition(
-            //position => { },
             error => alert(error.message),
             {
                 enableHighAccuracy: true,
@@ -65,7 +60,6 @@ class Home extends Component {
 
     componentWillUnmount() {
         navigator.geolocation.clearWatch(this.watchID);
-        //DeviceEventEmitter.removeCurrentListener()
     }
 
 
@@ -83,7 +77,8 @@ class Home extends Component {
             }),
         }).then((response) => response.json())
             .then((responseJson) => {
-                console.log(responseJson)
+                this.setState({polygons: responseJson.geometry.coordinates})
+                console.log(this.state.polygons)
                 return responseJson;
             })
             .catch((error) => {
@@ -105,7 +100,7 @@ class Home extends Component {
         return (
             <View style={styles.container}>
 
-                <Maps getMapRegion={this.getMapRegion.bind(this)} />
+                <Maps getPolygons={this.state.polygons} getMapRegion={this.getMapRegion.bind(this)} />
                 <View style={styles.bottomView}>
                     <Button
                         onPress={this.getMonument}

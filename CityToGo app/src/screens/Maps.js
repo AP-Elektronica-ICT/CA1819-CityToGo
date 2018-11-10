@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { StyleSheet, DeviceEventEmitter } from "react-native";
-import MapView from "react-native-maps";
+import { StyleSheet, DeviceEventEmitter, View } from "react-native";
+import MapView, { Polygon } from "react-native-maps";
 import { SensorManager } from 'NativeModules';
 import mapStyle from "../styles/jsons/mapstyle";
 
@@ -12,7 +12,7 @@ const LONGITUDE_DELTA = 0.009;
 class Maps extends Component {
 
     componentWillMount() {
-     
+
         SensorManager.startOrientation(100);
         DeviceEventEmitter.addListener('Orientation', orientation => {
             //this.refs.map.animateToBearing(Math.round(orientation.azimuth), 200);
@@ -24,6 +24,7 @@ class Maps extends Component {
         //DeviceEventEmitter.removeCurrentListener()
     }
     render() {
+        console.log(this.props.getPolygons)
         return (
             <MapView
                 style={styles.map}
@@ -38,7 +39,16 @@ class Maps extends Component {
                 //rotateEnabled={false}
                 customMapStyle={mapStyle}
                 ref="map"
+
             >
+                {/* {this.props.getPolygons.map((polygon, index) => (
+                    <View key={index}>
+                        <Polygon
+                            coordinates={polygon.coordinates}
+                        //onPress={() => this.toggle(polygon)}
+                        />
+                    </View>
+                ))} */}
             </MapView>
         );
     }
