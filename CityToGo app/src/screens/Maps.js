@@ -11,6 +11,7 @@ const LONGITUDE_DELTA = 0.009;
 
 class Maps extends Component {
 
+
     componentWillMount() {
 
         SensorManager.startOrientation(100);
@@ -21,18 +22,53 @@ class Maps extends Component {
     }
 
     componentWillUnmount() {
-        //DeviceEventEmitter.removeCurrentListener()
+        //DeviceEventEmitter.listeners('Orientation').remove()
     }
+
+    renderPolygon() {
+        const polygon = this.props.getPolygons.map(coordsArr => {
+            let coords = {
+                latitude: coordsArr[1],
+                longitude: coordsArr[0],
+            }
+            return coords;
+        });
+
+        if (this.props.getPolygons.length > 0) {
+            console.log("im ready")
+            return (
+                <Polygon
+                    coordinates={polygon}
+                    fillColor='red'
+                    strokeColor='black'
+                />
+            )
+
+        } else {
+            console.log("ik ben null")
+            return (
+                null
+            )
+        }
+    }
+
+
+
     render() {
-        console.log(this.props.getPolygons)
+        //this.renderPolygon()
+        // console.log("fake polygone")
+        // console.log(this.state.polygons[0].coordinates[0])
+        // console.log("real polygone")
+        // console.log(this.props.getPolygons)
+
         return (
             <MapView
                 style={styles.map}
                 region={this.props.getMapRegion()}
                 showsUserLocation={true}
-                showUserLocation
-                followUserLocation
-                loadingEnabled
+                //showUserLocation
+                //followUserLocation
+                //loadingEnabled
                 //scrollEnabled={false}
                 //pitchEnabled={false}
                 //zoomEnabled={false}
@@ -41,14 +77,12 @@ class Maps extends Component {
                 ref="map"
 
             >
-                {/* {this.props.getPolygons.map((polygon, index) => (
-                    <View key={index}>
-                        <Polygon
-                            coordinates={polygon.coordinates}
-                        //onPress={() => this.toggle(polygon)}
-                        />
-                    </View>
-                ))} */}
+
+
+                {this.renderPolygon()}
+
+
+
             </MapView>
         );
     }
