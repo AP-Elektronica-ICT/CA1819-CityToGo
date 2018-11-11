@@ -77,8 +77,7 @@ class Home extends Component {
             }),
         }).then((response) => response.json())
             .then((responseJson) => {
-                this.setState({polygons: responseJson.geometry.coordinates})
-                console.log(this.state.polygons)
+                this.setState({polygons: responseJson.geometry.coordinates[0]})
                 return responseJson;
             })
             .catch((error) => {
