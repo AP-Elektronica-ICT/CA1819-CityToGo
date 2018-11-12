@@ -46,7 +46,7 @@ export default class uniLogin extends Component {
 
     console.log("boom panes!");
 
-    this.getJWLToken()
+    this.getJWToken()
 
     SInfo.getItem("accessToken", {}).then(accessToken => {
       if (accessToken) {
@@ -98,6 +98,9 @@ export default class uniLogin extends Component {
   }
 
   login = () => {
+
+    
+
     auth0.webAuth
       .authorize({
         scope: Config.AUTH0_SCOPE,
@@ -126,6 +129,8 @@ export default class uniLogin extends Component {
   };
 
   gotoHome = data => {
+
+    
     this.setState({
       hasInitialized: true
     });
@@ -137,7 +142,7 @@ export default class uniLogin extends Component {
           params: {
             name: data.name,
             picture: data.picture,
-            token: this.state.token
+            //token: this.state.token
           }
         })
       ]
@@ -145,8 +150,8 @@ export default class uniLogin extends Component {
     this.props.navigation.dispatch(resetAction);
   };
 
-  async getJWLToken() {
-    return fetch('https://citytogo.eu.auth0.com/oauth/token', {
+  getJWToken() {
+    fetch('https://citytogo.eu.auth0.com/oauth/token', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -162,9 +167,10 @@ export default class uniLogin extends Component {
       .then((response) => response.json())
 
       .then((responseJson) => {
-        this.setState({
-          token: responseJson.access_token
-        })
+        //return responseJson.access_token
+        //console.log(responseJson.access_token)
+        SInfo.setItem("accessTokenServer", responseJson.access_token,{});
+    
       })
       .catch((error) => {
         console.error(error);

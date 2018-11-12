@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { StyleSheet, DeviceEventEmitter } from "react-native";
-import MapView, { AnimatedRegion } from "react-native-maps";
+import { StyleSheet, DeviceEventEmitter, View } from "react-native";
+import MapView, { Polygon } from "react-native-maps";
 import { SensorManager } from 'NativeModules';
 import mapStyle from "../styles/jsons/mapstyle";
 
@@ -11,79 +11,78 @@ const LONGITUDE_DELTA = 0.009;
 
 class Maps extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            latitude: LATITUDE,
-            longitude: LONGITUDE,
-            coordinate: new AnimatedRegion({
-                latitude: LATITUDE,
-                longitude: LONGITUDE
-            })
-        };
-    }
-
-    componentDidMount() {
-        this.watchID = navigator.geolocation.watchPosition(
-            position => {
-                const { coordinate } = this.state;
-                const { latitude, longitude } = position.coords;
-
-                this.setState({
-                    latitude,
-                    longitude,
-                });
-            },
-            error => console.log(error),
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-        );
-    }
 
     componentWillMount() {
-        navigator.geolocation.getCurrentPosition(
-            position => { },
-            error => alert(error.message),
-            {
-                enableHighAccuracy: true,
-                timeout: 20000,
-                maximumAge: 1000
-            }
-        );
 
         SensorManager.startOrientation(100);
         DeviceEventEmitter.addListener('Orientation', orientation => {
-            this.refs.map.animateToBearing(Math.round(orientation.azimuth), 200);
+            //this.refs.map.animateToBearing(Math.round(orientation.azimuth), 200);
         });
         SensorManager.stopAccelerometer();
-
     }
 
     componentWillUnmount() {
-        navigator.geolocation.clearWatch(this.watchID);
-        DeviceEventEmitter.removeCurrentListener()
+        //DeviceEventEmitter.listeners('Orientation').remove()
     }
 
-    getMapRegion = () => ({
-        latitude: this.state.latitude,
-        longitude: this.state.longitude,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA
-    });
+    renderPolygon() {
+        const polygon = this.props.getPolygons.map(coordsArr => {
+            let coords = {
+                latitude: coordsArr[1],
+                longitude: coordsArr[0],
+            }
+            return coords;
+        });
+
+        if (this.props.getPolygons.length > 0) {
+            console.log("im ready")
+            return (
+                <Polygon
+                    coordinates={polygon}
+                    fillColor='red'
+                    strokeColor='black'
+                />
+            )
+
+        } else {
+            console.log("ik ben null")
+            return (
+                null
+            )
+        }
+    }
+
 
 
     render() {
+        //this.renderPolygon()
+        // console.log("fake polygone")
+        // console.log(this.state.polygons[0].coordinates[0])
+        // console.log("real polygone")
+        // console.log(this.props.getPolygons)
+
         return (
             <MapView
                 style={styles.map}
-                region={this.getMapRegion()}
+                region={this.props.getMapRegion()}
                 showsUserLocation={true}
+                //showUserLocation
+                //followUserLocation
+                //loadingEnabled
                 //scrollEnabled={false}
                 //pitchEnabled={false}
                 //zoomEnabled={false}
                 //rotateEnabled={false}
                 customMapStyle={mapStyle}
                 ref="map"
-                >
+
+            >
+
+
+                {this.renderPolygon()}
+
+
+
             </MapView>
         );
     }
