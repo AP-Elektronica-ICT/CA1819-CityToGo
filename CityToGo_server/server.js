@@ -52,8 +52,8 @@ let currentUserLocation = {
 function calculateLocation(locationUser, locationDest) {
 
     let LocationDS = {
-        latitude: locationDest.geometry.coordinates[0][0][0],
-        longitude: locationDest.geometry.coordinates[0][0][1]
+        latitude: locationDest.geometry.coordinates[0][0][1],
+        longitude: locationDest.geometry.coordinates[0][0][0]
     }
 
     //Distance wordt in de array gestoken
