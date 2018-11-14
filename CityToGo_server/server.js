@@ -5,19 +5,11 @@ var jwks = require('jwks-rsa');
 const fetch = require('node-fetch');
 const bodyparser = require('body-parser');
 const haversine = require('haversine');
-let arr = [];
-var port = process.env.PORT || 3000;
-let shortest = arr[0];
-let currentUserLocation = {
-
-    latitude: "",
-    longitude: ""
-}
 
 
 app.use(bodyparser.json());
 
-
+var port = process.env.PORT || 3000;
 
 var jwtCheck = jwt({
     secret: jwks.expressJwtSecret({
@@ -33,7 +25,7 @@ var jwtCheck = jwt({
 
 //Disabled jwl token to prevent unauthorized request 
 //app.use(jwtCheck);
-
+let arr = [];
 
 //Haalt alle data van opendata api
 app.get('/api/monumenten', (req, res) => {
@@ -50,7 +42,11 @@ app.get('/api/monumenten', (req, res) => {
         .catch(err => console.error(err));
 })
 
+let currentUserLocation = {
 
+    latitude: "",
+    longitude: ""
+}
 
 //berekent afstand tussen een monument en de huidige locatie
 function calculateLocation(locationUser, locationDest) {
@@ -77,7 +73,7 @@ app.post('/api/getNextLocation', (req, res) => {
         calculateLocation(currentUserLocation, element);
     });
 
-    
+    let shortest = arr[0];
 
     // Elke element van de array wordt vergeleken met de huidige dichtbijzijndste locatie
     arr.forEach(element => {
@@ -93,7 +89,7 @@ app.post('/api/getNextLocation', (req, res) => {
 );
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}!`)
+    
 
     fetch('https://opendata.arcgis.com/datasets/628ded9e05184e76b69719eb8ce0e0aa_207.geojson')
         .then((response) => response.json())
@@ -111,8 +107,3 @@ app.listen(port, () => {
             throw error
         });
 });
-
-
-
-
-
