@@ -38,19 +38,19 @@ class Profiel extends Component {
 
   render() {
     console.log('render ' + data.nickname)
-    if (!this.state.fetching) {
-      return (
-        <View style={styles.container}>
+    // if (!this.state.fetching) {
+    //   return (
+    //     <View style={styles.container}>
 
-          <ActivityIndicator
-            size="large"
-            color="#05a5d1"
-            animating={!this.state.fetching}
-          />
-        </View>
+    //       <ActivityIndicator
+    //         size="large"
+    //         color="#05a5d1"
+    //         animating={!this.state.fetching}
+    //       />
+    //     </View>
 
-      )
-    }
+    //   )
+    // }
     return (
 
       <View style={styles.container}>

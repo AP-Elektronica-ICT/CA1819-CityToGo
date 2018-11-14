@@ -54,7 +54,7 @@ export default class uniLogin extends Component {
         auth0.auth
           .userInfo({ token: accessToken })
           .then(data => {
-            this.gotoAccount(data); console.log(accessToken);
+            this.gotoAccount(data); console.log(accessToken);console.log(data);console.log(" up is data")
           })
           .catch(err => {
 
@@ -100,13 +100,10 @@ export default class uniLogin extends Component {
   }
 
   login = () => {
-
-    
-
     auth0.webAuth
       .authorize({
-        scope: Config.AUTH0_SCOPE,
-        audience: Config.AUTH0_AUDIENCE,
+        scope: "openid profile email",
+        audience: "https://shakir01.eu.auth0.com/userinfo",
         device: "lqf6ddg6dfsg6",
         prompt: "login"
       })
@@ -136,7 +133,7 @@ export default class uniLogin extends Component {
     this.setState({
       hasInitialized: true
     });
-    const resetAction = StackActions.reset({
+     const resetAction = StackActions.reset({
       index: 0,
       
       actions: [

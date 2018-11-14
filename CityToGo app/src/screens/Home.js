@@ -9,7 +9,6 @@ import SInfo from "react-native-sensitive-info";
 import { Button } from 'react-native-elements'
 import Maps from "./Maps";
 import Profile from "./Profile";
-import { Button } from "./../common/Button";
 import { NavigationActions, StackActions } from "react-navigation";
 
 const LATITUDE = 29.95539;
@@ -26,7 +25,7 @@ class Home extends Component {
         this.state = {
             latitude: LATITUDE,
             longitude: LONGITUDE,
-            polygons:[]
+            polygons: []
         };
     }
 
@@ -80,7 +79,7 @@ class Home extends Component {
             }),
         }).then((response) => response.json())
             .then((responseJson) => {
-                this.setState({polygons: responseJson.geometry.coordinates[0]})
+                this.setState({ polygons: responseJson.geometry.coordinates[0] })
                 return responseJson;
             })
             .catch((error) => {
@@ -117,6 +116,8 @@ class Home extends Component {
 
     render() {
 
+        const { navigate } = this.props.navigation;
+
         return (
             <View style={styles.container}>
 
@@ -126,7 +127,11 @@ class Home extends Component {
                     top: '2%', //for center align
                     alignSelf: 'flex-end' //for align to right
                 }}>
-                    <Button onPress={() => navigate('Profile', { name: 'Jane' })}>Profile</Button>
+                    <Button
+                        onPress={() => navigate('Profile', { name: 'Jane' })}
+                        buttonStyle={styles.buttonStyle}
+                        title="Profiel"
+                    />
                 </View>
                 <View style={styles.bottomView}>
                     <Button

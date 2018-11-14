@@ -32,4 +32,4 @@
         }
     };
 
-    export { Button};
+    export { Button1};
