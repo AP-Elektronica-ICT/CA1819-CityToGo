@@ -8,6 +8,9 @@ import SInfo from "react-native-sensitive-info";
 
 import { Button } from 'react-native-elements'
 import Maps from "./Maps";
+import Profile from "./Profile";
+import { Button } from "./../common/Button";
+import { NavigationActions, StackActions } from "react-navigation";
 
 const LATITUDE = 29.95539;
 const LONGITUDE = 78.07513;
@@ -94,12 +97,37 @@ class Home extends Component {
         longitudeDelta: LONGITUDE_DELTA
     });
 
+    onButtonPress() {
+        const resetAction = StackActions.reset({
+            index: 0,
+
+            actions: [
+
+                NavigationActions.navigate({
+                    routeName: "Profile",
+
+                    params: {}
+                })
+            ]
+
+        });
+        this.props.navigation.dispatch(resetAction);
+
+    };
+
     render() {
 
         return (
             <View style={styles.container}>
 
                 <Maps getPolygons={this.state.polygons} getMapRegion={this.getMapRegion.bind(this)} />
+                <View style={{
+                    position: 'absolute',//use absolute position to show button on top of the map
+                    top: '2%', //for center align
+                    alignSelf: 'flex-end' //for align to right
+                }}>
+                    <Button onPress={() => navigate('Profile', { name: 'Jane' })}>Profile</Button>
+                </View>
                 <View style={styles.bottomView}>
                     <Button
                         onPress={this.getMonument}
@@ -108,7 +136,16 @@ class Home extends Component {
                     />
                 </View>
             </View>
+
+            // <View style={styles.container} >
+            //   <Button>Profile</Button>
+            //     <Maps />
+            // </View>
+            // <View style={{ flex: 1 }}>
+            //     <Maps />
+            // </View>
         );
+
     }
 }
 

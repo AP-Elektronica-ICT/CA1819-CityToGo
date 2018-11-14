@@ -21,6 +21,7 @@ const auth0 = new Auth0({
   clientId: Config.AUTH0_CLIENT_ID
 });
 
+
 export default class uniLogin extends Component {
 
   static navigationOptions = ({ navigation }) => {
@@ -53,7 +54,7 @@ export default class uniLogin extends Component {
         auth0.auth
           .userInfo({ token: accessToken })
           .then(data => {
-            this.gotoHome(data);
+            this.gotoAccount(data); console.log(accessToken);
           })
           .catch(err => {
 
@@ -67,6 +68,7 @@ export default class uniLogin extends Component {
                 .catch(err2 => {
                   console.log("err getting new access token");
                   console.log(err2);
+                  
                 });
             });
             console.log(err)
@@ -127,25 +129,30 @@ export default class uniLogin extends Component {
         console.log(error);
       });
   };
-
-  gotoHome = data => {
-
-    
+  
+  gotoAccount = data => {
+    SInfo.setItem("userdata", JSON.stringify(data), {});
+    console.log(data)
     this.setState({
       hasInitialized: true
     });
     const resetAction = StackActions.reset({
       index: 0,
+      
       actions: [
+        
         NavigationActions.navigate({
           routeName: "Home",
+          
           params: {
+            
             name: data.name,
             picture: data.picture,
             //token: this.state.token
           }
         })
       ]
+      
     });
     this.props.navigation.dispatch(resetAction);
   };

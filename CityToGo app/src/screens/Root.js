@@ -2,7 +2,8 @@ import React from "react";
 import { createStackNavigator } from "react-navigation";
 
 import Login from './Login';
-import Home from './Home'
+import Home from './Home';
+import Profile from './Profile';
 
 
 const Root = createStackNavigator(
@@ -12,6 +13,9 @@ const Root = createStackNavigator(
             navigationOptions: {
                 header: null
             }
+        },
+        Profile: {
+            screen: Profile
         },
         Home: {
             screen: Home,
