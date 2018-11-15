@@ -155,17 +155,17 @@ export default class uniLogin extends Component {
   };
 
   getJWToken() {
-    fetch('https://citytogo.eu.auth0.com/oauth/token', {
+    fetch('https://shakir01.eu.auth0.com/oauth/token', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        client_id: '5FWBdAaaZg8DeUmzKNt3W0tBY7PeMnmu',
-        client_secret: "MAJZxQIq5cxodpvdorCRIdNhzVyaofVfBwTDLvo7v5GrOUO0ezD4cyjOR3QIhC12",
+        client_id: 'T6Jq2x7zx2WYrJud4QQODiC168XdKcro',
+        client_secret: "AcOz94Rfu106VhLUj7qRrVdW7_UVh-_lywydtP07C1emAgO_OAGDO56OMS67hStY",
         audience: "http://localhost:3000/",
-        grant_type: "client_credentials",
+        grant_type: "password",
       }),
     })
       .then((response) => response.json())
