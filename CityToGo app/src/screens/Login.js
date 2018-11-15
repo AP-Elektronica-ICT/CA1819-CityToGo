@@ -106,13 +106,12 @@ export default class uniLogin extends Component {
         audience: "https://shakir01.eu.auth0.com/userinfo",
         device: "lqf6ddg6dfsg6",
         prompt: "login",
-        grant_type: "password"
       })
       .then(res => {
         auth0.auth
           .userInfo({ token: res.accessToken })
           .then(data => {
-            this.gotoHome(data);
+            this.gotoAccount(data);
           })
           .catch(err => {
             console.log("err: ");
@@ -166,7 +165,7 @@ export default class uniLogin extends Component {
         client_id: 'T6Jq2x7zx2WYrJud4QQODiC168XdKcro',
         client_secret: "AcOz94Rfu106VhLUj7qRrVdW7_UVh-_lywydtP07C1emAgO_OAGDO56OMS67hStY",
         audience: "http://localhost:3000/",
-        grant_type: "password",
+        grant_type: "client_credentials",
       }),
     })
       .then((response) => response.json())
