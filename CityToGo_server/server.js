@@ -16,10 +16,10 @@ var jwtCheck = jwt({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: "https://citytogo.eu.auth0.com/.well-known/jwks.json"
+        jwksUri: "https://shakir01.eu.auth0.com/.well-known/jwks.json"
     }),
     audience: 'http://localhost:3000/',
-    issuer: "https://citytogo.eu.auth0.com/",
+    issuer: "https://shakir01.eu.auth0.com/",
     algorithms: ['RS256']
 });
 

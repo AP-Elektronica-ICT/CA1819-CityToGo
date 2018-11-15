@@ -105,7 +105,8 @@ export default class uniLogin extends Component {
         scope: "openid profile email",
         audience: "https://shakir01.eu.auth0.com/userinfo",
         device: "lqf6ddg6dfsg6",
-        prompt: "login"
+        prompt: "login",
+        grant_type: "password"
       })
       .then(res => {
         auth0.auth
