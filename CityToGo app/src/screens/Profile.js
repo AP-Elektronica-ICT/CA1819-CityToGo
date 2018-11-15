@@ -27,10 +27,10 @@ class Profiel extends Component {
     SInfo.getItem("userdata", {}).then(JsonData => {
       data = JSON.parse(JsonData)
       console.log(data.nickname)
-      // metadata = data["https://shakir01.net/user_metadata"];
-      // Age = metadata.Age;
-      // Full_name = metadata.FullName;
-      // location = metadata.Location;
+       metadata = data["https://shakir01.net/user_metadata"];
+       Age = metadata.Age;
+       Full_name = metadata.FullName;
+      location = metadata.Location;
       this.setState({ fetching: true });
     });
 
@@ -38,19 +38,19 @@ class Profiel extends Component {
 
   render() {
     console.log('render ' + data.nickname)
-    // if (!this.state.fetching) {
-    //   return (
-    //     <View style={styles.container}>
+     if (!this.state.fetching) {
+       return (
+        <View style={styles.container}>
 
-    //       <ActivityIndicator
-    //         size="large"
-    //         color="#05a5d1"
-    //         animating={!this.state.fetching}
-    //       />
-    //     </View>
+           <ActivityIndicator
+             size="large"
+             color="#05a5d1"
+             animating={!this.state.fetching}
+           />
+         </View>
 
-    //   )
-    // }
+       )
+     }
     return (
 
       <View style={styles.container}>
@@ -70,18 +70,18 @@ class Profiel extends Component {
               <Image style={styles.icon} source={{ uri: 'https://cdn3.iconfinder.com/data/icons/black-easy/512/538642-user_512x512.png' }} />
             </View>
             <View style={styles.infoContent}>
-              <Text style={styles.info}>{data.nickname}</Text>
+              <Text style={styles.info}>{Full_name}</Text>
             </View>
           </View> 
 
-          {/* <View style={styles.item}>
+          <View style={styles.item}>
             <View style={styles.iconContent}>
               <Image style={styles.icon} source={{ uri: 'http://icons.iconarchive.com/icons/icons8/windows-8/256/Users-Age-icon.png' }} />
             </View>
             <View style={styles.infoContent}>
               <Text style={styles.info}>{Age}</Text>
             </View>
-          </View> */}
+          </View> 
 
           <View style={styles.item}>
             <View style={styles.iconContent}>
@@ -94,14 +94,14 @@ class Profiel extends Component {
             </View>
           </View>
 
-          {/* <View style={styles.item}>
+           <View style={styles.item}>
             <View style={styles.iconContent}>
               <Image style={styles.icon} source={{ uri: 'https://www.amdtelecom.net/wp-content/uploads/2018/08/loc.png' }} />
             </View>
             <View style={styles.infoContent}>
               <Text style={styles.info}>{location}</Text>
             </View>
-          </View> */}
+          </View> 
 
         </View>
 
