@@ -8,6 +8,14 @@ const LATITUDE = 29.95539;
 const LONGITUDE = 78.07513;
 const LATITUDE_DELTA = 0.009;
 const LONGITUDE_DELTA = 0.009;
+var markers = [
+    {
+      latitude: 45.65,
+      longitude: -78.90,
+      title: 'Foo Place',
+      subtitle: '1234 Foo Drive'
+    }
+  ];
 
 class Maps extends Component {
 
@@ -75,13 +83,20 @@ class Maps extends Component {
                 //rotateEnabled={false}
                 customMapStyle={mapStyle}
                 ref="map"
+                
+                
 
             >
 
 
                 {this.renderPolygon()}
 
-
+              <MapView.Marker
+            coordinate={{latitude: 51.21898431205421,
+            longitude: 4.373890642444849}}
+            title={"Quiz"}
+            description={"description"}
+         />
 
             </MapView>
         );
