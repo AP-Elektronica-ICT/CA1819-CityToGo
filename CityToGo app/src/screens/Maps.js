@@ -95,6 +95,7 @@ class Maps extends Component {
             coordinate={{latitude: 51.21898431205421,
             longitude: 4.373890642444849}}
             title={"Quiz"}
+            image={require('../assets/star.png')}
             description={"description"}
          />
 
