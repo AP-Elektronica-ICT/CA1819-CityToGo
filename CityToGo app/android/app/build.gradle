@@ -152,6 +152,7 @@ dependencies {
     implementation (project(':react-native-camera')) {
         exclude group: "com.google.android.gms"
         exclude group: "com.android.support"
+        compile 'com.android.support:exifinterface:27.+'
     }
     // implementation "com.android.support:exifinterface:+"
     // implementation "com.android.support:support-annotations:+"
