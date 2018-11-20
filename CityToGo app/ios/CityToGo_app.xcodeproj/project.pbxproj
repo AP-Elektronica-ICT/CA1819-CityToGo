@@ -42,6 +42,7 @@
 		6E6F0452733B4B77901E6D7B /* libReactNativeConfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A02E533185845A1874371F0 /* libReactNativeConfig.a */; };
 		D0DF05944A7840AD9FB9F64E /* libRNSensitiveInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BBF8DD414E145E6994383B5 /* libRNSensitiveInfo.a */; };
 		1709DFD3F69446E2AA002CA3 /* libRCTRestart.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43DA4D67241141B38C26B25F /* libRCTRestart.a */; };
+		4D7BE66945B841878DEA33C3 /* libRNCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CDA0B4A990414D34A7C32165 /* libRNCamera.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -357,6 +358,8 @@
 		9BBF8DD414E145E6994383B5 /* libRNSensitiveInfo.a */ = {isa = PBXFileReference; name = "libRNSensitiveInfo.a"; path = "libRNSensitiveInfo.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		228E4E43ED9D49A0A2F49866 /* RCTRestart.xcodeproj */ = {isa = PBXFileReference; name = "RCTRestart.xcodeproj"; path = "../node_modules/react-native-restart/ios/RCTRestart.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		43DA4D67241141B38C26B25F /* libRCTRestart.a */ = {isa = PBXFileReference; name = "libRCTRestart.a"; path = "libRCTRestart.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		5B334AA08CE242639B685E11 /* RNCamera.xcodeproj */ = {isa = PBXFileReference; name = "RNCamera.xcodeproj"; path = "../node_modules/react-native-camera/ios/RNCamera.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		CDA0B4A990414D34A7C32165 /* libRNCamera.a */ = {isa = PBXFileReference; name = "libRNCamera.a"; path = "libRNCamera.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -389,6 +392,7 @@
 				6E6F0452733B4B77901E6D7B /* libReactNativeConfig.a in Frameworks */,
 				D0DF05944A7840AD9FB9F64E /* libRNSensitiveInfo.a in Frameworks */,
 				1709DFD3F69446E2AA002CA3 /* libRCTRestart.a in Frameworks */,
+				4D7BE66945B841878DEA33C3 /* libRNCamera.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -580,6 +584,7 @@
 				735410AE860045DBA4570B26 /* ReactNativeConfig.xcodeproj */,
 				458474B60E8449A2AB73BC28 /* RNSensitiveInfo.xcodeproj */,
 				228E4E43ED9D49A0A2F49866 /* RCTRestart.xcodeproj */,
+				5B334AA08CE242639B685E11 /* RNCamera.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1212,6 +1217,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1220,6 +1226,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-sensitive-info\ios\RNSensitiveInfo",
 					"$(SRCROOT)\..\node_modules\react-native-restart\ios\RCTRestart/**",
+					"$(SRCROOT)\..\node_modules\react-native-camera\ios/**",
 				);
 			};
 			name = Debug;
@@ -1246,6 +1253,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1254,6 +1262,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-sensitive-info\ios\RNSensitiveInfo",
 					"$(SRCROOT)\..\node_modules\react-native-restart\ios\RCTRestart/**",
+					"$(SRCROOT)\..\node_modules\react-native-camera\ios/**",
 				);
 			};
 			name = Release;
@@ -1281,6 +1290,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-sensitive-info\ios\RNSensitiveInfo",
 					"$(SRCROOT)\..\node_modules\react-native-restart\ios\RCTRestart/**",
+					"$(SRCROOT)\..\node_modules\react-native-camera\ios/**",
 				);
 			};
 			name = Debug;
@@ -1307,6 +1317,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-sensitive-info\ios\RNSensitiveInfo",
 					"$(SRCROOT)\..\node_modules\react-native-restart\ios\RCTRestart/**",
+					"$(SRCROOT)\..\node_modules\react-native-camera\ios/**",
 				);
 			};
 			name = Release;
@@ -1341,6 +1352,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1349,6 +1361,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-sensitive-info\ios\RNSensitiveInfo",
 					"$(SRCROOT)\..\node_modules\react-native-restart\ios\RCTRestart/**",
+					"$(SRCROOT)\..\node_modules\react-native-camera\ios/**",
 				);
 			};
 			name = Debug;
@@ -1383,6 +1396,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1391,6 +1405,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-sensitive-info\ios\RNSensitiveInfo",
 					"$(SRCROOT)\..\node_modules\react-native-restart\ios\RCTRestart/**",
+					"$(SRCROOT)\..\node_modules\react-native-camera\ios/**",
 				);
 			};
 			name = Release;
@@ -1424,6 +1439,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1432,6 +1448,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-sensitive-info\ios\RNSensitiveInfo",
 					"$(SRCROOT)\..\node_modules\react-native-restart\ios\RCTRestart/**",
+					"$(SRCROOT)\..\node_modules\react-native-camera\ios/**",
 				);
 			};
 			name = Debug;
@@ -1465,6 +1482,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1473,6 +1491,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-config\ios\ReactNativeConfig",
 					"$(SRCROOT)\..\node_modules\react-native-sensitive-info\ios\RNSensitiveInfo",
 					"$(SRCROOT)\..\node_modules\react-native-restart\ios\RCTRestart/**",
+					"$(SRCROOT)\..\node_modules\react-native-camera\ios/**",
 				);
 			};
 			name = Release;
