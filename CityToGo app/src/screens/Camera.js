@@ -10,25 +10,14 @@ import {
     View
 } from "react-native";
 
-const PendingView = () => (
-    <View
-        style={{
-            flex: 1,
-            backgroundColor: 'lightgreen',
-            justifyContent: 'center',
-            alignItems: 'center',
-        }}
-    >
-        <Text>Waiting</Text>
-    </View>
-);
+
 
 class Camera extends Component {
     render() {
         return (
             <View style={styles.container}>
                 <RNCamera
-                    ref={ref => {
+                    ref={(ref) => {
                         this.camera = ref;
                     }}
                     style={styles.preview}
@@ -37,31 +26,27 @@ class Camera extends Component {
                     permissionDialogTitle={'Permission to use camera'}
                     permissionDialogMessage={'We need your permission to use your camera phone'}
                 >
-                    {({ camera, status }) => {
-                        if (status !== 'READY') return <PendingView />;
-                        return (
-                            <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-                                <TouchableOpacity onPress={() => this.takePicture(camera)} style={styles.capture}>
-                                    <Text style={{ fontSize: 14 }}> SNAP </Text>
-                                </TouchableOpacity>
-                            </View>
-                        );
-                    }}
-
+                <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center', }}>
+                    <TouchableOpacity
+                        onPress={this.takePicture.bind(this)}
+                        style={styles.capture}
+                    >
+                        <Text style={{ fontSize: 14 }}> SNAP </Text>
+                    </TouchableOpacity>
+                </View>
                 </RNCamera>
-
             </View>
         );
     }
 
-    takePicture = async function (camera) {
-        //const options = { quality: 0.5, base64: true };
-        //const data = await camera.takePictureAsync(options);
-        //  eslint-disable-next-line
-        console.log(data.uri);
-    }
+    takePicture = async function () {
+        if (this.camera) {
+            const options = { quality: 0.5, base64: true };
+            const data = await this.camera.takePictureAsync(options)
+            console.log(data.uri);
+        }
+    };
 }
-export default Camera;
 
 const styles = StyleSheet.create({
     container: {
@@ -76,13 +61,17 @@ const styles = StyleSheet.create({
     },
     capture: {
         flex: 0,
+        margin: 20,
+        borderWidth: 6,
+        borderColor: 'rgba(0,0,0,0.2)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 85,
+        height: 85,
         backgroundColor: '#fff',
-        borderRadius: 5,
-        padding: 15,
-        paddingHorizontal: 20,
-        alignSelf: 'center',
-        margin: 20
+        borderRadius: 100,
     }
 });
 
+export default Camera;
 //AppRegistry.registerComponent('Camera', () => Camera);
