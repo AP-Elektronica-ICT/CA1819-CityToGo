@@ -4,6 +4,7 @@ import { createStackNavigator } from "react-navigation";
 import Login from './Login';
 import Home from './Home';
 import Profile from './Profile';
+import Camera from './Camera'
 
 
 const Root = createStackNavigator(
@@ -22,10 +23,16 @@ const Root = createStackNavigator(
             navigationOptions: {
                 header: null
             }
+        },
+        Camera: {
+            screen: Camera,
+            navigationOptions: {
+                header: null
+            }
         }
     },
     {
-        initialRouteName: "Login" // show the login screen by default
+        initialRouteName: "Camera" // show the login screen by default
     }
 );
 
