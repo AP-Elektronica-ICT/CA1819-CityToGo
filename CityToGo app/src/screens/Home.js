@@ -88,7 +88,6 @@ class Home extends Component {
 
     }
 
-
     getMapRegion = () => ({
         latitude: this.state.latitude,
         longitude: this.state.longitude,
@@ -99,19 +98,14 @@ class Home extends Component {
     onButtonPress() {
         const resetAction = StackActions.reset({
             index: 0,
-
             actions: [
-
                 NavigationActions.navigate({
                     routeName: "Profile",
-
                     params: {}
                 })
             ]
-
         });
         this.props.navigation.dispatch(resetAction);
-
     };
 
     render() {
@@ -122,33 +116,24 @@ class Home extends Component {
             <View style={styles.container}>
 
                 <Maps getPolygons={this.state.polygons} getMapRegion={this.getMapRegion.bind(this)} />
-                <View style={{
-                    position: 'absolute',//use absolute position to show button on top of the map
-                    top: '2%', //for center align
-                    alignSelf: 'flex-end' //for align to right
-                }}>
+
+                <View style={styles.borronProfielView}>
                     <Button
                         onPress={() => navigate('Profile', { name: 'Jane' })}
                         buttonStyle={styles.buttonStyle}
                         title="Profiel"
                     />
                 </View>
-                <View style={styles.bottomView}>
+
+                <View style={styles.bottomStartView}>
                     <Button
                         onPress={this.getMonument}
                         buttonStyle={styles.buttonStyle}
                         title="Start"
                     />
                 </View>
-            </View>
 
-            // <View style={styles.container} >
-            //   <Button>Profile</Button>
-            //     <Maps />
-            // </View>
-            // <View style={{ flex: 1 }}>
-            //     <Maps />
-            // </View>
+            </View>
         );
 
     }
@@ -158,9 +143,8 @@ export default Home;
 
 const styles = StyleSheet.create({
     container: {
+        alignItems: 'stretch',
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
     },
     buttonStyle: {
         backgroundColor: "rgba(92, 99,216, 1)",
@@ -170,11 +154,14 @@ const styles = StyleSheet.create({
         borderWidth: 0,
         borderRadius: 5
     },
-    bottomView: {
-        height: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
+    bottomStartView: {
         position: 'absolute',
-        bottom: 20
+        bottom: '2%',
+        alignItems: 'center'
     },
+    borronProfielView: {
+        position: 'absolute',
+        top: '2%',
+        alignSelf: 'flex-end'
+    }
 });

@@ -2,10 +2,7 @@ import React, { Component } from "react";
 import { RNCamera } from 'react-native-camera';
 
 import {
-    AppRegistry,
-    Dimensions,
     StyleSheet,
-    Text,
     TouchableOpacity,
     View
 } from "react-native";
@@ -31,7 +28,6 @@ class Camera extends Component {
                         onPress={this.takePicture.bind(this)}
                         style={styles.capture}
                     >
-                        <Text style={{ fontSize: 14 }}> SNAP </Text>
                     </TouchableOpacity>
                 </View>
                 </RNCamera>

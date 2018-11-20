@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { StyleSheet, DeviceEventEmitter, View } from "react-native";
+import {
+    StyleSheet,
+    DeviceEventEmitter,
+    View,
+    TouchableOpacity,
+    Text
+} from "react-native";
 import MapView, { Polygon } from "react-native-maps";
 import { SensorManager } from 'NativeModules';
 import mapStyle from "../styles/jsons/mapstyle";
@@ -35,21 +41,25 @@ class Maps extends Component {
         });
 
         if (this.props.getPolygons.length > 0) {
-            console.log("im ready")
             return (
-                <Polygon
-                    coordinates={polygon}
-                    fillColor='red'
-                    strokeColor='black'
-                />
-            )
+                <View>
+                    <Polygon
+                        coordinates={polygon}
+                        fillColor='red'
+                        strokeColor='black'
+                        onPress={()=> this.polyPress()}
+                    >
+                    </Polygon>
+                    
+                </View>
 
-        } else {
-            console.log("ik ben null")
-            return (
-                null
             )
         }
+    }
+
+    polyPress() {
+        console.log("poly pressed")
+
     }
 
 
@@ -66,7 +76,6 @@ class Maps extends Component {
                 style={styles.map}
                 region={this.props.getMapRegion()}
                 showsUserLocation={true}
-                //showUserLocation
                 //followUserLocation
                 //loadingEnabled
                 //scrollEnabled={false}
@@ -75,14 +84,8 @@ class Maps extends Component {
                 //rotateEnabled={false}
                 customMapStyle={mapStyle}
                 ref="map"
-
             >
-
-
                 {this.renderPolygon()}
-
-
-
             </MapView>
         );
     }
@@ -91,10 +94,18 @@ export default Maps;
 
 const styles = StyleSheet.create({
     map: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
+        flex: 1,
     },
+    capture: {
+        flex: 0,
+        margin: 20,
+        borderWidth: 6,
+        borderColor: 'rgba(0,0,0,0.2)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 85,
+        height: 85,
+        backgroundColor: '#fff',
+        borderRadius: 100,
+    }
 });
