@@ -1,24 +1,18 @@
 import React, { Component, } from "react";
 import {
     StyleSheet,
-    View,
-    Text
+    View
 } from "react-native";
 import SInfo from "react-native-sensitive-info";
-
 import { Button } from 'react-native-elements'
 import Maps from "./Maps";
-import Profile from "./Profile";
-import { NavigationActions, StackActions } from "react-navigation";
 
 const LATITUDE = 29.95539;
 const LONGITUDE = 78.07513;
 const LATITUDE_DELTA = 0.009;
 const LONGITUDE_DELTA = 0.009;
 
-
 class Home extends Component {
-
 
     constructor(props) {
         super(props);
@@ -79,13 +73,24 @@ class Home extends Component {
             }),
         }).then((response) => response.json())
             .then((responseJson) => {
-                this.setState({ polygons: responseJson.geometry.coordinates[0] })
-                return responseJson;
+                this.mapPolygon(responseJson)
             })
             .catch((error) => {
                 console.error(error);
             });
 
+    }
+
+    mapPolygon(responseJson) {
+        const polygon = responseJson.geometry.coordinates[0].map(coordsArr => {
+            let coords = {
+                latitude: coordsArr[1],
+                longitude: coordsArr[0],
+            }
+            return coords;
+        });
+
+        this.setState({ polygons: polygon })
     }
 
     getMapRegion = () => ({
@@ -95,19 +100,6 @@ class Home extends Component {
         longitudeDelta: LONGITUDE_DELTA
     });
 
-    onButtonPress() {
-        const resetAction = StackActions.reset({
-            index: 0,
-            actions: [
-                NavigationActions.navigate({
-                    routeName: "Profile",
-                    params: {}
-                })
-            ]
-        });
-        this.props.navigation.dispatch(resetAction);
-    };
-
     render() {
 
         const { navigate } = this.props.navigation;
@@ -115,11 +107,11 @@ class Home extends Component {
         return (
             <View style={styles.container}>
 
-                <Maps getPolygons={this.state.polygons} getMapRegion={this.getMapRegion.bind(this)} />
+                <Maps navigate={navigate} getPolygons={this.state.polygons} getMapRegion={this.getMapRegion.bind(this)} />
 
                 <View style={styles.borronProfielView}>
                     <Button
-                        onPress={() => navigate('Profile', { name: 'Jane' })}
+                        onPress={() => navigate('Profile')}
                         buttonStyle={styles.buttonStyle}
                         title="Profiel"
                     />
