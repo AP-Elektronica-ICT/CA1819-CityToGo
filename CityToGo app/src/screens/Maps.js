@@ -9,14 +9,10 @@ import {
 import MapView, { Polygon } from "react-native-maps";
 import { SensorManager } from 'NativeModules';
 import mapStyle from "../styles/jsons/mapstyle";
-
-const LATITUDE = 29.95539;
-const LONGITUDE = 78.07513;
-const LATITUDE_DELTA = 0.009;
-const LONGITUDE_DELTA = 0.009;
+import { pointInPolygon } from 'geojson-utils';
+import { NavigationActions, StackActions } from "react-navigation";
 
 class Maps extends Component {
-
 
     componentWillMount() {
 
@@ -32,25 +28,19 @@ class Maps extends Component {
     }
 
     renderPolygon() {
-        const polygon = this.props.getPolygons.map(coordsArr => {
-            let coords = {
-                latitude: coordsArr[1],
-                longitude: coordsArr[0],
-            }
-            return coords;
-        });
-
         if (this.props.getPolygons.length > 0) {
+            //const { navigate } = this.props.navigation;
             return (
                 <View>
                     <Polygon
-                        coordinates={polygon}
+                        coordinates={this.props.getPolygons}
                         fillColor='red'
                         strokeColor='black'
-                        onPress={()=> this.polyPress()}
+                        tappable={true}
+                        onPress={() => this.props.navigate('Camera')}
                     >
                     </Polygon>
-                    
+
                 </View>
 
             )
@@ -61,15 +51,9 @@ class Maps extends Component {
         console.log("poly pressed")
 
     }
-
-
-
     render() {
-        //this.renderPolygon()
-        // console.log("fake polygone")
-        // console.log(this.state.polygons[0].coordinates[0])
-        // console.log("real polygone")
-        // console.log(this.props.getPolygons)
+
+        //const { navigate } = this.props.navigation;
 
         return (
             <MapView
@@ -95,17 +79,5 @@ export default Maps;
 const styles = StyleSheet.create({
     map: {
         flex: 1,
-    },
-    capture: {
-        flex: 0,
-        margin: 20,
-        borderWidth: 6,
-        borderColor: 'rgba(0,0,0,0.2)',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: 85,
-        height: 85,
-        backgroundColor: '#fff',
-        borderRadius: 100,
     }
 });
