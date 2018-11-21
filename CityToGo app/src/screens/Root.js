@@ -5,6 +5,7 @@ import Login from './Login';
 import Home from './Home';
 import Profile from './Profile';
 import Camera from './Camera'
+import Maps from './Maps'
 
 
 const Root = createStackNavigator(
@@ -26,6 +27,12 @@ const Root = createStackNavigator(
         },
         Camera: {
             screen: Camera,
+            navigationOptions: {
+                header: null
+            }
+        },
+        Map: {
+            screen: Maps,
             navigationOptions: {
                 header: null
             }
