@@ -45,7 +45,8 @@ class Home extends Component {
 
         SInfo.getItem("accessTokenServer", {}).then(accessToken => {
             global.token = accessToken
-        })
+        }) 
+        
     }
 
     componentWillMount() {
@@ -66,7 +67,7 @@ class Home extends Component {
 
 
     getMonument = async () => {
-        fetch('http://192.168.1.60:3000/api/getNextLocation', {
+        fetch('http://172.16.139.26:3000/api/getNextLocation', {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,

@@ -3,11 +3,19 @@ import { StyleSheet, DeviceEventEmitter, View } from "react-native";
 import MapView, { Polygon } from "react-native-maps";
 import { SensorManager } from 'NativeModules';
 import mapStyle from "../styles/jsons/mapstyle";
+import randomLocation from 'random-location';
 
 const LATITUDE = 29.95539;
 const LONGITUDE = 78.07513;
 const LATITUDE_DELTA = 0.009;
 const LONGITUDE_DELTA = 0.009;
+const MyLocation = {
+    latitude: 51.221671666666666,
+    longitude: 4.36896
+  }
+  const R = 500 // meters
+  const randomPoint = randomLocation.randomCircumferencePoint(MyLocation, R)
+  const randomPoint1 = randomLocation.randomCircumferencePoint(MyLocation, R)
 var markers = [
     {
       latitude: 45.65,
@@ -92,8 +100,13 @@ class Maps extends Component {
                 {this.renderPolygon()}
 
               <MapView.Marker
-            coordinate={{latitude: 51.21898431205421,
-            longitude: 4.373890642444849}}
+            coordinate= {randomPoint}
+            title={"Quiz"}
+            image={require('../assets/star.png')}
+            description={"description"}
+         />
+             <MapView.Marker
+            coordinate= {randomPoint1}
             title={"Quiz"}
             image={require('../assets/star.png')}
             description={"description"}

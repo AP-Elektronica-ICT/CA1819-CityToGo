@@ -55,7 +55,7 @@ function calculateLocation(locationUser, locationDest) {
         latitude: locationDest.geometry.coordinates[0][0][1],
         longitude: locationDest.geometry.coordinates[0][0][0]
     }
-
+   // console.log("Afstand tot bestemming is "+LocationDS);
     //Distance wordt in de array gestoken
     locationDest.geometry.coordinates[0][0][2] = (haversine(currentUserLocation, LocationDS));
     //console.log(locationDest.geometry.coordinates[0][0][2]);
