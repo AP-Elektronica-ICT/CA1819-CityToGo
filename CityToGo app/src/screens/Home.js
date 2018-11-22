@@ -10,11 +10,21 @@ import { Button } from 'react-native-elements'
 import Maps from "./Maps";
 import Profile from "./Profile";
 import { NavigationActions, StackActions } from "react-navigation";
+import randomLocation from 'random-location';
+import geolib from "geolib";
 
 const LATITUDE = 29.95539;
 const LONGITUDE = 78.07513;
 const LATITUDE_DELTA = 0.009;
 const LONGITUDE_DELTA = 0.009;
+var MyLocation;
+
+const R=500;
+var center;
+var distanceToCheckpoint;
+var stral ;
+
+
 
 
 class Home extends Component {
@@ -25,7 +35,9 @@ class Home extends Component {
         this.state = {
             latitude: LATITUDE,
             longitude: LONGITUDE,
-            polygons: []
+            polygons: [],
+            randomQuizes:[],
+            
         };
     }
 
@@ -58,7 +70,7 @@ class Home extends Component {
                 maximumAge: 1000
             }
         );
-
+     this.getRandomQuizes();
     }
 
     componentWillUnmount() {
@@ -86,6 +98,28 @@ class Home extends Component {
             .catch((error) => {
                 console.error(error);
             });
+
+    }
+
+    getRandomQuizes(){
+        MyLocation = {
+           latitude: this.getMapRegion().latitude,
+            longitude: this.getMapRegion().latitude
+       }
+      console.log(this.state.location);
+      center = geolib.getCenter([
+      { latitude: MyLocation.latitude, longitude: MyLocation.longitude },
+      { latitude: 51.217141304587265, longitude: 4.3824121758995025 }]);
+
+   distanceToCheckpoint = randomLocation.distance(MyLocation, { latitude: 51.217141304587265, longitude: 4.3824121758995025 })
+    stral = parseInt(distanceToCheckpoint) / 3; 
+    let arr =[]
+    for(let i = 0; i < 5; i++){
+        var randomPoints = randomLocation.randomCirclePoint(MyLocation, R)
+        arr.push(randomPoints);
+        console.log(this.state.randomQuizes);
+    }
+    this.setState({randomQuizes: arr})
 
     }
 
@@ -124,7 +158,7 @@ class Home extends Component {
         return (
             <View style={styles.container}>
 
-                <Maps getPolygons={this.state.polygons} getMapRegion={this.getMapRegion.bind(this)} />
+                <Maps getRandom={this.state.randomQuizes} getPolygons={this.state.polygons} getMapRegion={this.getMapRegion.bind(this)} />
                 <View style={{
                     position: 'absolute',//use absolute position to show button on top of the map
                     top: '2%', //for center align

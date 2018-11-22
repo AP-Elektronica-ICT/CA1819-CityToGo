@@ -3,39 +3,18 @@ import { StyleSheet, DeviceEventEmitter, View } from "react-native";
 import MapView, { Polygon } from "react-native-maps";
 import { SensorManager } from 'NativeModules';
 import mapStyle from "../styles/jsons/mapstyle";
-import randomLocation from 'random-location';
-import geolib from "geolib";
 
 
-const MyLocation= {
-    latitude: 51.221671666666666,
-    longitude: 4.36896
-  }
-  R=500;
-//const center;
-// const distanceToCheckpoint;
-// const stral = parseInt(distanceToCheckpoint) / 3;
-const randomPoint = randomLocation.randomCirclePoint(MyLocation, R)
-const randomPoint1 = randomLocation.randomCirclePoint(MyLocation, R)
-const randomPoint2 = randomLocation.randomCirclePoint(MyLocation, R)
-const randomPoint3 = randomLocation.randomCirclePoint(MyLocation, R)
+
+
 
 
 
 class Maps extends Component {
     constructor(props) {
         super(props)
-        this.state = { location: this.props.getMapRegion()};
-        // MyLocation = {
-        //     latitude: this.state.location.latitude,
-        //     longitude: this.state.location.longitude
-        // }
-        // center = geolib.getCenter([
-        //     { latitude: MyLocation.latitude, longitude: MyLocation.longitude },
-        //     { latitude: 51.217141304587265, longitude: 4.3824121758995025 }]);
-
-       // distanceToCheckpoint = randomLocation.distance(MyLocation, { latitude: 51.217141304587265, longitude: 4.3824121758995025 })
        
+
     }
 
 
@@ -83,8 +62,8 @@ class Maps extends Component {
 
 
     render() {
-        //console.log('live checkpoint')
-        //console.log(this.props.getPolygons().latitude)
+        console.log('live checkpoint')
+        console.log(this.props.getRandom)
         //this.renderPolygon()
         // console.log("fake polygone")
         // console.log(this.state.polygons[0].coordinates[0])
@@ -105,34 +84,31 @@ class Maps extends Component {
                 //rotateEnabled={false}
                 customMapStyle={mapStyle}
                 ref="map"
-
-
-
             >
 
 
                 {this.renderPolygon()}
 
                 <MapView.Marker
-                    coordinate={randomPoint}
+                    coordinate={this.props.getRandom[0]}
                     title={"Quiz"}
                     image={require('../assets/star.png')}
                     description={"description"}
                 />
                 <MapView.Marker
-                    coordinate={randomPoint1}
+                    coordinate={this.props.getRandom[1]}
                     title={"Quiz"}
                     image={require('../assets/star.png')}
                     description={"description"}
                 />
                 <MapView.Marker
-                    coordinate={randomPoint2}
+                    coordinate={this.props.getRandom[2]}
                     title={"Quiz"}
                     image={require('../assets/star.png')}
                     description={"description"}
                 />
                 <MapView.Marker
-                    coordinate={randomPoint3}
+                    coordinate={this.props.getRandom[3]}
                     title={"Quiz"}
                     image={require('../assets/star.png')}
                     description={"description"}
