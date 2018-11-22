@@ -5,6 +5,7 @@ var jwks = require('jwks-rsa');
 const fetch = require('node-fetch');
 const bodyparser = require('body-parser');
 const haversine = require('haversine');
+var vision = require('@google-cloud/vision');
 
 
 app.use(bodyparser.json());
@@ -88,8 +89,32 @@ app.post('/api/getNextLocation', (req, res) => {
 }
 );
 
+//Google Vision API
+// Imports the Google Cloud client library
+//const vision = require('@google-cloud/vision');
+
+// Creates a client
+const client = new vision.ImageAnnotatorClient({
+    project_id: "citytogo-219013",
+    keyFilename:'cloud_vision_key.json'
+});
+
+// Performs label detection on the image file
+client
+    .labelDetection('./resources/Savannah-cat.jpg')
+    .then(results => {
+        const labels = results[0].labelAnnotations;
+        console.log('Labels:');
+        labels.forEach(label => console.log(label.description));
+    })
+    .catch(err => {
+        console.error('ERROR:', err);
+    });
+
+
+
 app.listen(port, () => {
-    
+
 
     fetch('https://opendata.arcgis.com/datasets/628ded9e05184e76b69719eb8ce0e0aa_207.geojson')
         .then((response) => response.json())
