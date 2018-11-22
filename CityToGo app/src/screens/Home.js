@@ -67,7 +67,7 @@ class Home extends Component {
 
 
     getMonument = async () => {
-        fetch('http://172.16.139.26:3000/api/getNextLocation', {
+        fetch('http://172.16.201.130:3000/api/getNextLocation', {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -96,6 +96,8 @@ class Home extends Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
     });
+
+    
 
     onButtonPress() {
         const resetAction = StackActions.reset({
