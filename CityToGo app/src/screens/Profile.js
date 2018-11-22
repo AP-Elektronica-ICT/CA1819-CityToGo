@@ -26,7 +26,7 @@ class Profiel extends Component {
 
     SInfo.getItem("userdata", {}).then(JsonData => {
       data = JSON.parse(JsonData)
-      console.log(data.nickname)
+      //console.log(data.nickname)
        metadata = data["https://shakir01.net/user_metadata"];
        Age = metadata.Age;
        Full_name = metadata.FullName;
@@ -37,7 +37,7 @@ class Profiel extends Component {
   }
 
   render() {
-    console.log('render ' + data.nickname)
+    //console.log('render ' + data.nickname)
      if (!this.state.fetching) {
        return (
         <View style={styles.container}>

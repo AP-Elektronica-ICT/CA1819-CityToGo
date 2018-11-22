@@ -39,7 +39,7 @@ const Root = createStackNavigator(
         }
     },
     {
-        initialRouteName: "Login" // show the login screen by default
+        initialRouteName: "Camera" // show the login screen by default
     }
 );
 

@@ -4,7 +4,8 @@ import { RNCamera } from 'react-native-camera';
 import {
     StyleSheet,
     TouchableOpacity,
-    View
+    View,
+    AppRegistry
 } from "react-native";
 
 
@@ -23,23 +24,53 @@ class Camera extends Component {
                     permissionDialogTitle={'Permission to use camera'}
                     permissionDialogMessage={'We need your permission to use your camera phone'}
                 >
-                <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center', }}>
-                    <TouchableOpacity
-                        onPress={this.takePicture.bind(this)}
-                        style={styles.capture}
-                    >
-                    </TouchableOpacity>
-                </View>
+                    <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center', }}>
+                        <TouchableOpacity
+                            onPress={this.takePicture.bind(this)}
+                            style={styles.capture}
+                        >
+                        </TouchableOpacity>
+                    </View>
                 </RNCamera>
             </View>
         );
     }
 
-    takePicture = async function () {
+    // getVisionLabels = async (base64Image) => {
+    //     fetch('https://vision.googleapis.com/v1/images:annotate?key=AIzaSyB4HgIDhaV6sv3ddo_Xol9r4fDLj7RpOaU'), {
+    //         method: 'POST',
+    //         body: {
+    //             "requests": [
+    //                 {
+    //                     "image": {
+    //                         "content": base64Image
+    //                     },
+    //                     "features": [
+    //                         {
+    //                             "type": "LABEL_DETECTION"
+    //                         }
+    //                     ]
+    //                 }
+    //             ]
+    //         }
+    //     }.then((response) => response.json())
+    //         .then((responseJson) => {
+    //             console.log("this is vision labels")
+    //             console.log(responseJson)
+    //         })
+    //         .catch((error) => {
+    //             debugger
+    //             console.error(error);
+    //         });
+
+    // }
+
+    takePicture = async () => {
         if (this.camera) {
             const options = { quality: 0.5, base64: true };
             const data = await this.camera.takePictureAsync(options)
-            console.log(data.uri);
+            console.log(data);
+            //this.getVisionLabels(data.base64)
         }
     };
 }
@@ -70,4 +101,4 @@ const styles = StyleSheet.create({
 });
 
 export default Camera;
-//AppRegistry.registerComponent('Camera', () => Camera);
+AppRegistry.registerComponent('Camera', () => Camera);

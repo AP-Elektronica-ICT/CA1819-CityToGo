@@ -7,8 +7,8 @@ import SInfo from "react-native-sensitive-info";
 import { Button } from 'react-native-elements'
 import Maps from "./Maps";
 
-const LATITUDE = 29.95539;
-const LONGITUDE = 78.07513;
+const LATITUDE = 0;
+const LONGITUDE = 0;
 const LATITUDE_DELTA = 0.009;
 const LONGITUDE_DELTA = 0.009;
 
@@ -60,7 +60,7 @@ class Home extends Component {
 
 
     getMonument = async () => {
-        fetch('http://192.168.1.15:3000/api/getNextLocation', {
+        fetch('http://172.16.201.184:3000/api/getNextLocation', {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -78,7 +78,6 @@ class Home extends Component {
             .catch((error) => {
                 console.error(error);
             });
-
     }
 
     mapPolygon(responseJson) {

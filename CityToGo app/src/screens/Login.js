@@ -54,7 +54,7 @@ export default class uniLogin extends Component {
         auth0.auth
           .userInfo({ token: accessToken })
           .then(data => {
-            this.gotoAccount(data); console.log(accessToken);console.log(data);console.log(" up is data")
+            this.gotoAccount(data); // console.log(accessToken);console.log(data);console.log(" up is data")
           })
           .catch(err => {
 
