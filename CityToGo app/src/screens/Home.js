@@ -19,10 +19,10 @@ const LATITUDE_DELTA = 0.009;
 const LONGITUDE_DELTA = 0.009;
 var MyLocation;
 
-const R=500;
+const R = 500;
 var center;
 var distanceToCheckpoint;
-var stral ;
+var stral;
 
 
 
@@ -36,8 +36,8 @@ class Home extends Component {
             latitude: LATITUDE,
             longitude: LONGITUDE,
             polygons: [],
-            randomQuizes:[],
-            
+            randomQuizes: [],
+
         };
     }
 
@@ -57,8 +57,8 @@ class Home extends Component {
 
         SInfo.getItem("accessTokenServer", {}).then(accessToken => {
             global.token = accessToken
-        }) 
-        
+        })
+
     }
 
     componentWillMount() {
@@ -70,7 +70,7 @@ class Home extends Component {
                 maximumAge: 1000
             }
         );
-     this.getRandomQuizes();
+        this.getRandomQuizes();
     }
 
     componentWillUnmount() {
@@ -79,7 +79,7 @@ class Home extends Component {
 
 
     getMonument = async () => {
-        fetch('http://172.16.201.130:3000/api/getNextLocation', {
+        fetch('http://192.168.1.57:3000/api/getNextLocation', {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -98,28 +98,33 @@ class Home extends Component {
             .catch((error) => {
                 console.error(error);
             });
-
+            this.getRandomQuizes();
     }
 
-    getRandomQuizes(){
+    getRandomQuizes() {
+        //Current location
         MyLocation = {
-           latitude: this.getMapRegion().latitude,
-            longitude: this.getMapRegion().latitude
-       }
-      console.log(this.state.location);
-      center = geolib.getCenter([
-      { latitude: MyLocation.latitude, longitude: MyLocation.longitude },
-      { latitude: 51.217141304587265, longitude: 4.3824121758995025 }]);
-
-   distanceToCheckpoint = randomLocation.distance(MyLocation, { latitude: 51.217141304587265, longitude: 4.3824121758995025 })
-    stral = parseInt(distanceToCheckpoint) / 3; 
-    let arr =[]
-    for(let i = 0; i < 5; i++){
-        var randomPoints = randomLocation.randomCirclePoint(MyLocation, R)
-        arr.push(randomPoints);
+            latitude: this.getMapRegion().latitude,
+            longitude: this.getMapRegion().longitude
+        }
+        console.log(MyLocation);
+        //middenpunt tussen bestemming en huidige locatie 
+        center = geolib.getCenter([
+            { latitude: MyLocation.latitude, longitude: MyLocation.longitude },
+            { latitude: 51.217141304587265, longitude: 4.3824121758995025 }]);
+        //Afstand tussen bestemming en huidgie locatie 
+        distanceToCheckpoint = randomLocation.distance(MyLocation, { latitude: 51.217141304587265, longitude: 4.3824121758995025 })
+        //Groote van de circle waar Quizes gegenereerd worden
+        stral = parseInt(distanceToCheckpoint) / 3;
+        let arr = []
+        // Random Quizes worden in een array gestoken
+        for (let i = 0; i < 5; i++) {
+            var randomPoints = randomLocation.randomCirclePoint(center, stral)
+            arr.push(randomPoints);
+            
+        }
+        this.setState({ randomQuizes: arr })
         console.log(this.state.randomQuizes);
-    }
-    this.setState({randomQuizes: arr})
 
     }
 
@@ -131,7 +136,7 @@ class Home extends Component {
         longitudeDelta: LONGITUDE_DELTA
     });
 
-    
+
 
     onButtonPress() {
         const resetAction = StackActions.reset({

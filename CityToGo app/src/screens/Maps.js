@@ -13,7 +13,7 @@ import mapStyle from "../styles/jsons/mapstyle";
 class Maps extends Component {
     constructor(props) {
         super(props)
-       
+
 
     }
 
@@ -59,17 +59,7 @@ class Maps extends Component {
         }
     }
 
-
-
     render() {
-        console.log('live checkpoint')
-        console.log(this.props.getRandom)
-        //this.renderPolygon()
-        // console.log("fake polygone")
-        // console.log(this.state.polygons[0].coordinates[0])
-        // console.log("real polygone")
-        // console.log(this.props.getPolygons)
-
         return (
             <MapView
                 style={styles.map}
@@ -85,42 +75,17 @@ class Maps extends Component {
                 customMapStyle={mapStyle}
                 ref="map"
             >
-
-
                 {this.renderPolygon()}
+                
+                {this.props.getRandom.map(marker => (
+                    <MapView.Marker
+                        coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
+                        title={"Quiz"}
+                        image={require('../assets/star.png')}
+                        description={"description"}
+                    />
+                ))}
 
-                <MapView.Marker
-                    coordinate={this.props.getRandom[0]}
-                    title={"Quiz"}
-                    image={require('../assets/star.png')}
-                    description={"description"}
-                />
-                <MapView.Marker
-                    coordinate={this.props.getRandom[1]}
-                    title={"Quiz"}
-                    image={require('../assets/star.png')}
-                    description={"description"}
-                />
-                <MapView.Marker
-                    coordinate={this.props.getRandom[2]}
-                    title={"Quiz"}
-                    image={require('../assets/star.png')}
-                    description={"description"}
-                />
-                <MapView.Marker
-                    coordinate={this.props.getRandom[3]}
-                    title={"Quiz"}
-                    image={require('../assets/star.png')}
-                    description={"description"}
-                />
-                {/* <MapView.Marker
-                    coordinate={{
-                        latitude: parseFloat(center.latitude),
-                        longitude: parseFloat(center.longitude)
-                    }}
-                    title={"Middle_Point"}
-                    description={"description"}
-                /> */}
 
             </MapView>
         );
