@@ -37,6 +37,7 @@ class Home extends Component {
             longitude: LONGITUDE,
             polygons: [],
             randomQuizes: [],
+            randomNumber:0
 
         };
     }
@@ -103,6 +104,10 @@ class Home extends Component {
             //console.log("destination: "  + parseFloat(+"Lat: "+this.state.polygons[1][1]+ " long: "+ this.state.polygons[1][1]))
            
         }
+        // Functie om random int te generaren.
+    generateRandomint(min, max){
+        return Math.random() * (max - min) + min;
+    }
 
     getRandomQuizes() {
         //Current location
@@ -111,26 +116,36 @@ class Home extends Component {
             longitude: this.getMapRegion().longitude
         }
         //console.log("my Location:  "+ MyLocation);
+        
         //middenpunt tussen bestemming en huidige locatie 
         center = geolib.getCenter([
             { latitude: MyLocation.latitude, longitude: MyLocation.longitude },
             { latitude: parseFloat( this.state.polygons[1][1]), longitude: parseFloat( this.state.polygons[1][0]) }]);
-        //Afstand tussen bestemming en huidgie locatie 
+       
+            //Afstand tussen bestemming en huidgie locatie 
         distanceToCheckpoint = randomLocation.distance(MyLocation, { latitude: parseFloat( this.state.polygons[1][1]), longitude: parseFloat( this.state.polygons[1][0]) })
-        //Groote van de circle waar Quizes gegenereerd worden
+        
+        //Grootte van de circle waar Quizes gegenereerd worden
         stral = parseInt(distanceToCheckpoint) / 3;
         let arr = []
+
+        //Aantal Quizes worden getoond op basis van afstand tot checkpoint .
+        if(parseInt( distanceToCheckpoint)<1000){
+            this.setState({randomNumber: this.generateRandomint(2,5)})
+        }
+        else{
+            this.setState({randomNumber: this.generateRandomint(4,7)})
+        }
+        console.log(this.state.randomNumber)
+        
         // Random Quizes worden in een array gestoken
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < parseInt (this.state.randomNumber); i++) {
             var randomPoints = randomLocation.randomCirclePoint(center, stral)
-            arr.push(randomPoints);
-            
+            arr.push(randomPoints); 
         }
         this.setState({ randomQuizes: arr })
-        //console.log("array of Quizes: "+ this.state.randomQuizes);
 
     }
-
 
     getMapRegion = () => ({
         latitude: this.state.latitude,
