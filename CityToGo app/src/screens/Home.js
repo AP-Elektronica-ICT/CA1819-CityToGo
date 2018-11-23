@@ -70,7 +70,7 @@ class Home extends Component {
                 maximumAge: 1000
             }
         );
-        this.getRandomQuizes();
+       // this.getRandomQuizes();
     }
 
     componentWillUnmount() {
@@ -93,13 +93,16 @@ class Home extends Component {
         }).then((response) => response.json())
             .then((responseJson) => {
                 this.setState({ polygons: responseJson.geometry.coordinates[0] })
+                this.getRandomQuizes();
                 return responseJson;
             })
             .catch((error) => {
                 console.error(error);
             });
-            this.getRandomQuizes();
-    }
+            
+            //console.log("destination: "  + parseFloat(+"Lat: "+this.state.polygons[1][1]+ " long: "+ this.state.polygons[1][1]))
+           
+        }
 
     getRandomQuizes() {
         //Current location
@@ -107,13 +110,13 @@ class Home extends Component {
             latitude: this.getMapRegion().latitude,
             longitude: this.getMapRegion().longitude
         }
-        console.log(MyLocation);
+        //console.log("my Location:  "+ MyLocation);
         //middenpunt tussen bestemming en huidige locatie 
         center = geolib.getCenter([
             { latitude: MyLocation.latitude, longitude: MyLocation.longitude },
-            { latitude: 51.217141304587265, longitude: 4.3824121758995025 }]);
+            { latitude: parseFloat( this.state.polygons[1][1]), longitude: parseFloat( this.state.polygons[1][0]) }]);
         //Afstand tussen bestemming en huidgie locatie 
-        distanceToCheckpoint = randomLocation.distance(MyLocation, { latitude: 51.217141304587265, longitude: 4.3824121758995025 })
+        distanceToCheckpoint = randomLocation.distance(MyLocation, { latitude: parseFloat( this.state.polygons[1][1]), longitude: parseFloat( this.state.polygons[1][0]) })
         //Groote van de circle waar Quizes gegenereerd worden
         stral = parseInt(distanceToCheckpoint) / 3;
         let arr = []
@@ -124,7 +127,7 @@ class Home extends Component {
             
         }
         this.setState({ randomQuizes: arr })
-        console.log(this.state.randomQuizes);
+        //console.log("array of Quizes: "+ this.state.randomQuizes);
 
     }
 

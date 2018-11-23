@@ -31,7 +31,26 @@ class Maps extends Component {
     componentWillUnmount() {
         //DeviceEventEmitter.listeners('Orientation').remove()
     }
-
+    
+    renderQuizes(){
+        if(typeof this.props.polygon != "undefinded"){
+            return
+        }
+    }
+//     renderQuizes(){
+        
+//         console.log("it's not undefined")
+//          this.props.getRandom.map((marker)=> {
+//         return(
+//         <MapView.Marker
+//         coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
+//         title={"Quiz"}
+//         image={require('../assets/star.png')}
+//         description={"description"}
+//     />
+//         )
+// })
+//     }
     renderPolygon() {
         const polygon = this.props.getPolygons.map(coordsArr => {
             let coords = {
