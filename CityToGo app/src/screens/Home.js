@@ -10,6 +10,7 @@ import { Button } from 'react-native-elements'
 import Maps from "./Maps";
 import Profile from "./Profile";
 import { NavigationActions, StackActions } from "react-navigation";
+import ModalExample from "./popup"
 
 const LATITUDE = 29.95539;
 const LONGITUDE = 78.07513;
@@ -25,7 +26,10 @@ class Home extends Component {
         this.state = {
             latitude: LATITUDE,
             longitude: LONGITUDE,
-            polygons: []
+            polygons: [],
+            visible: false,
+            data:"",
+            Name:""
         };
     }
 
@@ -66,7 +70,8 @@ class Home extends Component {
 
 
     getMonument = async () => {
-        fetch('http://172.16.203.87:3000/api/getNextLocation', {
+       
+        fetch('http://192.168.178.20:3000/api/getNextLocation', {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -79,7 +84,12 @@ class Home extends Component {
             }),
         }).then((response) => response.json())
             .then((responseJson) => {
-                this.setState({ polygons: responseJson.geometry.coordinates[0] })
+                this.setState({ polygons: responseJson.geometry.coordinates[0] });
+                this.setState({data:responseJson.properties.imageUrl})
+                this.setState({Name:responseJson.properties.Naam})
+                this.setState({visible: true});
+                this.refs.popupchild.setModalVisible(this.state.visible);
+                
                 return responseJson;
             })
             .catch((error) => {
@@ -120,7 +130,8 @@ class Home extends Component {
 
         return (
             <View style={styles.container}>
-
+            
+               
                 <Maps getPolygons={this.state.polygons} getMapRegion={this.getMapRegion.bind(this)} />
                 <View style={{
                     position: 'absolute',//use absolute position to show button on top of the map
@@ -140,6 +151,9 @@ class Home extends Component {
                         title="Start"
                     />
                 </View>
+                
+                <ModalExample ref='popupchild' imageUri={this.state.data}  data={this.state.Name}/>
+                
             </View>
 
             // <View style={styles.container} >
