@@ -89,14 +89,12 @@ app.post('/api/getNextLocation', (req, res) => {
 }
 );
 
-//Google Vision API
-// Imports the Google Cloud client library
-//const vision = require('@google-cloud/vision');
+//#Google Vision API
 
 // Creates a client
 const client = new vision.ImageAnnotatorClient({
     project_id: "citytogo-219013",
-    keyFilename:'cloud_vision_key.json'
+    keyFilename: 'cloud_vision_key.json'
 });
 
 // Performs label detection on the image file
@@ -113,9 +111,11 @@ client
 
 
 
+
+
+
+    
 app.listen(port, () => {
-
-
     fetch('https://opendata.arcgis.com/datasets/628ded9e05184e76b69719eb8ce0e0aa_207.geojson')
         .then((response) => response.json())
         .then((responseJson) => {
