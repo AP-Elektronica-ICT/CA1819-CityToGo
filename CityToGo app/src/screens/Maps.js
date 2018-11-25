@@ -2,15 +2,11 @@ import React, { Component } from "react";
 import {
     StyleSheet,
     DeviceEventEmitter,
-    View,
-    TouchableOpacity,
-    Text
+    View
 } from "react-native";
 import MapView, { Polygon } from "react-native-maps";
 import { SensorManager } from 'NativeModules';
 import mapStyle from "../styles/jsons/mapstyle";
-import { pointInPolygon } from 'geojson-utils';
-import { NavigationActions, StackActions } from "react-navigation";
 
 class Maps extends Component {
 

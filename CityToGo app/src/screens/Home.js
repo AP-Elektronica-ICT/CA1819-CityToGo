@@ -60,7 +60,7 @@ class Home extends Component {
 
 
     getMonument = async () => {
-        fetch('http://172.16.201.184:3000/api/getNextLocation', {
+        fetch('http://192.168.1.35:3000/api/getNextLocation', {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
