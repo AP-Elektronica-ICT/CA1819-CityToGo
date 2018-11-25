@@ -86,8 +86,7 @@ app.post('/api/getNextLocation', (req, res) => {
 
     });
     res.json(shortest);
-}
-);
+});
 
 //#Google Vision API
 
@@ -97,24 +96,33 @@ const client = new vision.ImageAnnotatorClient({
     keyFilename: 'cloud_vision_key.json'
 });
 
-// Performs label detection on the image file
-client
-    .labelDetection('./resources/Savannah-cat.jpg')
-    .then(results => {
-        const labels = results[0].labelAnnotations;
-        console.log('Labels:');
-        labels.forEach(label => console.log(label.description));
-    })
-    .catch(err => {
-        console.error('ERROR:', err);
-    });
+app.post('/api/getImageLabels', (req, res) => {
+    // Performs label detection on the image file
+    //console.log(req)
+    client
+        .labelDetection({
+            image: {content : req.body.image}
+        })
+        .then(results => {
+            const labels = results[0].labelAnnotations;
+            console.log('Labels:');
+            labels.forEach(label => console.log(label.description));
+
+            res.json(labels)
+        })
+        .catch(err => {
+            res.json(err)
+            console.error('ERROR:', err);
+        });
+})
 
 
 
 
 
 
-    
+
+
 app.listen(port, () => {
     fetch('https://opendata.arcgis.com/datasets/628ded9e05184e76b69719eb8ce0e0aa_207.geojson')
         .then((response) => response.json())

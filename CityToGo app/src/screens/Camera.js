@@ -70,9 +70,31 @@ class Camera extends Component {
             const options = { quality: 0.5, base64: true };
             const data = await this.camera.takePictureAsync(options)
             console.log(data);
+            this.getImageLabels(data.base64)
+
             //this.getVisionLabels(data.base64)
         }
     };
+
+    getImageLabels = async (imageBase64) => {
+        fetch('http://192.168.1.35:3000/api/getImageLabels', {
+            method: 'POST',
+            headers: {
+                authorization: 'Bearer ' + global.token,
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                image: imageBase64
+            }),
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson)
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
 }
 
 const styles = StyleSheet.create({
