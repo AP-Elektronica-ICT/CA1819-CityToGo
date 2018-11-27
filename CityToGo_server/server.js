@@ -93,7 +93,7 @@ app.post('/api/getNextLocation', (req, res) => {
 // Creates a client
 const client = new vision.ImageAnnotatorClient({
     project_id: "citytogo-219013",
-    keyFilename: 'cloud_vision_key.json'
+    keyFilename: 'cloud-vision-key.json'
 });
 
 app.post('/api/getImageLabels', (req, res) => {
