@@ -54,7 +54,7 @@ export default class uniLogin extends Component {
         auth0.auth
           .userInfo({ token: accessToken })
           .then(data => {
-            this.gotoAccount(data); console.log(accessToken);console.log(data);console.log(" up is data")
+            this.gotoAccount(data); console.log(accessToken);
           })
           .catch(err => {
 
@@ -129,7 +129,6 @@ export default class uniLogin extends Component {
   
   gotoAccount = data => {
     SInfo.setItem("userdata", JSON.stringify(data), {});
-    console.log(data)
     this.setState({
       hasInitialized: true
     });
