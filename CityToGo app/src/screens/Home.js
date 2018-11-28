@@ -39,7 +39,7 @@ class Home extends Component {
             polygons: [],
             visible: false,
             data:"",
-            Name:""
+            Name:"",
             polygons: [],
             randomQuizes: [],
             randomNumber:0
