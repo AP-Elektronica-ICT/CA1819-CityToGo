@@ -4,12 +4,18 @@ import MapView, { Polygon } from "react-native-maps";
 import { SensorManager } from 'NativeModules';
 import mapStyle from "../styles/jsons/mapstyle";
 
-const LATITUDE = 29.95539;
-const LONGITUDE = 78.07513;
-const LATITUDE_DELTA = 0.009;
-const LONGITUDE_DELTA = 0.009;
+
+
+
+
+
 
 class Maps extends Component {
+    constructor(props) {
+        super(props)
+
+
+    }
 
 
     componentWillMount() {
@@ -19,12 +25,32 @@ class Maps extends Component {
             //this.refs.map.animateToBearing(Math.round(orientation.azimuth), 200);
         });
         SensorManager.stopAccelerometer();
+
     }
 
     componentWillUnmount() {
         //DeviceEventEmitter.listeners('Orientation').remove()
     }
-
+    
+    renderQuizes(){
+        if(typeof this.props.polygon != "undefinded"){
+            return
+        }
+    }
+//     renderQuizes(){
+        
+//         console.log("it's not undefined")
+//          this.props.getRandom.map((marker)=> {
+//         return(
+//         <MapView.Marker
+//         coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
+//         title={"Quiz"}
+//         image={require('../assets/star.png')}
+//         description={"description"}
+//     />
+//         )
+// })
+//     }
     renderPolygon() {
         const polygon = this.props.getPolygons.map(coordsArr => {
             let coords = {
@@ -52,15 +78,7 @@ class Maps extends Component {
         }
     }
 
-
-
     render() {
-        //this.renderPolygon()
-        // console.log("fake polygone")
-        // console.log(this.state.polygons[0].coordinates[0])
-        // console.log("real polygone")
-        // console.log(this.props.getPolygons)
-
         return (
             <MapView
                 style={styles.map}
@@ -75,12 +93,17 @@ class Maps extends Component {
                 //rotateEnabled={false}
                 customMapStyle={mapStyle}
                 ref="map"
-
             >
-
-
                 {this.renderPolygon()}
-
+                
+                {this.props.getRandom.map(marker => (
+                    <MapView.Marker
+                        coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
+                        title={"Quiz"}
+                        image={require('../assets/star.png')}
+                        description={"description"}
+                    />
+                ))}
 
 
             </MapView>
