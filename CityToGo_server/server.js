@@ -5,12 +5,55 @@ var jwks = require('jwks-rsa');
 const fetch = require('node-fetch');
 const bodyparser = require('body-parser');
 const haversine = require('haversine');
-const GoogleImages = require('google-images');
+
+//const GoogleImages = require('google-images');
  
-const client = new GoogleImages('014026545629182192558:tlzt4j3t7ne', 'AIzaSyA7jYzpqhunuHkAZoszNRz67meScjjM_0w');
+//const client = new GoogleImages('014026545629182192558:tlzt4j3t7ne', 'AIzaSyA7jYzpqhunuHkAZoszNRz67meScjjM_0w');
+'use strict';
+let https = require('https');
 
 
- 
+let subscriptionKey = '';
+let host = 'api.cognitive.microsoft.com';
+let path = '/bing/v7.0/images/search';
+let term = '';
+
+/*let request_params = {
+    
+    method : 'GET',
+    hostname : host,
+    path : path + '?q=' + encodeURIComponent(term),
+    headers : {
+        
+            'Content-Type': 'application/json',
+         
+    'Ocp-Apim-Subscription-Key' : subscriptionKey,
+    }
+};*/
+let response_handler = function (response) {
+    let body='';
+    response.on('data', function (d) {
+        body +=d
+    });
+    response.on('end', function () {
+       // console.log("init");
+        let obj = JSON.parse(body);
+       // console.log(obj);
+      // console.log(obj._type);
+        shortest.properties.imageUrl =obj.value[0].contentUrl;
+     // console.log(obj.value[0].contentUrl);
+     // shortest.
+      // let firstImageResult = imageResults.value[0];
+      //  console.log(`Image result count: ${imageResults.value.length}`);
+     //   console.log(`First image thumbnail url: ${firstImageResult.thumbnailUrl}`);
+     //   console.log(`First image web search url: ${firstImageResult.webSearchUrl}`);
+     });
+};
+
+
+
+
+
 
 
 app.use(bodyparser.json());
@@ -67,19 +110,20 @@ function calculateLocation(locationUser, locationDest) {
     //console.log(locationDest.geometry.coordinates[0][0][2]);
 }
 
+let shortest =arr[0];
 // Huidige locatie wordt hier gegeven
-app.post('/api/getNextLocation', (req, res) => {
+app.post('/api/getNextLocation', (requ, res) => {
 
-    currentUserLocation.latitude = req.body.latitude;
-    currentUserLocation.longitude = req.body.longitude;
-    console.log(req.body)
+    currentUserLocation.latitude = requ.body.latitude;
+    currentUserLocation.longitude = requ.body.longitude;
+    console.log(requ.body)
 
     // voor elke coordinaat van elke monument wordt de afstand berekend tov de huidige locatie
     arr.forEach(element => {
         calculateLocation(currentUserLocation, element);
     });
-
-    let shortest = arr[0];
+    shortest = arr[0];
+    //let shortest = arr[0];
 
     // Elke element van de array wordt vergeleken met de huidige dichtbijzijndste locatie
     arr.forEach(element => {
@@ -88,16 +132,32 @@ app.post('/api/getNextLocation', (req, res) => {
             shortest = [];
             
             shortest = element;
-            client.search(shortest.properties.Naam).then(images =>{
-                
-                shortest.properties.imageUrl = images[0].url;
-
-            });
-            
-            
+        
         }
 
     });
+  let  term = `'${shortest.properties.Naam} gebouw'`;
+    console.log(term);
+    let req = https.request(
+        
+        
+    {
+    
+        method : 'GET',
+        hostname : 'api.cognitive.microsoft.com',
+        path : '/bing/v7.0/images/search' + '?q=' + encodeURIComponent(term),
+        headers : {
+            
+                'Content-Type': 'application/json',
+             
+        'Ocp-Apim-Subscription-Key' : '2d238b17838c477fbf02db7183468e51',
+        }
+    },
+    
+    
+    response_handler);
+    req.end()
+
     res.json(shortest);
 }
 );
