@@ -11,11 +11,21 @@ import Maps from "./Maps";
 import Profile from "./Profile";
 import { NavigationActions, StackActions } from "react-navigation";
 import ModalExample from "./popup"
+import randomLocation from 'random-location';
+import geolib from "geolib";
 
 const LATITUDE = 29.95539;
 const LONGITUDE = 78.07513;
 const LATITUDE_DELTA = 0.009;
 const LONGITUDE_DELTA = 0.009;
+var MyLocation;
+
+const R = 500;
+var center;
+var distanceToCheckpoint;
+var stral;
+
+
 
 
 class Home extends Component {
@@ -29,7 +39,11 @@ class Home extends Component {
             polygons: [],
             visible: false,
             data:"",
-            Name:""
+            Name:"",
+            polygons: [],
+            randomQuizes: [],
+            randomNumber:0
+
         };
     }
 
@@ -50,6 +64,7 @@ class Home extends Component {
         SInfo.getItem("accessTokenServer", {}).then(accessToken => {
             global.token = accessToken
         })
+
     }
 
     componentWillMount() {
@@ -61,7 +76,7 @@ class Home extends Component {
                 maximumAge: 1000
             }
         );
-
+       // this.getRandomQuizes();
     }
 
     componentWillUnmount() {
@@ -70,8 +85,7 @@ class Home extends Component {
 
 
     getMonument = async () => {
-       
-        fetch('http://192.168.178.20:3000/api/getNextLocation', {
+        fetch('http://192.168.1.57:3000/api/getNextLocation', {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -90,14 +104,59 @@ class Home extends Component {
                 this.setState({visible: true});
                 this.refs.popupchild.setModalVisible(this.state.visible);
                 
+                this.setState({ polygons: responseJson.geometry.coordinates[0] })
+                this.getRandomQuizes();
                 return responseJson;
             })
             .catch((error) => {
                 console.error(error);
             });
-
+            
+            //console.log("destination: "  + parseFloat(+"Lat: "+this.state.polygons[1][1]+ " long: "+ this.state.polygons[1][1]))
+           
+        }
+        // Functie om random int te generaren.
+    generateRandomint(min, max){
+        return Math.random() * (max - min) + min;
     }
 
+    getRandomQuizes() {
+        //Current location
+        MyLocation = {
+            latitude: this.getMapRegion().latitude,
+            longitude: this.getMapRegion().longitude
+        }
+        //console.log("my Location:  "+ MyLocation);
+        
+        //middenpunt tussen bestemming en huidige locatie 
+        center = geolib.getCenter([
+            { latitude: MyLocation.latitude, longitude: MyLocation.longitude },
+            { latitude: parseFloat( this.state.polygons[1][1]), longitude: parseFloat( this.state.polygons[1][0]) }]);
+       
+            //Afstand tussen bestemming en huidgie locatie 
+        distanceToCheckpoint = randomLocation.distance(MyLocation, { latitude: parseFloat( this.state.polygons[1][1]), longitude: parseFloat( this.state.polygons[1][0]) })
+        
+        //Grootte van de circle waar Quizes gegenereerd worden
+        stral = parseInt(distanceToCheckpoint) / 3;
+        let arr = []
+
+        //Aantal Quizes worden getoond op basis van afstand tot checkpoint .
+        if(parseInt( distanceToCheckpoint)<1000){
+            this.setState({randomNumber: this.generateRandomint(2,5)})
+        }
+        else{
+            this.setState({randomNumber: this.generateRandomint(4,7)})
+        }
+        console.log(this.state.randomNumber)
+        
+        // Random Quizes worden in een array gestoken
+        for (let i = 0; i < parseInt (this.state.randomNumber); i++) {
+            var randomPoints = randomLocation.randomCirclePoint(center, stral)
+            arr.push(randomPoints); 
+        }
+        this.setState({ randomQuizes: arr })
+
+    }
 
     getMapRegion = () => ({
         latitude: this.state.latitude,
@@ -105,6 +164,8 @@ class Home extends Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
     });
+
+
 
     onButtonPress() {
         const resetAction = StackActions.reset({
@@ -130,9 +191,8 @@ class Home extends Component {
 
         return (
             <View style={styles.container}>
-            
-               
-                <Maps getPolygons={this.state.polygons} getMapRegion={this.getMapRegion.bind(this)} />
+
+                <Maps getRandom={this.state.randomQuizes} getPolygons={this.state.polygons} getMapRegion={this.getMapRegion.bind(this)} />
                 <View style={{
                     position: 'absolute',//use absolute position to show button on top of the map
                     top: '2%', //for center align
