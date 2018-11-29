@@ -136,7 +136,7 @@ app.post('/api/getNextLocation', (requ, res) => {
         }
 
     });
-  let  term = `'${shortest.properties.Naam} gebouw'`;
+  let  term = `'${shortest.properties.Straatnaam} ${shortest.properties.Huisnr} ${shortest.properties.District}'`;
     console.log(term);
     let req = https.request(
         
