@@ -11,8 +11,10 @@ import Maps from "./Maps";
 import Profile from "./Profile";
 import { NavigationActions, StackActions } from "react-navigation";
 import ModalExample from "./popup"
+import Quiz_popUp from "./Quiz_popup";
 import randomLocation from 'random-location';
 import geolib from "geolib";
+
 
 const LATITUDE = 29.95539;
 const LONGITUDE = 78.07513;
@@ -38,6 +40,7 @@ class Home extends Component {
             longitude: LONGITUDE,
             polygons: [],
             visible: false,
+            quiz_visible:false,
             data:"",
             Name:"",
             polygons: [],
@@ -82,10 +85,14 @@ class Home extends Component {
     componentWillUnmount() {
         navigator.geolocation.clearWatch(this.watchID);
     }
+    getQuizpopup= async ()=>{
+        this.setState({quiz_visible: true});
+        this.refs.quizchild.setModalVisible(this.state.quiz_visible);
+    }
 
 
     getMonument = async () => {
-        fetch('http://192.168.178.20:3000/api/getNextLocation', {
+        fetch('http://192.168.1.60:3000/api/getNextLocation', {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -184,6 +191,7 @@ class Home extends Component {
         this.props.navigation.dispatch(resetAction);
 
     };
+   
 
     render() {
 
@@ -210,9 +218,15 @@ class Home extends Component {
                         buttonStyle={styles.buttonStyle}
                         title="Start"
                     />
+                    <Button
+                        onPress={this.getQuizpopup}
+                        buttonStyle={styles.buttonStyle}
+                        title="Test"
+                    />
                 </View>
                 
                 <ModalExample ref='popupchild' imageUri={this.state.data}  data={this.state.Name}/>
+                <Quiz_popUp ref='quizchild' imageUri={this.state.data}  data={this.state.Name}/>
                 
             </View>
 
