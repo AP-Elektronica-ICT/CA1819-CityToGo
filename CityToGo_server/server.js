@@ -13,10 +13,10 @@ const haversine = require('haversine');
 let https = require('https');
 
 
-let subscriptionKey = '';
+/*let subscriptionKey = '';
 let host = 'api.cognitive.microsoft.com';
 let path = '/bing/v7.0/images/search';
-let term = '';
+let term = '';*/
 
 /*let request_params = {
     
@@ -37,10 +37,14 @@ let response_handler = function (response) {
     });
     response.on('end', function () {
        // console.log("init");
+       
         let obj = JSON.parse(body);
+       
        // console.log(obj);
       // console.log(obj._type);
         shortest.properties.imageUrl =obj.value[0].contentUrl;
+        sqr.json(shortest);
+        console.log(shortest);
      // console.log(obj.value[0].contentUrl);
      // shortest.
       // let firstImageResult = imageResults.value[0];
@@ -111,9 +115,10 @@ function calculateLocation(locationUser, locationDest) {
 }
 
 let shortest =arr[0];
+let sqr;
 // Huidige locatie wordt hier gegeven
 app.post('/api/getNextLocation', (requ, res) => {
-
+sqr = res;
     currentUserLocation.latitude = requ.body.latitude;
     currentUserLocation.longitude = requ.body.longitude;
     console.log(requ.body)
@@ -156,9 +161,12 @@ app.post('/api/getNextLocation', (requ, res) => {
     
     
     response_handler);
-    req.end()
+  //  console.log("ha");
+  //  console.log(shortest);
+    req.end();
+    //console.log(shortest);
 
-    res.json(shortest);
+   // res.json(shortest);
 }
 );
 
@@ -173,6 +181,7 @@ app.listen(port, () => {
             arr = [];
             responseJson.features.forEach(element => {
                 // pusht data van api in een variable
+                element.properties.imageUrl = ''
                 arr.push(element);
             })
         })
