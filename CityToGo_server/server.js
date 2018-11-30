@@ -5,10 +5,11 @@ var jwks = require('jwks-rsa');
 const fetch = require('node-fetch');
 const bodyparser = require('body-parser');
 const haversine = require('haversine');
-var vision = require('@google-cloud/vision');
 
+//app.use(bodyparser.json());
+app.use(bodyparser.json({limit: '10mb', extended: true}))
+app.use(bodyparser.urlencoded({limit: '10mb', extended: true}))
 
-app.use(bodyparser.json());
 
 var port = process.env.PORT || 3000;
 
@@ -91,14 +92,23 @@ app.post('/api/getNextLocation', (req, res) => {
 //#Google Vision API
 
 // Creates a client
-const client = new vision.ImageAnnotatorClient({
-    project_id: "citytogo-219013",
-    keyFilename: 'cloud-vision-key.json'
-});
+// const client = new vision.ImageAnnotatorClient({
+//     project_id: "citytogo-219013",
+//     keyFilename: 'cloud-vision-key.json'
+// });
+
+// bodyParser = {
+//     json: { limit: '50mb', extended: true },
+//     urlencoded: { limit: '50mb', extended: true }
+// };
+
+
+
 
 app.post('/api/getImageLabels', (req, res) => {
     // Performs label detection on the image file
-    //console.log(req)
+    //var imageBase64 = json.Parse
+
     const body = {
         "requests": [
             {
