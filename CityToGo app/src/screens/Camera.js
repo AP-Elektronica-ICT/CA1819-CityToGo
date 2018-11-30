@@ -8,8 +8,6 @@ import {
     AppRegistry
 } from "react-native";
 
-
-
 class Camera extends Component {
     render() {
         return (
@@ -47,7 +45,7 @@ class Camera extends Component {
     };
 
     getImageLabels = async (imageBase64) => {
-        fetch('http://192.168.1.35:3000/api/getImageLabels', {
+        fetch('http://172.16.182.172:3000/api/getImageLabels', {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -57,7 +55,8 @@ class Camera extends Component {
             body: JSON.stringify({
                 image: imageBase64
             }),
-        }).then((response) => response.json())
+        })
+            .then((response) => response.json())
             .then((responseJson) => {
                 console.log(responseJson)
             })
@@ -93,4 +92,4 @@ const styles = StyleSheet.create({
 });
 
 export default Camera;
-AppRegistry.registerComponent('Camera', () => Camera);
+//AppRegistry.registerComponent('Camera', () => Camera);

@@ -99,21 +99,48 @@ const client = new vision.ImageAnnotatorClient({
 app.post('/api/getImageLabels', (req, res) => {
     // Performs label detection on the image file
     //console.log(req)
-    client
-        .labelDetection({
-            image: {content : req.body.image}
-        })
-        .then(results => {
-            const labels = results[0].labelAnnotations;
-            console.log('Labels:');
-            labels.forEach(label => console.log(label.description));
+    const body = {
+        "requests": [
+            {
+                "image": {
+                    "content": req.body.image
+                },
+                "features": [
+                    {
+                        "type": "WEB_DETECTION",
+                        "maxResults": 5
+                    }
+                ]
+            }
+        ]
+    }
 
-            res.json(labels)
+    fetch('https://vision.googleapis.com/v1/images:annotate?key=AIzaSyB4HgIDhaV6sv3ddo_Xol9r4fDLj7RpOaU', {
+        method: 'post',
+        body: JSON.stringify(body),
+        headers: { 'Content-Type': 'application/json' },
+    })
+        .then(res => res.json())
+        .then(json => {
+            res.send(json.responses[0].webDetection.webEntities)
+            console.log(json.responses[0].webDetection.webEntities)
         })
-        .catch(err => {
-            res.json(err)
-            console.error('ERROR:', err);
-        });
+        .catch(err => console.error(err));
+    // client
+    //     .labelDetection({
+    //         image: {content : req.body.image}
+    //     })
+    //     .then(results => {
+    //         const labels = results[0].labelAnnotations;
+    //         console.log('Labels:');
+    //         labels.forEach(label => console.log(label.description));
+
+    //         res.json(labels)
+    //     })
+    //     .catch(err => {
+    //         res.json(err)
+    //         console.error('ERROR:', err);
+    //     });
 })
 
 
