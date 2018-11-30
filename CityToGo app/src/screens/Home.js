@@ -60,7 +60,7 @@ class Home extends Component {
 
 
     getMonument = async () => {
-        fetch('http://172.16.182.172:3000/api/getNextLocation', {
+        fetch('http://192.168.1.35:3000/api/getNextLocation', {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -73,7 +73,7 @@ class Home extends Component {
             }),
         }).then((response) => response.json())
             .then((responseJson) => {
-                console.log(responseJson.properties)
+                //console.log(responseJson.properties)
                 this.mapPolygon(responseJson)
                 this.getMonumentsProperties(responseJson.properties)
             })
@@ -114,7 +114,11 @@ class Home extends Component {
         return (
             <View style={styles.container}>
 
-                <Maps navigate={navigate} getPolygons={this.state.polygons} getMapRegion={this.getMapRegion.bind(this)} getMonumentProps={this.getMonumentsProperties.bind(this)} />
+                <Maps 
+                navigate={navigate} 
+                getPolygons={this.state.polygons} 
+                getMapRegion={this.getMapRegion.bind(this)} 
+                getMonumentProps={this.getMonumentsProperties.bind(this)} />
 
                 <View style={styles.borronProfielView}>
                     <Button
