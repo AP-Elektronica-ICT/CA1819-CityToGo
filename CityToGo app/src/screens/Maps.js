@@ -36,9 +36,7 @@ class Maps extends Component {
                         onPress={() => this.props.navigate('Camera')}
                     >
                     </Polygon>
-
                 </View>
-
             )
         }
     }
