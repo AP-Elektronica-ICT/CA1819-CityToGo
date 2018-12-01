@@ -1,9 +1,13 @@
 import React, {Component} from 'react';
 import {Modal, Text, TouchableHighlight, View, Alert,Image,StyleSheet} from 'react-native';
 import { Button } from 'react-native-elements'
+
+
 class Quiz_popUp extends Component {
+  
   state = {
     modalVisible: false,
+    
   };
 
   setModalVisible(visible) {
@@ -11,7 +15,7 @@ class Quiz_popUp extends Component {
   }
 
   render() {
-    debugger
+    
     return (
       <View style={{marginTop: 22}}>
         <Modal

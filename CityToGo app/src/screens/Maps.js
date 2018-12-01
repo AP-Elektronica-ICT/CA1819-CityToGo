@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, DeviceEventEmitter, View } from "react-native";
+import { StyleSheet, DeviceEventEmitter, View,Button, TouchableHighlight,Text } from "react-native";
 import MapView, { Polygon } from "react-native-maps";
 import { SensorManager } from 'NativeModules';
 import mapStyle from "../styles/jsons/mapstyle";
@@ -30,6 +30,7 @@ class Maps extends Component {
 
     componentWillUnmount() {
         //DeviceEventEmitter.listeners('Orientation').remove()
+        console.log(this.props.children)
     }
     
     renderQuizes(){
@@ -52,6 +53,7 @@ class Maps extends Component {
 // })
 //     }
     renderPolygon() {
+        
         const polygon = this.props.getPolygons.map(coordsArr => {
             let coords = {
                 latitude: coordsArr[1],
@@ -80,6 +82,7 @@ class Maps extends Component {
 
     render() {
         return (
+           
             <MapView
                 style={styles.map}
                 region={this.props.getMapRegion()}
@@ -96,17 +99,26 @@ class Maps extends Component {
             >
                 {this.renderPolygon()}
                 
+              
+                    
+                
                 {this.props.getRandom.map(marker => (
                     <MapView.Marker
                         coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-                        title={"Quiz"}
-                        image={require('../assets/star.png')}
-                        description={"description"}
-                    />
+                        //title={"Quiz"}
+                        image={require('../assets/quiz.png')}
+                       // description={"description"}
+                        onPress={() => this.props.Quiz2()} >
+                       
+                        
+                        </MapView.Marker>
+                  
+                    
                 ))}
 
 
             </MapView>
+    
         );
     }
 }
@@ -119,5 +131,20 @@ const styles = StyleSheet.create({
         left: 0,
         bottom: 0,
         right: 0,
+    },
+    buttonStyle: {
+        backgroundColor: "rgba(92, 99,216, 1)",
+        width: 200,
+        height: 45,
+        borderColor: "transparent",
+        borderWidth: 0,
+        borderRadius: 5
+    },
+    bottomView: {
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: 20
     },
 });

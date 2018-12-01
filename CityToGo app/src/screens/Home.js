@@ -35,6 +35,8 @@ class Home extends Component {
 
     constructor(props) {
         super(props);
+        this.Quiz = this.getQuizpopup.bind(this);
+        
         this.state = {
             latitude: LATITUDE,
             longitude: LONGITUDE,
@@ -49,7 +51,9 @@ class Home extends Component {
 
         };
     }
-
+    Quiz = () => {
+        //button click handler.
+      }
     componentDidMount() {
         this.watchID = navigator.geolocation.watchPosition(
             position => {
@@ -85,7 +89,8 @@ class Home extends Component {
     componentWillUnmount() {
         navigator.geolocation.clearWatch(this.watchID);
     }
-    getQuizpopup= async ()=>{
+    getQuizpopup=  ()=>{
+        console.log("method is working")
         this.setState({quiz_visible: true});
         this.refs.quizchild.setModalVisible(this.state.quiz_visible);
     }
@@ -200,7 +205,7 @@ class Home extends Component {
         return (
             <View style={styles.container}>
 
-                <Maps getRandom={this.state.randomQuizes} getPolygons={this.state.polygons} getMapRegion={this.getMapRegion.bind(this)} />
+                <Maps getRandom={this.state.randomQuizes} getPolygons={this.state.polygons} getMapRegion={this.getMapRegion.bind(this)} Quiz2={this.Quiz} />
                 <View style={{
                     position: 'absolute',//use absolute position to show button on top of the map
                     top: '2%', //for center align
