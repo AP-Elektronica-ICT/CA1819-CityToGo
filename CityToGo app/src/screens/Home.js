@@ -19,7 +19,8 @@ class Home extends Component {
         this.state = {
             latitude: LATITUDE,
             longitude: LONGITUDE,
-            polygons: []
+            polygons: [],
+            monumentsProps: []
         };
     }
 
@@ -75,7 +76,7 @@ class Home extends Component {
             .then((responseJson) => {
                 //console.log(responseJson.properties)
                 this.mapPolygon(responseJson)
-                this.getMonumentsProperties(responseJson.properties)
+                this.setState({monumentsProps: responseJson.properties})
             })
             .catch((error) => {
                 console.error(error);
@@ -83,7 +84,7 @@ class Home extends Component {
     }
 
     getMonumentsProperties(monumentsProps){
-        return monumentsProps
+         
     }
 
     mapPolygon(responseJson) {
@@ -118,7 +119,7 @@ class Home extends Component {
                 navigate={navigate} 
                 getPolygons={this.state.polygons} 
                 getMapRegion={this.getMapRegion.bind(this)} 
-                getMonumentProps={this.getMonumentsProperties.bind(this)} />
+                getMonumentProps={this.state.monumentsProps} />
 
                 <View style={styles.borronProfielView}>
                     <Button

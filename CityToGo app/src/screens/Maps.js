@@ -24,6 +24,7 @@ class Maps extends Component {
     }
 
     renderPolygon() {
+       // console.log(this.props.getMonumentProps)
         if (this.props.getPolygons.length > 0) {
             //const { navigate } = this.props.navigation;
             return (
@@ -33,7 +34,9 @@ class Maps extends Component {
                         fillColor='red'
                         strokeColor='black'
                         tappable={true}
-                        onPress={() => this.props.navigate('Camera')}
+                        onPress={() => this.props.navigate('Camera',{
+                            monumentProps: this.props.getMonumentProps
+                        })}
                     >
                     </Polygon>
                 </View>
