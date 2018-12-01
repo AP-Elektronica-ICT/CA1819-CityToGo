@@ -6,10 +6,15 @@ const fetch = require('node-fetch');
 const bodyparser = require('body-parser');
 const haversine = require('haversine');
 
+//const GoogleImages = require('google-images');
+
+//const client = new GoogleImages('014026545629182192558:tlzt4j3t7ne', 'AIzaSyA7jYzpqhunuHkAZoszNRz67meScjjM_0w');
+'use strict';
+let https = require('https');
+
 //app.use(bodyparser.json());
 app.use(bodyparser.json({limit: '10mb', extended: true}))
 app.use(bodyparser.urlencoded({limit: '10mb', extended: true}))
-
 
 /*let subscriptionKey = '';
 let host = 'api.cognitive.microsoft.com';
@@ -29,27 +34,27 @@ let term = '';*/
     }
 };*/
 let response_handler = function (response) {
-    let body='';
+    let body = '';
     response.on('data', function (d) {
-        body +=d
+        body += d
     });
     response.on('end', function () {
-       // console.log("init");
-       
+        // console.log("init");
+
         let obj = JSON.parse(body);
-       
-       // console.log(obj);
-      // console.log(obj._type);
-        shortest.properties.imageUrl =obj.value[0].contentUrl;
+
+        // console.log(obj);
+        // console.log(obj._type);
+        shortest.properties.imageUrl = obj.value[0].contentUrl;
         sqr.json(shortest);
         console.log(shortest);
-     // console.log(obj.value[0].contentUrl);
-     // shortest.
-      // let firstImageResult = imageResults.value[0];
-      //  console.log(`Image result count: ${imageResults.value.length}`);
-     //   console.log(`First image thumbnail url: ${firstImageResult.thumbnailUrl}`);
-     //   console.log(`First image web search url: ${firstImageResult.webSearchUrl}`);
-     });
+        // console.log(obj.value[0].contentUrl);
+        // shortest.
+        // let firstImageResult = imageResults.value[0];
+        //  console.log(`Image result count: ${imageResults.value.length}`);
+        //   console.log(`First image thumbnail url: ${firstImageResult.thumbnailUrl}`);
+        //   console.log(`First image web search url: ${firstImageResult.webSearchUrl}`);
+    });
 };
 
 
@@ -58,7 +63,6 @@ let response_handler = function (response) {
 
 
 
-app.use(bodyparser.json());
 
 var port = process.env.PORT || 3000;
 
@@ -106,17 +110,17 @@ function calculateLocation(locationUser, locationDest) {
         latitude: locationDest.geometry.coordinates[0][0][1],
         longitude: locationDest.geometry.coordinates[0][0][0]
     }
-   // console.log("Afstand tot bestemming is "+LocationDS);
+    // console.log("Afstand tot bestemming is "+LocationDS);
     //Distance wordt in de array gestoken
     locationDest.geometry.coordinates[0][0][2] = (haversine(currentUserLocation, LocationDS));
     //console.log(locationDest.geometry.coordinates[0][0][2]);
 }
 
-let shortest =arr[0];
+let shortest = arr[0];
 let sqr;
 // Huidige locatie wordt hier gegeven
 app.post('/api/getNextLocation', (requ, res) => {
-sqr = res;
+    sqr = res;
     currentUserLocation.latitude = requ.body.latitude;
     currentUserLocation.longitude = requ.body.longitude;
     console.log(requ.body)
@@ -133,42 +137,42 @@ sqr = res;
 
         if (element.geometry.coordinates[0][0][2] < shortest.geometry.coordinates[0][0][2]) {
             shortest = [];
-            
+
             shortest = element;
-        
+
         }
 
     });
-    res.json(shortest);
-});
-  let  term = `'${shortest.properties.Straatnaam} ${shortest.properties.Huisnr} ${shortest.properties.District}'`;
+    let term = `'${shortest.properties.Straatnaam} ${shortest.properties.Huisnr} ${shortest.properties.District}'`;
     console.log(term);
     let req = https.request(
-        
-        
-    {
-    
-        method : 'GET',
-        hostname : 'api.cognitive.microsoft.com',
-        path : '/bing/v7.0/images/search' + '?q=' + encodeURIComponent(term),
-        headers : {
-            
+
+
+        {
+
+            method: 'GET',
+            hostname: 'api.cognitive.microsoft.com',
+            path: '/bing/v7.0/images/search' + '?q=' + encodeURIComponent(term),
+            headers: {
+
                 'Content-Type': 'application/json',
-             
-        'Ocp-Apim-Subscription-Key' : '2d238b17838c477fbf02db7183468e51',
-        }
-    },
-    
-    
-    response_handler);
-  //  console.log("ha");
-  //  console.log(shortest);
+
+                'Ocp-Apim-Subscription-Key': '2d238b17838c477fbf02db7183468e51',
+            }
+        },
+
+
+        response_handler);
+    //  console.log("ha");
+    //  console.log(shortest);
     req.end();
     //console.log(shortest);
 
-   // res.json(shortest);
+    // res.json(shortest);
 }
 );
+//  res.json(shortest);
+//});
 
 //#Google Vision API
 

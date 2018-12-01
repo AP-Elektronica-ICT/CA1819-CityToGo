@@ -6,25 +6,20 @@ import {
 import SInfo from "react-native-sensitive-info";
 import { Button } from 'react-native-elements'
 import Maps from "./Maps";
-import Profile from "./Profile";
-import { NavigationActions, StackActions } from "react-navigation";
 import ModalExample from "./popup"
 import randomLocation from 'random-location';
 import geolib from "geolib";
 
 const LATITUDE = 0;
 const LONGITUDE = 0;
-const LATITUDE_DELTA = 0.009;
-const LONGITUDE_DELTA = 0.009;
+const LATITUDE_DELTA = 0.003;
+const LONGITUDE_DELTA = 0.003;
 var MyLocation;
 
 const R = 500;
 var center;
 var distanceToCheckpoint;
 var stral;
-
-
-
 
 class Home extends Component {
 
@@ -33,16 +28,14 @@ class Home extends Component {
         this.state = {
             latitude: LATITUDE,
             longitude: LONGITUDE,
-            polygons: [],
-            monumentsProps: []
-            polygons: [],
+            polygonMonument: [],
+            monumentsProps: [],
             visible: false,
-            data:"",
-            Name:"",
+            data: "",
+            Name: "",
             polygons: [],
             randomQuizes: [],
-            randomNumber:0
-
+            randomNumber: 0
         };
     }
 
@@ -75,7 +68,6 @@ class Home extends Component {
                 maximumAge: 1000
             }
         );
-       // this.getRandomQuizes();
     }
 
     componentWillUnmount() {
@@ -99,26 +91,23 @@ class Home extends Component {
             .then((responseJson) => {
                 //console.log(responseJson.properties)
                 this.mapPolygon(responseJson)
-                this.setState({monumentsProps: responseJson.properties})
-                this.setState({ polygons: responseJson.geometry.coordinates[0] });
-                this.setState({data:responseJson.properties.imageUrl})
-                this.setState({Name:responseJson.properties.Naam})
-                this.setState({visible: true});
-                this.refs.popupchild.setModalVisible(this.state.visible);
-                
-                this.setState({ polygons: responseJson.geometry.coordinates[0] })
+                this.setState({
+                    monumentsProps: responseJson.properties,
+                    polygons: responseJson.geometry.coordinates[0],
+                    data: responseJson.properties.imageUrl,
+                    Name: responseJson.properties.Naam,
+                    Name: responseJson.properties.Naam,
+                    visible: true,
+                    polygons: responseJson.geometry.coordinates[0]
+                })
                 this.getRandomQuizes();
-                return responseJson;
+                this.refs.popupchild.setModalVisible(this.state.visible);
             })
             .catch((error) => {
                 console.error(error);
             });
-            
-            //console.log("destination: "  + parseFloat(+"Lat: "+this.state.polygons[1][1]+ " long: "+ this.state.polygons[1][1]))
-           
-        }
-        // Functie om random int te generaren.
-    generateRandomint(min, max){
+    }
+    generateRandomint(min, max) {
         return Math.random() * (max - min) + min;
     }
 
@@ -128,33 +117,32 @@ class Home extends Component {
             latitude: this.getMapRegion().latitude,
             longitude: this.getMapRegion().longitude
         }
-        //console.log("my Location:  "+ MyLocation);
-        
+
         //middenpunt tussen bestemming en huidige locatie 
         center = geolib.getCenter([
             { latitude: MyLocation.latitude, longitude: MyLocation.longitude },
-            { latitude: parseFloat( this.state.polygons[1][1]), longitude: parseFloat( this.state.polygons[1][0]) }]);
-       
-            //Afstand tussen bestemming en huidgie locatie 
-        distanceToCheckpoint = randomLocation.distance(MyLocation, { latitude: parseFloat( this.state.polygons[1][1]), longitude: parseFloat( this.state.polygons[1][0]) })
-        
+            { latitude: parseFloat(this.state.polygons[1][1]), longitude: parseFloat(this.state.polygons[1][0]) }]);
+
+        //Afstand tussen bestemming en huidgie locatie 
+        distanceToCheckpoint = randomLocation.distance(MyLocation, { latitude: parseFloat(this.state.polygons[1][1]), longitude: parseFloat(this.state.polygons[1][0]) })
+
         //Grootte van de circle waar Quizes gegenereerd worden
         stral = parseInt(distanceToCheckpoint) / 3;
         let arr = []
 
         //Aantal Quizes worden getoond op basis van afstand tot checkpoint .
-        if(parseInt( distanceToCheckpoint)<1000){
-            this.setState({randomNumber: this.generateRandomint(2,5)})
+        if (parseInt(distanceToCheckpoint) < 1000) {
+            this.setState({ randomNumber: this.generateRandomint(2, 5) })
         }
-        else{
-            this.setState({randomNumber: this.generateRandomint(4,7)})
+        else {
+            this.setState({ randomNumber: this.generateRandomint(4, 7) })
         }
         console.log(this.state.randomNumber)
-        
+
         // Random Quizes worden in een array gestoken
-        for (let i = 0; i < parseInt (this.state.randomNumber); i++) {
+        for (let i = 0; i < parseInt(this.state.randomNumber); i++) {
             var randomPoints = randomLocation.randomCirclePoint(center, stral)
-            arr.push(randomPoints); 
+            arr.push(randomPoints);
         }
         this.setState({ randomQuizes: arr })
 
@@ -169,7 +157,7 @@ class Home extends Component {
             return coords;
         });
 
-        this.setState({ polygons: polygon })
+        this.setState({ polygonMonument: polygon })
     }
 
     getMapRegion = () => ({
@@ -179,7 +167,7 @@ class Home extends Component {
         longitudeDelta: LONGITUDE_DELTA
     });
 
-    
+
 
     render() {
 
@@ -187,18 +175,12 @@ class Home extends Component {
 
         return (
             <View style={styles.container}>
-
-                <Maps getRandom={this.state.randomQuizes} getPolygons={this.state.polygons} getMapRegion={this.getMapRegion.bind(this)} />
-                <View style={{
-                    position: 'absolute',//use absolute position to show button on top of the map
-                    top: '2%', //for center align
-                    alignSelf: 'flex-end' //for align to right
-                }}>
-                <Maps 
-                navigate={navigate} 
-                getPolygons={this.state.polygons} 
-                getMapRegion={this.getMapRegion.bind(this)} 
-                getMonumentProps={this.state.monumentsProps} />
+                <Maps
+                    navigate={navigate}
+                    getRandom={this.state.randomQuizes}
+                    getPolygons={this.state.polygonMonument}
+                    getMapRegion={this.getMapRegion.bind(this)}
+                    getMonumentProps={this.state.monumentsProps} />
 
                 <View style={styles.borronProfielView}>
                     <Button
@@ -214,11 +196,8 @@ class Home extends Component {
                         buttonStyle={styles.buttonStyle}
                         title="Start"
                     />
+                    <ModalExample ref='popupchild' imageUri={this.state.data} data={this.state.Name} />
                 </View>
-                
-                <ModalExample ref='popupchild' imageUri={this.state.data}  data={this.state.Name}/>
-                
-            </View>
 
             </View>
         );
@@ -230,8 +209,8 @@ export default Home;
 
 const styles = StyleSheet.create({
     container: {
-        alignItems: 'stretch',
         flex: 1,
+        alignItems: 'stretch',
     },
     buttonStyle: {
         backgroundColor: "rgba(92, 99,216, 1)",

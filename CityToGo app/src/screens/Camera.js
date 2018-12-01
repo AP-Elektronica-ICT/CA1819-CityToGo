@@ -31,7 +31,6 @@ class Camera extends Component {
                     }}
                     style={styles.preview}
                     type={RNCamera.Constants.Type.back}
-                    //flashMode={RNCamera.Constants.FlashMode.on}
                     permissionDialogTitle={'Permission to use camera'}
                     permissionDialogMessage={'We need your permission to use your camera phone'}
                 >
@@ -73,9 +72,7 @@ class Camera extends Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 this.setState({ isLoading: false })
-                //console.log(responseJson)
                 this.verificationMatch(responseJson)
-                //console.log()
             })
             .catch((error) => {
                 console.error(error);
@@ -130,4 +127,3 @@ const styles = StyleSheet.create({
 });
 
 export default Camera;
-//AppRegistry.registerComponent('Camera', () => Camera);

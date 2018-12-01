@@ -54,7 +54,7 @@ export default class uniLogin extends Component {
         auth0.auth
           .userInfo({ token: accessToken })
           .then(data => {
-            this.gotoAccount(data); // console.log(accessToken);console.log(data);console.log(" up is data")
+            this.gotoAccount(data);
           })
           .catch(err => {
 
@@ -68,7 +68,7 @@ export default class uniLogin extends Component {
                 .catch(err2 => {
                   console.log("err getting new access token");
                   console.log(err2);
-                  
+
                 });
             });
             console.log(err)
@@ -126,29 +126,28 @@ export default class uniLogin extends Component {
         console.log(error);
       });
   };
-  
+
   gotoAccount = data => {
     SInfo.setItem("userdata", JSON.stringify(data), {});
     this.setState({
       hasInitialized: true
     });
-     const resetAction = StackActions.reset({
+    const resetAction = StackActions.reset({
       index: 0,
-      
+
       actions: [
-        
+
         NavigationActions.navigate({
           routeName: "Home",
-          
+
           params: {
-            
+
             name: data.name,
             picture: data.picture,
-            //token: this.state.token
           }
         })
       ]
-      
+
     });
     this.props.navigation.dispatch(resetAction);
   };
@@ -170,10 +169,8 @@ export default class uniLogin extends Component {
       .then((response) => response.json())
 
       .then((responseJson) => {
-        //return responseJson.access_token
-        //console.log(responseJson.access_token)
-        SInfo.setItem("accessTokenServer", responseJson.access_token,{});
-    
+        SInfo.setItem("accessTokenServer", responseJson.access_token, {});
+
       })
       .catch((error) => {
         console.error(error);
