@@ -6,11 +6,9 @@ const fetch = require('node-fetch');
 const bodyparser = require('body-parser');
 const haversine = require('haversine');
 
-//const GoogleImages = require('google-images');
- 
-//const client = new GoogleImages('014026545629182192558:tlzt4j3t7ne', 'AIzaSyA7jYzpqhunuHkAZoszNRz67meScjjM_0w');
-'use strict';
-let https = require('https');
+//app.use(bodyparser.json());
+app.use(bodyparser.json({limit: '10mb', extended: true}))
+app.use(bodyparser.urlencoded({limit: '10mb', extended: true}))
 
 
 /*let subscriptionKey = '';
@@ -141,6 +139,8 @@ sqr = res;
         }
 
     });
+    res.json(shortest);
+});
   let  term = `'${shortest.properties.Straatnaam} ${shortest.properties.Huisnr} ${shortest.properties.District}'`;
     console.log(term);
     let req = https.request(
@@ -170,9 +170,78 @@ sqr = res;
 }
 );
 
-app.listen(port, () => {
-    
+//#Google Vision API
 
+// Creates a client
+// const client = new vision.ImageAnnotatorClient({
+//     project_id: "citytogo-219013",
+//     keyFilename: 'cloud-vision-key.json'
+// });
+
+// bodyParser = {
+//     json: { limit: '50mb', extended: true },
+//     urlencoded: { limit: '50mb', extended: true }
+// };
+
+
+
+
+app.post('/api/getImageLabels', (req, res) => {
+    // Performs label detection on the image file
+    //var imageBase64 = json.Parse
+
+    const body = {
+        "requests": [
+            {
+                "image": {
+                    "content": req.body.image
+                },
+                "features": [
+                    {
+                        "type": "WEB_DETECTION",
+                        "maxResults": 5
+                    }
+                ]
+            }
+        ]
+    }
+
+    fetch('https://vision.googleapis.com/v1/images:annotate?key=AIzaSyB4HgIDhaV6sv3ddo_Xol9r4fDLj7RpOaU', {
+        method: 'post',
+        body: JSON.stringify(body),
+        headers: { 'Content-Type': 'application/json' },
+    })
+        .then(res => res.json())
+        .then(json => {
+            res.send(json.responses[0].webDetection.webEntities)
+            console.log(json.responses[0].webDetection.webEntities)
+        })
+        .catch(err => console.error(err));
+    // client
+    //     .labelDetection({
+    //         image: {content : req.body.image}
+    //     })
+    //     .then(results => {
+    //         const labels = results[0].labelAnnotations;
+    //         console.log('Labels:');
+    //         labels.forEach(label => console.log(label.description));
+
+    //         res.json(labels)
+    //     })
+    //     .catch(err => {
+    //         res.json(err)
+    //         console.error('ERROR:', err);
+    //     });
+})
+
+
+
+
+
+
+
+
+app.listen(port, () => {
     fetch('https://opendata.arcgis.com/datasets/628ded9e05184e76b69719eb8ce0e0aa_207.geojson')
         .then((response) => response.json())
         .then((responseJson) => {

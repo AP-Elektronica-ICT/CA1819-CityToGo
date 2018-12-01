@@ -1,11 +1,9 @@
 import React, { Component, } from "react";
 import {
     StyleSheet,
-    View,
-    Text
+    View
 } from "react-native";
 import SInfo from "react-native-sensitive-info";
-
 import { Button } from 'react-native-elements'
 import Maps from "./Maps";
 import Profile from "./Profile";
@@ -14,8 +12,8 @@ import ModalExample from "./popup"
 import randomLocation from 'random-location';
 import geolib from "geolib";
 
-const LATITUDE = 29.95539;
-const LONGITUDE = 78.07513;
+const LATITUDE = 0;
+const LONGITUDE = 0;
 const LATITUDE_DELTA = 0.009;
 const LONGITUDE_DELTA = 0.009;
 var MyLocation;
@@ -30,12 +28,13 @@ var stral;
 
 class Home extends Component {
 
-
     constructor(props) {
         super(props);
         this.state = {
             latitude: LATITUDE,
             longitude: LONGITUDE,
+            polygons: [],
+            monumentsProps: []
             polygons: [],
             visible: false,
             data:"",
@@ -85,7 +84,7 @@ class Home extends Component {
 
 
     getMonument = async () => {
-        fetch('http://192.168.178.20:3000/api/getNextLocation', {
+        fetch('http://192.168.1.35:3000/api/getNextLocation', {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -98,6 +97,9 @@ class Home extends Component {
             }),
         }).then((response) => response.json())
             .then((responseJson) => {
+                //console.log(responseJson.properties)
+                this.mapPolygon(responseJson)
+                this.setState({monumentsProps: responseJson.properties})
                 this.setState({ polygons: responseJson.geometry.coordinates[0] });
                 this.setState({data:responseJson.properties.imageUrl})
                 this.setState({Name:responseJson.properties.Naam})
@@ -158,6 +160,18 @@ class Home extends Component {
 
     }
 
+    mapPolygon(responseJson) {
+        const polygon = responseJson.geometry.coordinates[0].map(coordsArr => {
+            let coords = {
+                latitude: coordsArr[1],
+                longitude: coordsArr[0],
+            }
+            return coords;
+        });
+
+        this.setState({ polygons: polygon })
+    }
+
     getMapRegion = () => ({
         latitude: this.state.latitude,
         longitude: this.state.longitude,
@@ -165,25 +179,7 @@ class Home extends Component {
         longitudeDelta: LONGITUDE_DELTA
     });
 
-
-
-    onButtonPress() {
-        const resetAction = StackActions.reset({
-            index: 0,
-
-            actions: [
-
-                NavigationActions.navigate({
-                    routeName: "Profile",
-
-                    params: {}
-                })
-            ]
-
-        });
-        this.props.navigation.dispatch(resetAction);
-
-    };
+    
 
     render() {
 
@@ -198,13 +194,21 @@ class Home extends Component {
                     top: '2%', //for center align
                     alignSelf: 'flex-end' //for align to right
                 }}>
+                <Maps 
+                navigate={navigate} 
+                getPolygons={this.state.polygons} 
+                getMapRegion={this.getMapRegion.bind(this)} 
+                getMonumentProps={this.state.monumentsProps} />
+
+                <View style={styles.borronProfielView}>
                     <Button
-                        onPress={() => navigate('Profile', { name: 'Jane' })}
+                        onPress={() => navigate('Profile')}
                         buttonStyle={styles.buttonStyle}
                         title="Profiel"
                     />
                 </View>
-                <View style={styles.bottomView}>
+
+                <View style={styles.bottomStartView}>
                     <Button
                         onPress={this.getMonument}
                         buttonStyle={styles.buttonStyle}
@@ -216,13 +220,7 @@ class Home extends Component {
                 
             </View>
 
-            // <View style={styles.container} >
-            //   <Button>Profile</Button>
-            //     <Maps />
-            // </View>
-            // <View style={{ flex: 1 }}>
-            //     <Maps />
-            // </View>
+            </View>
         );
 
     }
@@ -232,9 +230,8 @@ export default Home;
 
 const styles = StyleSheet.create({
     container: {
+        alignItems: 'stretch',
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
     },
     buttonStyle: {
         backgroundColor: "rgba(92, 99,216, 1)",
@@ -244,11 +241,14 @@ const styles = StyleSheet.create({
         borderWidth: 0,
         borderRadius: 5
     },
-    bottomView: {
-        height: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
+    bottomStartView: {
         position: 'absolute',
-        bottom: 20
+        bottom: '2%',
+        alignItems: 'center'
     },
+    borronProfielView: {
+        position: 'absolute',
+        top: '2%',
+        alignSelf: 'flex-end'
+    }
 });

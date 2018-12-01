@@ -18,6 +18,7 @@ node_modules
 package-lock.json
 *.log
 *.gz
+cloud-vision-key.json
 
 
 # Coveralls

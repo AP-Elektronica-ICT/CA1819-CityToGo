@@ -1,14 +1,12 @@
 import React, { Component } from "react";
-import { StyleSheet, DeviceEventEmitter, View } from "react-native";
+import {
+    StyleSheet,
+    DeviceEventEmitter,
+    View
+} from "react-native";
 import MapView, { Polygon } from "react-native-maps";
 import { SensorManager } from 'NativeModules';
 import mapStyle from "../styles/jsons/mapstyle";
-
-
-
-
-
-
 
 class Maps extends Component {
     constructor(props) {
@@ -52,28 +50,22 @@ class Maps extends Component {
 // })
 //     }
     renderPolygon() {
-        const polygon = this.props.getPolygons.map(coordsArr => {
-            let coords = {
-                latitude: coordsArr[1],
-                longitude: coordsArr[0],
-            }
-            return coords;
-        });
-
+       // console.log(this.props.getMonumentProps)
         if (this.props.getPolygons.length > 0) {
-            console.log("im ready")
+            //const { navigate } = this.props.navigation;
             return (
-                <Polygon
-                    coordinates={polygon}
-                    fillColor='red'
-                    strokeColor='black'
-                />
-            )
-
-        } else {
-            console.log("ik ben null")
-            return (
-                null
+                <View>
+                    <Polygon
+                        coordinates={this.props.getPolygons}
+                        fillColor='red'
+                        strokeColor='black'
+                        tappable={true}
+                        onPress={() => this.props.navigate('Camera',{
+                            monumentProps: this.props.getMonumentProps
+                        })}
+                    >
+                    </Polygon>
+                </View>
             )
         }
     }
@@ -84,7 +76,6 @@ class Maps extends Component {
                 style={styles.map}
                 region={this.props.getMapRegion()}
                 showsUserLocation={true}
-                //showUserLocation
                 //followUserLocation
                 //loadingEnabled
                 //scrollEnabled={false}
@@ -114,10 +105,6 @@ export default Maps;
 
 const styles = StyleSheet.create({
     map: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
-    },
+        flex: 1,
+    }
 });
