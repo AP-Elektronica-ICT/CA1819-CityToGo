@@ -223,11 +223,7 @@ class Home extends Component {
                         buttonStyle={styles.buttonStyle}
                         title="Start"
                     />
-                    <Button
-                        onPress={this.getQuizpopup}
-                        buttonStyle={styles.buttonStyle}
-                        title="Test"
-                    />
+                
                 </View>
                 
                 <ModalExample ref='popupchild' imageUri={this.state.data}  data={this.state.Name}/>
