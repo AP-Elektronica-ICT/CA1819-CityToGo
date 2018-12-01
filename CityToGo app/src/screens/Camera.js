@@ -5,11 +5,24 @@ import {
     StyleSheet,
     TouchableOpacity,
     View,
-    AppRegistry
+    ActivityIndicator
 } from "react-native";
 
 class Camera extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = { isLoading: false }
+    }
+
     render() {
+        if (this.state.isLoading) {
+            return (
+                <View style={ styles.horizontal}>
+                    <ActivityIndicator size="large" color="#0000ff" />
+                </View>
+            )
+        }
         return (
             <View style={styles.container}>
                 <RNCamera
@@ -41,6 +54,7 @@ class Camera extends Component {
             console.log(data);
 
             this.getImageLabels(data.base64)
+            this.setState({ isLoading: true })
         }
     };
 
@@ -58,12 +72,30 @@ class Camera extends Component {
         })
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log(responseJson)
+                this.setState({ isLoading: false })
+                //console.log(responseJson)
+                this.verificationMatch(responseJson)
                 //console.log()
             })
             .catch((error) => {
                 console.error(error);
             });
+    }
+
+    verificationMatch(responseJson) {
+        const { params } = this.props.navigation.state;
+        let monumentName = params.monumentProps.Naam
+        console.log(params.monumentProps)
+
+        responseJson.forEach(function(params) {
+            console.log(params.description)
+            if (params.description == monumentName){
+                console.log("MATCH!!")
+            }else
+                console.log("NO MATCH")
+        })
+
+        
     }
 }
 
@@ -89,6 +121,11 @@ const styles = StyleSheet.create({
         height: 85,
         backgroundColor: '#fff',
         borderRadius: 100,
+    },
+    horizontal: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 });
 
