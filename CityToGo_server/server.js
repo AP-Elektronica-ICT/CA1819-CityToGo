@@ -6,62 +6,24 @@ const fetch = require('node-fetch');
 const bodyparser = require('body-parser');
 const haversine = require('haversine');
 
-//const GoogleImages = require('google-images');
-
-//const client = new GoogleImages('014026545629182192558:tlzt4j3t7ne', 'AIzaSyA7jYzpqhunuHkAZoszNRz67meScjjM_0w');
 'use strict';
 let https = require('https');
 
-//app.use(bodyparser.json());
-app.use(bodyparser.json({limit: '10mb', extended: true}))
-app.use(bodyparser.urlencoded({limit: '10mb', extended: true}))
+app.use(bodyparser.json({ limit: '10mb', extended: true }))
+app.use(bodyparser.urlencoded({ limit: '10mb', extended: true }))
 
-/*let subscriptionKey = '';
-let host = 'api.cognitive.microsoft.com';
-let path = '/bing/v7.0/images/search';
-let term = '';*/
-
-/*let request_params = {
-    
-    method : 'GET',
-    hostname : host,
-    path : path + '?q=' + encodeURIComponent(term),
-    headers : {
-        
-            'Content-Type': 'application/json',
-         
-    'Ocp-Apim-Subscription-Key' : subscriptionKey,
-    }
-};*/
 let response_handler = function (response) {
     let body = '';
     response.on('data', function (d) {
         body += d
     });
     response.on('end', function () {
-        // console.log("init");
-
         let obj = JSON.parse(body);
-
-        // console.log(obj);
-        // console.log(obj._type);
         shortest.properties.imageUrl = obj.value[0].contentUrl;
         sqr.json(shortest);
         console.log(shortest);
-        // console.log(obj.value[0].contentUrl);
-        // shortest.
-        // let firstImageResult = imageResults.value[0];
-        //  console.log(`Image result count: ${imageResults.value.length}`);
-        //   console.log(`First image thumbnail url: ${firstImageResult.thumbnailUrl}`);
-        //   console.log(`First image web search url: ${firstImageResult.webSearchUrl}`);
     });
 };
-
-
-
-
-
-
 
 
 var port = process.env.PORT || 3000;
@@ -79,10 +41,9 @@ var jwtCheck = jwt({
 });
 
 //Disabled jwl token to prevent unauthorized request 
-//app.use(jwtCheck);
-let arr = [];
+app.use(jwtCheck);
 
-//Haalt alle data van opendata api
+let arr = [];
 app.get('/api/monumenten', (req, res) => {
     fetch('https://opendata.arcgis.com/datasets/628ded9e05184e76b69719eb8ce0e0aa_207.geojson')
         .then(res => res.json())
@@ -110,10 +71,8 @@ function calculateLocation(locationUser, locationDest) {
         latitude: locationDest.geometry.coordinates[0][0][1],
         longitude: locationDest.geometry.coordinates[0][0][0]
     }
-    // console.log("Afstand tot bestemming is "+LocationDS);
     //Distance wordt in de array gestoken
     locationDest.geometry.coordinates[0][0][2] = (haversine(currentUserLocation, LocationDS));
-    //console.log(locationDest.geometry.coordinates[0][0][2]);
 }
 
 let shortest = arr[0];
@@ -144,56 +103,22 @@ app.post('/api/getNextLocation', (requ, res) => {
 
     });
     let term = `'${shortest.properties.Straatnaam} ${shortest.properties.Huisnr} ${shortest.properties.District}'`;
-    console.log(term);
+
     let req = https.request(
-
-
         {
-
             method: 'GET',
             hostname: 'api.cognitive.microsoft.com',
             path: '/bing/v7.0/images/search' + '?q=' + encodeURIComponent(term),
             headers: {
-
                 'Content-Type': 'application/json',
-
                 'Ocp-Apim-Subscription-Key': '2d238b17838c477fbf02db7183468e51',
             }
         },
-
-
         response_handler);
-    //  console.log("ha");
-    //  console.log(shortest);
     req.end();
-    //console.log(shortest);
-
-    // res.json(shortest);
-}
-);
-//  res.json(shortest);
-//});
-
-//#Google Vision API
-
-// Creates a client
-// const client = new vision.ImageAnnotatorClient({
-//     project_id: "citytogo-219013",
-//     keyFilename: 'cloud-vision-key.json'
-// });
-
-// bodyParser = {
-//     json: { limit: '50mb', extended: true },
-//     urlencoded: { limit: '50mb', extended: true }
-// };
-
-
-
+});
 
 app.post('/api/getImageLabels', (req, res) => {
-    // Performs label detection on the image file
-    //var imageBase64 = json.Parse
-
     const body = {
         "requests": [
             {
@@ -221,29 +146,7 @@ app.post('/api/getImageLabels', (req, res) => {
             console.log(json.responses[0].webDetection.webEntities)
         })
         .catch(err => console.error(err));
-    // client
-    //     .labelDetection({
-    //         image: {content : req.body.image}
-    //     })
-    //     .then(results => {
-    //         const labels = results[0].labelAnnotations;
-    //         console.log('Labels:');
-    //         labels.forEach(label => console.log(label.description));
-
-    //         res.json(labels)
-    //     })
-    //     .catch(err => {
-    //         res.json(err)
-    //         console.error('ERROR:', err);
-    //     });
 })
-
-
-
-
-
-
-
 
 app.listen(port, () => {
     fetch('https://opendata.arcgis.com/datasets/628ded9e05184e76b69719eb8ce0e0aa_207.geojson')
