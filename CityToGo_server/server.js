@@ -6,6 +6,7 @@ const fetch = require('node-fetch');
 const bodyparser = require('body-parser');
 const haversine = require('haversine');
 let https = require('https');
+const image2base64 = require('image-to-base64');
 
 app.use(bodyparser.json({ limit: '10mb', extended: true }))
 app.use(bodyparser.urlencoded({ limit: '10mb', extended: true }))
@@ -20,6 +21,9 @@ let response_handler = function (response) {
         shortest.properties.imageUrl = obj.value[0].contentUrl;
         sqr.json(shortest);
         console.log(shortest);
+        console.log('base64 !!!!!!!!!!!!!!!!');
+        //Buffer.alloc()
+        converBingImageToBase64();
     });
 };
 
@@ -44,14 +48,15 @@ var jwtCheck = jwt({
 let arr = [];
 app.get('/api/monumenten', (req, res) => {
     fetch('https://opendata.arcgis.com/datasets/628ded9e05184e76b69719eb8ce0e0aa_207.geojson')
-        .then(res => res.json())
+        .then(res => { res.json() })
         .then(json => {
             res.send(json.features);
-            arr = [];
-            json.features.forEach(element => {
-                // pusht data van api in een variable
-                arr.push(element);
-            });
+            // arr = [];
+            // json.features.forEach(element => {
+            //     // pusht data van api in een variable
+            //     if (!element.Naam == 'huis')
+            //         arr.push(element);
+            // });
         })
         .catch(err => console.error(err));
 })
@@ -60,6 +65,16 @@ let currentUserLocation = {
 
     latitude: "",
     longitude: ""
+}
+
+function converBingImageToBase64() {
+    image2base64(shortest.properties.imageUrl)
+        .then((response) => {
+            console.log(response); 
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 }
 
 //berekent afstand tussen een monument en de huidige locatie
@@ -100,7 +115,10 @@ app.post('/api/getNextLocation', (requ, res) => {
         }
 
     });
-    let term = `'${shortest.properties.Straatnaam} ${shortest.properties.Huisnr} ${shortest.properties.District}'`;
+
+
+
+    let term = `'${shortest.properties.Naam} ${shortest.properties.Straatnaam} ${shortest.properties.Straatnaam} ${shortest.properties.Huisnr} ${shortest.properties.District}'`;
 
     let req = https.request(
         {
@@ -113,7 +131,9 @@ app.post('/api/getNextLocation', (requ, res) => {
             }
         },
         response_handler);
+
     req.end();
+
 });
 
 app.post('/api/getImageLabels', (req, res) => {
@@ -141,7 +161,7 @@ app.post('/api/getImageLabels', (req, res) => {
         .then(res => res.json())
         .then(json => {
             res.send(json.responses[0].webDetection.webEntities)
-            console.log(json.responses[0].webDetection.webEntities)
+            //console.log(json.responses[0].webDetection.webEntities)
         })
         .catch(err => console.error(err));
 })
@@ -151,16 +171,18 @@ app.listen(port, () => {
         .then((response) => response.json())
         .then((responseJson) => {
             console.log("Monuments fetched!");
-            //return responseJson
             arr = [];
             responseJson.features.forEach(element => {
                 // pusht data van api in een variable
-                element.properties.imageUrl = ''
-                arr.push(element);
+                if (element.properties.Naam !== 'huis') {
+                    element.properties.imageUrl = ''
+                    arr.push(element);
+                }
+                //     }
+
             })
         })
         .catch((error) => {
             console.error(error);
-            throw error
         });
 });
