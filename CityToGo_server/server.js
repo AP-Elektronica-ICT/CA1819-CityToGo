@@ -5,8 +5,6 @@ var jwks = require('jwks-rsa');
 const fetch = require('node-fetch');
 const bodyparser = require('body-parser');
 const haversine = require('haversine');
-
-'use strict';
 let https = require('https');
 
 app.use(bodyparser.json({ limit: '10mb', extended: true }))
@@ -41,7 +39,7 @@ var jwtCheck = jwt({
 });
 
 //Disabled jwl token to prevent unauthorized request 
-app.use(jwtCheck);
+//app.use(jwtCheck);
 
 let arr = [];
 app.get('/api/monumenten', (req, res) => {
