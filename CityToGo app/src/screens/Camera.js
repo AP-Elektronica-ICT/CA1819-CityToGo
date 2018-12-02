@@ -18,7 +18,7 @@ class Camera extends Component {
     render() {
         if (this.state.isLoading) {
             return (
-                <View style={ styles.horizontal}>
+                <View style={styles.horizontal}>
                     <ActivityIndicator size="large" color="#0000ff" />
                 </View>
             )
@@ -50,14 +50,15 @@ class Camera extends Component {
         if (this.camera) {
             const options = { quality: 0.5, base64: true };
             const data = await this.camera.takePictureAsync(options)
-            console.log(data);
-
+ 
             this.getImageLabels(data.base64)
             this.setState({ isLoading: true })
         }
     };
 
     getImageLabels = async (imageBase64) => {
+        const { navigate } = this.props.navigation;
+
         fetch('http://192.168.1.35:3000/api/getImageLabels', {
             method: 'POST',
             headers: {
@@ -71,28 +72,14 @@ class Camera extends Component {
         })
             .then((response) => response.json())
             .then((responseJson) => {
+                console.log(responseJson)
                 this.setState({ isLoading: false })
-                this.verificationMatch(responseJson)
+                if (responseJson == "match")
+                    navigate('Home')
             })
             .catch((error) => {
                 console.error(error);
             });
-    }
-
-    verificationMatch(responseJson) {
-        const { params } = this.props.navigation.state;
-        let monumentName = params.monumentProps.Naam
-        console.log(params.monumentProps)
-
-        responseJson.forEach(function(params) {
-            console.log(params.description)
-            if (params.description == monumentName){
-                console.log("MATCH!!")
-            }else
-                console.log("NO MATCH")
-        })
-
-        
     }
 }
 
