@@ -127,20 +127,33 @@ app.post('/api/getNextLocation', (requ, res) => {
 
 });
 
+//--- Google vision ipa implementation ---
+
+let resultBingImgLabels
+let resultCameraImgLabels
 
 app.post('/api/getImageLabels', (req, res) => {
     var imgBase64 = req.body.image
+    let resultMatch = 0
     getVisionImgLabels(imgBase64)
         .then(res => res.json())
         .then(json => {
-            console.log(json.responses[0].webDetection.webEntities)
+            resultCameraImgLabels = json.responses[0].webDetection.webEntities
 
+            resultBingImgLabels.forEach((e1) => resultCameraImgLabels.forEach((e2) => {
+                if (e1.description == e2.description)
+                    resultMatch += 1
+            }))
 
-            res.send(json.responses[0].webDetection.webEntities)
+            console.log(resultMatch)
+
+            if (resultMatch >= 2)
+                res.send(JSON.stringify('match'))
+            else
+                res.send(JSON.stringify('no match'))
         })
         .catch(err => console.error(err));
 })
-
 
 
 function converBingImageToBase64() {
@@ -158,7 +171,7 @@ function getVisionBingImgLabels(response) {
     getVisionImgLabels(response)
         .then(res => res.json())
         .then(json => {
-            return json.responses[0].webDetection.webEntities
+            resultBingImgLabels = json.responses[0].webDetection.webEntities
         })
         .catch(err => console.error(err));
 }
@@ -173,7 +186,7 @@ async function getVisionImgLabels(imgBase64) {
                 "features": [
                     {
                         "type": "WEB_DETECTION",
-                        "maxResults": 5
+                        "maxResults": 10
                     }
                 ]
             }
@@ -192,6 +205,8 @@ async function getVisionImgLabels(imgBase64) {
     // })
     // .catch(err => console.error(err));
 }
+
+//---------------------------
 
 app.listen(port, () => {
     fetch('https://opendata.arcgis.com/datasets/628ded9e05184e76b69719eb8ce0e0aa_207.geojson')
