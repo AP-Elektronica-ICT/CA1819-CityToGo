@@ -67,15 +67,6 @@ let currentUserLocation = {
     longitude: ""
 }
 
-function converBingImageToBase64() {
-    image2base64(shortest.properties.imageUrl)
-        .then((response) => {
-            console.log(response); 
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-}
 
 //berekent afstand tussen een monument en de huidige locatie
 function calculateLocation(locationUser, locationDest) {
@@ -136,12 +127,48 @@ app.post('/api/getNextLocation', (requ, res) => {
 
 });
 
+
 app.post('/api/getImageLabels', (req, res) => {
+    var imgBase64 = req.body.image
+    getVisionImgLabels(imgBase64)
+        .then(res => res.json())
+        .then(json => {
+            console.log(json.responses[0].webDetection.webEntities)
+
+
+            res.send(json.responses[0].webDetection.webEntities)
+        })
+        .catch(err => console.error(err));
+})
+
+
+
+function converBingImageToBase64() {
+    image2base64(shortest.properties.imageUrl)
+        .then((response) => {
+            getVisionBingImgLabels(response);
+
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
+
+function getVisionBingImgLabels(response) {
+    getVisionImgLabels(response)
+        .then(res => res.json())
+        .then(json => {
+            return json.responses[0].webDetection.webEntities
+        })
+        .catch(err => console.error(err));
+}
+
+async function getVisionImgLabels(imgBase64) {
     const body = {
         "requests": [
             {
                 "image": {
-                    "content": req.body.image
+                    "content": imgBase64
                 },
                 "features": [
                     {
@@ -151,20 +178,20 @@ app.post('/api/getImageLabels', (req, res) => {
                 ]
             }
         ]
-    }
-
-    fetch('https://vision.googleapis.com/v1/images:annotate?key=AIzaSyB4HgIDhaV6sv3ddo_Xol9r4fDLj7RpOaU', {
+    };
+    return fetch('https://vision.googleapis.com/v1/images:annotate?key=AIzaSyB4HgIDhaV6sv3ddo_Xol9r4fDLj7RpOaU', {
         method: 'post',
         body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' },
     })
-        .then(res => res.json())
-        .then(json => {
-            res.send(json.responses[0].webDetection.webEntities)
-            //console.log(json.responses[0].webDetection.webEntities)
-        })
-        .catch(err => console.error(err));
-})
+    // .then(res => res.json())
+    // .then(json => {
+    //     return json;
+    //     //res.send(json.responses[0].webDetection.webEntities)
+    //     //console.log(json.responses[0].webDetection.webEntities)
+    // })
+    // .catch(err => console.error(err));
+}
 
 app.listen(port, () => {
     fetch('https://opendata.arcgis.com/datasets/628ded9e05184e76b69719eb8ce0e0aa_207.geojson')
@@ -186,3 +213,4 @@ app.listen(port, () => {
             console.error(error);
         });
 });
+
