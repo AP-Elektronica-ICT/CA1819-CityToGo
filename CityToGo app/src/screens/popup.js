@@ -11,7 +11,7 @@ class ModalExample extends Component {
   }
 
   render() {
-
+ 
     return (
       <View style={{ marginTop: 22 }}>
         <Modal

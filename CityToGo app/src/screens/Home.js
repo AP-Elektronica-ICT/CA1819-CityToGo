@@ -7,6 +7,7 @@ import SInfo from "react-native-sensitive-info";
 import { Button } from 'react-native-elements'
 import Maps from "./Maps";
 import ModalExample from "./popup"
+import Quiz_popUp from "./Quiz_popup";
 import randomLocation from 'random-location';
 import geolib from "geolib";
 
@@ -25,20 +26,25 @@ class Home extends Component {
 
     constructor(props) {
         super(props);
+        this.Quiz = this.getQuizpopup.bind(this);
+        
         this.state = {
             latitude: LATITUDE,
             longitude: LONGITUDE,
             polygonMonument: [],
             monumentsProps: [],
             visible: false,
-            data: "",
-            Name: "",
+            quiz_visible:false,
+            data:"",
+            Name:"",
             polygons: [],
             randomQuizes: [],
             randomNumber: 0
         };
     }
-
+    Quiz = () => {
+        //button click handler.
+      }
     componentDidMount() {
         this.watchID = navigator.geolocation.watchPosition(
             position => {
@@ -73,10 +79,15 @@ class Home extends Component {
     componentWillUnmount() {
         navigator.geolocation.clearWatch(this.watchID);
     }
+    getQuizpopup=  ()=>{
+        console.log("method is working")
+        this.setState({quiz_visible: true});
+        this.refs.quizchild.setModalVisible(this.state.quiz_visible);
+    }
 
 
     getMonument = async () => {
-        fetch('http://192.168.1.35:3000/api/getNextLocation', {
+        fetch('http://192.168.1.60:3000/api/getNextLocation', {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -180,8 +191,10 @@ class Home extends Component {
                     getRandom={this.state.randomQuizes}
                     getPolygons={this.state.polygonMonument}
                     getMapRegion={this.getMapRegion.bind(this)}
-                    getMonumentProps={this.state.monumentsProps} />
+                    getMonumentProps={this.state.monumentsProps} 
+                    Quiz2={this.Quiz}/>
 
+                
                 <View style={styles.borronProfielView}>
                     <Button
                         onPress={() => navigate('Profile')}
@@ -196,8 +209,12 @@ class Home extends Component {
                         buttonStyle={styles.buttonStyle}
                         title="Start"
                     />
-                    <ModalExample ref='popupchild' imageUri={this.state.data} data={this.state.Name} />
                 </View>
+                
+                <ModalExample ref='popupchild' imageUri={this.state.data}  data={this.state.Name}/>
+                <Quiz_popUp ref='quizchild' imageUri={this.state.data}  data={this.state.Name}/>
+                
+            </View>
 
             </View>
         );
