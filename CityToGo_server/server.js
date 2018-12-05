@@ -8,6 +8,16 @@ const haversine = require('haversine');
 let https = require('https');
 const image2base64 = require('image-to-base64');
 
+// Set up mongoose connection
+var passDB = require('./config/mongoDB_pass')
+const mongoose = require('mongoose');
+let mongoDB = `mongodb://Admin:${passDB}@citytogocluster-shard-00-00-bbsns.azure.mongodb.net:27017,citytogocluster-shard-00-01-bbsns.azure.mongodb.net:27017,citytogocluster-shard-00-02-bbsns.azure.mongodb.net:27017/test?ssl=true&replicaSet=CitytogoCluster-shard-0&authSource=admin&retryWrites=true`;
+//let mongoDB = process.env.MONGODB_URI || dev_db_url;
+mongoose.connect(mongoDB, { useNewUrlParser: true });
+mongoose.Promise = global.Promise;
+let db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
 app.use(bodyparser.json({ limit: '10mb', extended: true }))
 app.use(bodyparser.urlencoded({ limit: '10mb', extended: true }))
 
@@ -44,6 +54,8 @@ var jwtCheck = jwt({
 
 //Disabled jwl token to prevent unauthorized request 
 //app.use(jwtCheck);
+
+app.use('/', require('./routes'));
 
 let arr = [];
 app.get('/api/monumenten', (req, res) => {
