@@ -4,7 +4,7 @@ var router = express.Router();
 var userData_controller = require('../controllers/userData')
 
 /*
- * Routes that can be accessed only by autheticated users
+ * Routes that can be accessed by anyone (temporally)
  */
 router.get('/api/v1/userData/test', userData_controller.test);
 router.post('/api/v1/userData/create', userData_controller.product_create);
