@@ -18,6 +18,15 @@ class Quiz_popUp extends Component {
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
   }
+  getQuizes() {
+    return fetch('http://localhost:3000/api/quizes')
+      .then((response) => response.json())
+      .then((responseJson) => {console.log(responseJson);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 
   render() {
 
@@ -40,6 +49,10 @@ class Quiz_popUp extends Component {
               onPress={(value) => { this.setState({ value: value }) }}
             />
               <Button
+                        onPress={() => {
+                          this.getQuizes();
+                        }}
+                        
                         buttonStyle={styles.buttonStyle}
                         title="Confirm"
                     />

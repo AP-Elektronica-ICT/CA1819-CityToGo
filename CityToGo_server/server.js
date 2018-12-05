@@ -44,7 +44,7 @@ var jwtCheck = jwt({
 
 //Disabled jwl token to prevent unauthorized request 
 //app.use(jwtCheck);
-
+let arrQuiz=[];
 let arr = [];
 app.get('/api/monumenten', (req, res) => {
     fetch('https://opendata.arcgis.com/datasets/628ded9e05184e76b69719eb8ce0e0aa_207.geojson')
@@ -228,4 +228,31 @@ app.listen(port, () => {
             console.error(error);
         });
 });
+//Vragen fetchen van opentdb api voor Quizes
+app.get('/api/quizes', (req, res) => {
+    fetch('https://opentdb.com/api.php?amount=10&category=23&type=boolean')
+    .then(data => data.json())
+    .then((Quizes) => { 
+    // pusht data van api in een variable
+                arrQuiz.push(Quizes.results);
+                
+            
+
+        }).then(
+            fetch('https://opentdb.com/api.php?amount=10&category=22&type=boolean')
+            .then(data => data.json())
+            .then((Quizes) => { 
+            // pusht data van api in een variable
+                        arrQuiz.push(Quizes.results);
+                        res.send(arrQuiz)
+                    
+        
+                })
+
+        )
+        
+
+})
+
+
 
