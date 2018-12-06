@@ -27,7 +27,7 @@ let response_handler = function (response) {
     });
 };
 
-
+var test = "22";
 var port = process.env.PORT || 3000;
 
 var jwtCheck = jwt({
@@ -44,7 +44,7 @@ var jwtCheck = jwt({
 
 //Disabled jwl token to prevent unauthorized request 
 //app.use(jwtCheck);
-let arrQuiz=[];
+let arrQuiz = [];
 let arr = [];
 app.get('/api/monumenten', (req, res) => {
     fetch('https://opendata.arcgis.com/datasets/628ded9e05184e76b69719eb8ce0e0aa_207.geojson')
@@ -228,19 +228,15 @@ app.listen(port, () => {
             console.error(error);
         });
 });
-//Vragen fetchen van opentdb api voor Quizes
-app.get('/api/quizes', (req, res) => {
-    fetch('https://opentdb.com/api.php?amount=10&category=23&type=boolean')
-    .then(data => data.json())
-    .then((Quizes) => { 
-    // pusht data van api in een variable
-                arrQuiz.push(Quizes.results);
-                res.send(Quizes.results)
-               
-
+//Vragen fetchen van opentdb api voor Quizes en stuur het door naar front-end per gevraagde category
+app.post('/api/quizCategory', (req, res) => {
+    fetch('https://opentdb.com/api.php?amount=10&category=' + req.body.category + '&type=boolean')
+        .then(data => data.json())
+        .then((Quizes) => {
+            console.log(req.body.category)
+            arrQuiz.push(Quizes.results);
+            res.send(Quizes.results)
         })
-        
-
 })
 
 

@@ -7,42 +7,47 @@ var radio_props = [
   { label: 'True', value: 0 },
   { label: 'False', value: 1 }
 ];
-var arrQuiz=[];
+var arrQuiz = [];
 
 class Quiz_popUp extends Component {
   constructor(props) {
     super(props);
-    this.state= {
+    this.state = {
       arrQuiz: [],
       modalVisible: false,
       question: "",
-      answer:""
-      
-    }
- 
-  }
-componentWillMount(){
-  this.getQuizes();
-}
-generateRandomint(min, max) {
-  return Math.random() * (max - min) + min;
-}
+      answer: "",
+      category: ""
 
+    }
+
+  }
+  componentWillMount() {
+    this.QuizCategory();
+    this.setState({ category: "22" })
+  }
+  QuizCategory = async () => {
+    fetch('http://192.168.1.60:3000/api/QuizCategory', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        category: this.state.category,
+
+      })
+    }).then((response) => response.json()).then((data) => {
+      this.setState({
+        question: data[0].question,
+        answer: data[0].correct_answer
+      })
+    });
+  }
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
   }
-   getQuizes = async () => {
-    const response = await fetch('http://172.16.193.57:3000/api/quizes');
-    const json = await response.json();
-    // just log ‘json’
-  
-    this.setState({
-      arrQuiz:json,
-      question:json[0].question,
-      question:json[0].correct_answer
-    })
-    console.log(this.state.arrQuiz[0].question);
-}
+
   render() {
 
     return (
@@ -64,20 +69,20 @@ generateRandomint(min, max) {
               initial={0}
               onPress={(value) => { this.setState({ value: value }) }}
             />
-              <Button
-                        onPress={() => {
-                          this.getQuizes();
-                        }}
-                        
-                        buttonStyle={styles.buttonStyle}
-                        title="Confirm"
-                    />
-                
+            <Button
+              onPress={() => {
+                this.QuizCategory();
+              }}
+
+              buttonStyle={styles.buttonStyle}
+              title="Confirm"
+            />
+
             < Button buttonStyle={styles.buttonStyle2}
               onPress={() => {
                 this.setModalVisible(false);
               }}
-              
+
               title="close"
             />
 
@@ -97,11 +102,11 @@ generateRandomint(min, max) {
 export default Quiz_popUp;
 
 const styles = StyleSheet.create({
-  container:{
-    flex:1,
-    
-    alignItems:'center',
-    justifyContent:'center'
+  container: {
+    flex: 1,
+
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   image: {
     marginTop: 20,
@@ -116,19 +121,19 @@ const styles = StyleSheet.create({
     borderColor: "transparent",
     borderWidth: 0,
     borderRadius: 5
-},
-buttonStyle2: {
-  backgroundColor: "rgb(178,34,34)",
-  width: 200,
-  height: 45,
-  borderColor: "transparent",
-  borderWidth: 0,
-  borderRadius: 5
-},
-  textStyle:{
-    textAlign:'center',
-    fontWeight:'bold',
-    fontSize:20,
+  },
+  buttonStyle2: {
+    backgroundColor: "rgb(178,34,34)",
+    width: 200,
+    height: 45,
+    borderColor: "transparent",
+    borderWidth: 0,
+    borderRadius: 5
+  },
+  textStyle: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 20,
 
   }
 });
