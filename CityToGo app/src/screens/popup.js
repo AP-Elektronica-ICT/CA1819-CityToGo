@@ -10,18 +10,21 @@ class ModalExample extends Component {
     this.setState({ modalVisible: visible });
   }
 
+  startGameSession(){
+    this.setModalVisible(false);
+    this.props.startGameSession()
+  }
+
   render() {
  
     return (
       <View style={{ marginTop: 22 }}>
         <Modal
-
           animationType="slide"
           transparent={false}
           visible={this.state.modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-          }}>
+          onRequestClose={() => {Alert.alert('Modal has been closed.');}}
+          >
           <View style={{ marginTop: 22 }}>
             <View>
               <Image
@@ -34,10 +37,8 @@ class ModalExample extends Component {
               </Text>
 
               < Button style={{ marginTop: 150 }}
-                onPress={() => {
-                  this.setModalVisible(false);
-                }}
-                title="close"
+                onPress={() => {this.startGameSession()}}
+                title="Let's go"
               />
             </View>
           </View>

@@ -1,4 +1,4 @@
-import React, { Component, } from "react";
+ import React, { Component, } from "react";
 import {
     StyleSheet,
     View
@@ -27,24 +27,25 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.Quiz = this.getQuizpopup.bind(this);
-        
+
         this.state = {
             latitude: LATITUDE,
             longitude: LONGITUDE,
             polygonMonument: [],
             monumentsProps: [],
-            visible: false,
-            quiz_visible:false,
-            data:"",
-            Name:"",
+            isStartPopupVisible: false,
+            quiz_visible: false,
+            data: "",
+            Name: "",
             polygons: [],
             randomQuizes: [],
-            randomNumber: 0
+            randomNumber: 0,
+            isStartBttnVisible: false
         };
     }
     Quiz = () => {
         //button click handler.
-      }
+    }
     componentDidMount() {
         this.watchID = navigator.geolocation.watchPosition(
             position => {
@@ -79,15 +80,15 @@ class Home extends Component {
     componentWillUnmount() {
         navigator.geolocation.clearWatch(this.watchID);
     }
-    getQuizpopup=  ()=>{
+    getQuizpopup = () => {
         console.log("method is working")
-        this.setState({quiz_visible: true});
+        this.setState({ quiz_visible: true });
         this.refs.quizchild.setModalVisible(this.state.quiz_visible);
     }
 
 
     getMonument = async () => {
-        fetch('http://192.168.1.60:3000/api/getNextLocation', {
+        fetch('http://192.168.1.35:3000/api/getNextLocation', {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -108,11 +109,12 @@ class Home extends Component {
                     data: responseJson.properties.imageUrl,
                     Name: responseJson.properties.Naam,
                     Name: responseJson.properties.Naam,
-                    visible: true,
-                    polygons: responseJson.geometry.coordinates[0]
+                    isStartPopupVisible: true,
+                    polygons: responseJson.geometry.coordinates[0],
+                    isStartBttnVisible: true
                 })
                 this.getRandomQuizes();
-                this.refs.popupchild.setModalVisible(this.state.visible);
+                this.refs.popupchild.setModalVisible(this.state.isStartPopupVisible);
             })
             .catch((error) => {
                 console.error(error);
@@ -178,7 +180,31 @@ class Home extends Component {
         longitudeDelta: LONGITUDE_DELTA
     });
 
+    startGameSession() {
+        console.log("lest go !!!!")
+        setTimeout(() => {
+            
+        }, timeout);
+    }
 
+    //shows the start popup
+    showStartPopup() {
+        this.getMonument()
+    }
+
+    renderStartButton() {
+        if (this.state.isStartBttnVisible !== true) {
+            return (
+                <View style={styles.bottomStartView}>
+                    <Button
+                        onPress={() => this.showStartPopup()}
+                        buttonStyle={styles.buttonStyle}
+                        title="Start"
+                    />
+                </View>
+            )
+        }
+    }
 
     render() {
 
@@ -191,10 +217,9 @@ class Home extends Component {
                     getRandom={this.state.randomQuizes}
                     getPolygons={this.state.polygonMonument}
                     getMapRegion={this.getMapRegion.bind(this)}
-                    getMonumentProps={this.state.monumentsProps} 
-                    Quiz2={this.Quiz}/>
+                    getMonumentProps={this.state.monumentsProps}
+                    Quiz2={this.Quiz} />
 
-                
                 <View style={styles.borronProfielView}>
                     <Button
                         onPress={() => navigate('Profile')}
@@ -203,17 +228,18 @@ class Home extends Component {
                     />
                 </View>
 
-                <View style={styles.bottomStartView}>
-                    <Button
-                        onPress={this.getMonument}
-                        buttonStyle={styles.buttonStyle}
-                        title="Start"
-                    />
-                </View>
-                
-                <ModalExample ref='popupchild' imageUri={this.state.data}  data={this.state.Name}/>
-                <Quiz_popUp ref='quizchild' imageUri={this.state.data}  data={this.state.Name}/>
-                
+                {this.renderStartButton()}
+
+                <ModalExample ref='popupchild'
+                    imageUri={this.state.data}
+                    data={this.state.Name}
+                    startGameSession={this.startGameSession.bind(this)}
+                />
+                <Quiz_popUp ref='quizchild'
+                    imageUri={this.state.data}
+                    data={this.state.Name}
+                />
+
             </View>
         );
 
