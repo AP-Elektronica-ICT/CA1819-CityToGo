@@ -79,7 +79,7 @@ class Home extends Component {
     componentWillUnmount() {
         navigator.geolocation.clearWatch(this.watchID);
     }
-    getQuizpopup=  ()=>{
+    getQuizpopup= async ()=>{
         console.log("method is working")
         this.setState({quiz_visible: true});
         this.refs.quizchild.setModalVisible(this.state.quiz_visible);

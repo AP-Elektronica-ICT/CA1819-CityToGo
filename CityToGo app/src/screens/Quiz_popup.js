@@ -4,20 +4,18 @@ import { Button } from 'react-native-elements'
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import { bold } from 'ansi-colors';
 var radio_props = [
-  { label: 'True', value: 0 },
-  { label: 'False', value: 1 }
+  { label: 'True', value: "True" },
+  { label: 'False', value: "False"}
 ];
 var category_props = [
   { label: 'History', value: "23"},
   { label: 'Politics', value: "24" },
-  { label: 'Geography', value: "22"},
   { label: 'Geography', value: "22"}, 
   { label: 'Science/Computers', value: "18"},
   { label: 'Sports', value: "21"},
   
-
 ];
-var arrQuiz = [];
+var random;
 
 class Quiz_popUp extends Component {
   constructor(props) {
@@ -27,16 +25,18 @@ class Quiz_popUp extends Component {
       modalVisible: false,
       question: "",
       answer: "",
+      given_answer:"",
       category: "",
-      category_is_selected:false
+      category_is_selected:false,
+
 
     }
 
   }
-  componentWillMount() {
-   // this.QuizCategory();
-    //this.setState({ category: "22" })
-  }
+  generateRandomint(min, max) {
+    return Math.random() * (max - min) + min;
+}
+  //Hier wordt category gepost en in response krijgen wij de vragen en de juiste antwoord!
   QuizCategory = async () => {
     fetch('http://192.168.1.60:3000/api/QuizCategory', {
       method: 'POST',
@@ -49,21 +49,35 @@ class Quiz_popUp extends Component {
 
       })
     }).then((response) => response.json()).then((data) => {
+      random=this.generateRandomint(1,9);
       this.setState({
-        question: data[0].question,
-        answer: data[0].correct_answer
+        question: data[parseInt(random)].question,
+        answer: data[parseInt(random)].correct_answer
       })
     });
   }
+  //close button
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
   }
+  // Category bevestigen en vragen van de category laden
   confirmCategory(){
     this.setState({category_is_selected:true})
     this.QuizCategory();
   }
-
+  //Het antwoord wordt hier gecontroleerd en rewards moet ook hier gegeven worden
+  checkAnswer(){
+    if(this.state.given_answer==this.state.answer){
+    console.log("Correct Answer bro !")
+    this.setState({category_is_selected:false,modalVisible:false})
+  }
+  else{
+    console.log("Wrong answer bro !")
+    this.setState({category_is_selected:false,modalVisible:false})
+  }
+  }
   render() {
+    // Vragen renderen na bevestigen van category
    if(this.state.category_is_selected){
     return (
       <View style={styles.container}>
@@ -78,15 +92,14 @@ class Quiz_popUp extends Component {
           <View style={styles.container}>
 
             <Text style={styles.textStyle}>{this.state.question} </Text>
-            <Text style={styles.textStyle}> {this.state.answer} </Text>
             <RadioForm
               radio_props={radio_props}
               initial={0}
-              onPress={(value) => { this.setState({ value: value }) }}
+              onPress={(value) => { this.setState({ given_answer: value }) }}
             />
             <Button
               onPress={() => {
-                this.QuizCategory();
+                this.checkAnswer();
               }}
 
               buttonStyle={styles.buttonStyle}
