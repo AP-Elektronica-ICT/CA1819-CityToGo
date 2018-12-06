@@ -7,27 +7,42 @@ var radio_props = [
   { label: 'True', value: 0 },
   { label: 'False', value: 1 }
 ];
+var arrQuiz=[];
 
 class Quiz_popUp extends Component {
-
-  state = {
-    modalVisible: false,
-
-  };
+  constructor(props) {
+    super(props);
+    this.state= {
+      arrQuiz: [],
+      modalVisible: false,
+      question: "",
+      answer:""
+      
+    }
+ 
+  }
+componentWillMount(){
+  this.getQuizes();
+}
+generateRandomint(min, max) {
+  return Math.random() * (max - min) + min;
+}
 
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
   }
-  getQuizes() {
-    return fetch('http://localhost:3000/api/quizes')
-      .then((response) => response.json())
-      .then((responseJson) => {console.log(responseJson);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
-
+   getQuizes = async () => {
+    const response = await fetch('http://172.16.193.57:3000/api/quizes');
+    const json = await response.json();
+    // just log ‘json’
+  
+    this.setState({
+      arrQuiz:json,
+      question:json[0].question,
+      question:json[0].correct_answer
+    })
+    console.log(this.state.arrQuiz[0].question);
+}
   render() {
 
     return (
@@ -42,7 +57,8 @@ class Quiz_popUp extends Component {
           }}>
           <View style={styles.container}>
 
-            <Text style={styles.textStyle}> Japan was part of the Allied Powers during World War I </Text>
+            <Text style={styles.textStyle}>{this.state.question} </Text>
+            <Text style={styles.textStyle}> {this.state.answer} </Text>
             <RadioForm
               radio_props={radio_props}
               initial={0}

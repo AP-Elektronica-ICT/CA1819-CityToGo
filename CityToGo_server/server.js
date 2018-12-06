@@ -235,21 +235,10 @@ app.get('/api/quizes', (req, res) => {
     .then((Quizes) => { 
     // pusht data van api in een variable
                 arrQuiz.push(Quizes.results);
-                
-            
+                res.send(Quizes.results)
+               
 
-        }).then(
-            fetch('https://opentdb.com/api.php?amount=10&category=22&type=boolean')
-            .then(data => data.json())
-            .then((Quizes) => { 
-            // pusht data van api in een variable
-                        arrQuiz.push(Quizes.results);
-                        res.send(arrQuiz)
-                    
-        
-                })
-
-        )
+        })
         
 
 })
