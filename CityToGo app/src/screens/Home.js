@@ -215,8 +215,6 @@ class Home extends Component {
                 <Quiz_popUp ref='quizchild' imageUri={this.state.data}  data={this.state.Name}/>
                 
             </View>
-
-            </View>
         );
 
     }
