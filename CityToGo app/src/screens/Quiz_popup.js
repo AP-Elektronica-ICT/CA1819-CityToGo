@@ -7,6 +7,16 @@ var radio_props = [
   { label: 'True', value: 0 },
   { label: 'False', value: 1 }
 ];
+var category_props = [
+  { label: 'History', value: "23"},
+  { label: 'Politics', value: "24" },
+  { label: 'Geography', value: "22"},
+  { label: 'Geography', value: "22"}, 
+  { label: 'Science/Computers', value: "18"},
+  { label: 'Sports', value: "21"},
+  
+
+];
 var arrQuiz = [];
 
 class Quiz_popUp extends Component {
@@ -17,14 +27,15 @@ class Quiz_popUp extends Component {
       modalVisible: false,
       question: "",
       answer: "",
-      category: ""
+      category: "",
+      category_is_selected:false
 
     }
 
   }
   componentWillMount() {
-    this.QuizCategory();
-    this.setState({ category: "22" })
+   // this.QuizCategory();
+    //this.setState({ category: "22" })
   }
   QuizCategory = async () => {
     fetch('http://192.168.1.60:3000/api/QuizCategory', {
@@ -47,9 +58,13 @@ class Quiz_popUp extends Component {
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
   }
+  confirmCategory(){
+    this.setState({category_is_selected:true})
+    this.QuizCategory();
+  }
 
   render() {
-
+   if(this.state.category_is_selected){
     return (
       <View style={styles.container}>
         <Modal
@@ -96,6 +111,55 @@ class Quiz_popUp extends Component {
       </View>
     );
   }
+  else{
+    return (
+      <View style={styles.container}>
+        <Modal
+
+          animationType="slide"
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+          }}>
+          <View style={styles.container}>
+
+            <Text style={styles.textStyle}>Select a category ! </Text>
+            <RadioForm
+              radio_props={category_props}
+              initial={0}
+              onPress={(value) => { this.setState({ category: value }) }}
+            />
+            <Button
+              onPress={() => {
+                this.confirmCategory();
+              }}
+
+              buttonStyle={styles.buttonStyle}
+              title="Confirm"
+            />
+
+            < Button buttonStyle={styles.buttonStyle2}
+              onPress={() => {
+                this.setModalVisible(false);
+              }}
+
+              title="close"
+            />
+
+
+
+          </View>
+
+        </Modal>
+
+
+      </View>
+    );
+
+  }
+}
+
 }
 
 
