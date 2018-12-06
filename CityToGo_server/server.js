@@ -7,11 +7,11 @@ const bodyparser = require('body-parser');
 const haversine = require('haversine');
 let https = require('https');
 const image2base64 = require('image-to-base64');
-var credentials = require('./config/credentials')
+var secret = require('./config/secret')
 
 // Set up mongoose connection
 const mongoose = require('mongoose');
-let mongoDB = `mongodb://Admin:${credentials.mongoDBpass}@citytogocluster-shard-00-00-bbsns.azure.mongodb.net:27017,citytogocluster-shard-00-01-bbsns.azure.mongodb.net:27017,citytogocluster-shard-00-02-bbsns.azure.mongodb.net:27017/test?ssl=true&replicaSet=CitytogoCluster-shard-0&authSource=admin&retryWrites=true`;
+let mongoDB = `mongodb://Admin:${secret.mongoDBpass}@citytogocluster-shard-00-00-93g0j.gcp.mongodb.net:27017,citytogocluster-shard-00-01-93g0j.gcp.mongodb.net:27017,citytogocluster-shard-00-02-93g0j.gcp.mongodb.net:27017/test?ssl=true&replicaSet=CitytogoCluster-shard-0&authSource=admin&retryWrites=true`;
 //let mongoDB = process.env.MONGODB_URI || dev_db_url;
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
@@ -128,7 +128,7 @@ app.post('/api/getNextLocation', (requ, res) => {
             path: '/bing/v7.0/images/search' + '?q=' + encodeURIComponent(term),
             headers: {
                 'Content-Type': 'application/json',
-                'Ocp-Apim-Subscription-Key': credentials.azureAccesKey,
+                'Ocp-Apim-Subscription-Key': secret.azureAccesKey,
             }
         },
         response_handler);
@@ -202,7 +202,7 @@ async function getVisionImgLabels(imgBase64) {
             }
         ]
     };
-    return fetch(`https://vision.googleapis.com/v1/images:annotate?key=${credentials.googleKey}`, {
+    return fetch(`https://vision.googleapis.com/v1/images:annotate?key=${secret.googleKey}`, {
         method: 'post',
         body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' },
