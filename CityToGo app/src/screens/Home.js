@@ -1,7 +1,9 @@
- import React, { Component, } from "react";
+import React, { Component, } from "react";
 import {
+    View,
     StyleSheet,
-    View
+    Image,
+    TouchableOpacity
 } from "react-native";
 import SInfo from "react-native-sensitive-info";
 import { Button } from 'react-native-elements'
@@ -43,10 +45,26 @@ class Home extends Component {
             isStartBttnVisible: false
         };
     }
+
     Quiz = () => {
         //button click handler.
     }
+
     componentDidMount() {
+
+        const { navigation } = this.props;
+        const userData = navigation.getParam("userData");
+
+        this.setState({ avatarImg: userData.picture })
+
+        //returns current time and date
+        setInterval(() => {
+            this.setState({
+                curTime: new Date().toLocaleString()
+            })
+        }, 1000)
+
+        //current localisation 
         this.watchID = navigator.geolocation.watchPosition(
             position => {
                 const { latitude, longitude } = position.coords;
@@ -81,7 +99,6 @@ class Home extends Component {
         navigator.geolocation.clearWatch(this.watchID);
     }
     getQuizpopup = () => {
-        console.log("method is working")
         this.setState({ quiz_visible: true });
         this.refs.quizchild.setModalVisible(this.state.quiz_visible);
     }
@@ -180,11 +197,12 @@ class Home extends Component {
         longitudeDelta: LONGITUDE_DELTA
     });
 
+    postStartSession() {
+
+    }
+
     startGameSession() {
-        console.log("lest go !!!!")
-        setTimeout(() => {
-            
-        }, timeout);
+        console.log(this.state.curTime)
     }
 
     //shows the start popup
@@ -220,12 +238,11 @@ class Home extends Component {
                     getMonumentProps={this.state.monumentsProps}
                     Quiz2={this.Quiz} />
 
-                <View style={styles.borronProfielView}>
-                    <Button
-                        onPress={() => navigate('Profile')}
-                        buttonStyle={styles.buttonStyle}
-                        title="Profiel"
-                    />
+                <View style={styles.profielView}>
+                    <TouchableOpacity onPress={() => navigate('Profile')}>
+                        <Image style={styles.avatar}
+                            source={{ uri: this.state.avatarImg }} />
+                    </TouchableOpacity>
                 </View>
 
                 {this.renderStartButton()}
@@ -266,9 +283,18 @@ const styles = StyleSheet.create({
         bottom: '2%',
         alignItems: 'center'
     },
-    borronProfielView: {
+    profielView: {
         position: 'absolute',
-        top: '2%',
+        top: '1%',
+        right:'2%',
         alignSelf: 'flex-end'
+    },
+    avatar: {
+        width: 60,
+        height: 60,
+        borderRadius: 63,
+        borderWidth: 2,
+        borderColor: "white"
     }
+
 });
