@@ -1,23 +1,29 @@
-var UserData = require('../models/userData');
+var UserSession = require('../models/userSession');
 
 //Simple version, without validation or sanitation
 exports.test = function (req, res) {
     res.send('Greetings from the Test controller!');
 };
 
-exports.product_create = function (req, res) {
-    var userData = new UserData(
+exports.session_create = function (req, res) {
+    console.log(req.body.subSession)
+    var userSession = new UserSession(
         {
-            name: req.body.name,
-            price: req.body.price
-        }
-    );
+            userId: req.body.userId,
+            isRunning: req.body.isRunning,
+            subSession: {
+                startTime: req.body.subSession.startTime,
+                stopTime: req.body.subSession.stopTime,
+                monument: req.body.subSession.monument
+            }
+        });
 
-    userData.save(function (err) {
+    userSession.save(function (err) {
         if (err) {
-            return next(err);
-        }
-        res.send('user data Created successfully')
+            res.send(err)
+            //return next(err);
+        } else
+            res.send('user session created successfully')
     })
 };
 
