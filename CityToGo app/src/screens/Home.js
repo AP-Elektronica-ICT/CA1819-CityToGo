@@ -52,17 +52,12 @@ class Home extends Component {
 
     componentDidMount() {
 
-        const { navigation } = this.props;
-        const userData = navigation.getParam("userData");
+        // const { navigation } = this.props;
+        // const userData = navigation.getParam("userData");
 
-        this.setState({ avatarImg: userData.picture })
+        // this.setState({ avatarImg: userData.picture })
 
-        //returns current time and date
-        setInterval(() => {
-            this.setState({
-                curTime: new Date().toLocaleString()
-            })
-        }, 1000)
+
 
         //current localisation 
         this.watchID = navigator.geolocation.watchPosition(
@@ -197,12 +192,36 @@ class Home extends Component {
         longitudeDelta: LONGITUDE_DELTA
     });
 
-    postStartSession() {
-
-    }
-
     startGameSession() {
-        console.log(this.state.curTime)
+        let userProfielData = this.props.navigation.getParam("userData");
+
+        let startTime = new Date().valueOf()
+        let userId = userProfielData.sub
+
+        console.log(userId)
+        console.log(startTime)
+        console.log(this.state.monumentsProps)
+
+        fetch('http://192.168.1.35:3000/api/v1/userdata/create', {
+            method: 'POST',
+            headers: {
+                authorization: 'Bearer ' + global.token,
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: userId,
+                startTime: startTime,
+                stopTime: 0,
+                monument: this.state.monumentsProps
+            }),
+        }).then((response) =>
+            console.log(response)
+        )
+            .catch((error) => {
+                console.error(error);
+            });
+
     }
 
     //shows the start popup
@@ -226,7 +245,8 @@ class Home extends Component {
 
     render() {
 
-        const { navigate } = this.props.navigation;
+        const userProfielData = this.props.navigation.getParam("userData");
+        const {navigate} = this.props.navigation;
 
         return (
             <View style={styles.container}>
@@ -241,7 +261,7 @@ class Home extends Component {
                 <View style={styles.profielView}>
                     <TouchableOpacity onPress={() => navigate('Profile')}>
                         <Image style={styles.avatar}
-                            source={{ uri: this.state.avatarImg }} />
+                            source={{ uri: userProfielData.picture }} />
                     </TouchableOpacity>
                 </View>
 
@@ -269,9 +289,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'stretch',
+        alignItems: 'center'
     },
     buttonStyle: {
-        backgroundColor: "rgba(92, 99,216, 1)",
+        backgroundColor: "rgba(51,204,0,1)",
         width: 200,
         height: 45,
         borderColor: "transparent",
@@ -280,20 +301,19 @@ const styles = StyleSheet.create({
     },
     bottomStartView: {
         position: 'absolute',
-        bottom: '2%',
-        alignItems: 'center'
+        bottom: '2%'
     },
     profielView: {
         position: 'absolute',
         top: '1%',
-        right:'2%',
+        right: '2%',
         alignSelf: 'flex-end'
     },
     avatar: {
-        width: 60,
-        height: 60,
+        width: 55,
+        height: 55,
         borderRadius: 63,
-        borderWidth: 2,
+        borderWidth: 4,
         borderColor: "white"
     }
 
