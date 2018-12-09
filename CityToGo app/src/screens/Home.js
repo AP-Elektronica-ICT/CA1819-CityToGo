@@ -48,7 +48,48 @@ class Home extends Component {
             Name: "",
             polygons: [],
             randomQuizes: [],
-            randomNumber: 0
+            randomNumber: 0,
+            showMonument:false,
+          
+
+            markers: [
+                {
+                  coordinate: {
+                    latitude: 45.524548,
+                    longitude: -122.6749817,
+                  },
+                  title: "Best Place",
+                  description: "This is the best place in Portland",
+                  image: Images[0],
+                },
+                {
+                  coordinate: {
+                    latitude: 45.524698,
+                    longitude: -122.6655507,
+                  },
+                  title: "Second Best Place",
+                  description: "This is the second best place in Portland",
+                  image: Images[1],
+                },
+                {
+                  coordinate: {
+                    latitude: 45.5230786,
+                    longitude: -122.6701034,
+                  },
+                  title: "Third Best Place",
+                  description: "This is the third best place in Portland",
+                  image: Images[2],
+                },
+                {
+                  coordinate: {
+                    latitude: 45.521016,
+                    longitude: -122.6561917,
+                  },
+                  title: "Fourth Best Place",
+                  description: "This is the fourth best place in Portland",
+                  image: Images[3],
+                },
+              ]
         };
     }
 
@@ -268,7 +309,10 @@ class Home extends Component {
                     getPolygons={this.state.polygonMonument}
                     getMapRegion={this.getMapRegion.bind(this)}
                     getMonumentProps={this.state.monumentsProps} 
-                    Quiz2={this.Quiz}/>
+                    Quiz2={this.Quiz}
+                    getmarker={this.state.markers}
+                    monumentVisibility={this.state.showMonument}
+                    />
 
                 
                 <View style={styles.borronProfielView}>
@@ -276,6 +320,11 @@ class Home extends Component {
                         onPress={() => navigate('Profile')}
                         buttonStyle={styles.buttonStyle}
                         title="Profiel"
+                    />
+                    <Button
+                        onPress={this.ShowMonument}
+                        buttonStyle={styles.buttonStyle}
+                        title="show visited monuments"
                     />
                 </View>
 
