@@ -58,7 +58,7 @@ class Maps extends Component {
                 //pitchEnabled={false}
                 //zoomEnabled={false}
                 //rotateEnabled={false}
-                customMapStyle={mapStyle}
+                //customMapStyle={mapStyle}
                 ref="map"
             >
                 {this.renderPolygon()}
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         right: 0,
     },
     buttonStyle: {
-        backgroundColor: "rgba(92, 99,216, 1)",
+        backgroundColor: "rgba(51,204,0,1)",
         width: 200,
         height: 45,
         borderColor: "transparent",

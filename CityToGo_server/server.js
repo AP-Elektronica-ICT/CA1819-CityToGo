@@ -7,6 +7,16 @@ const bodyparser = require('body-parser');
 const haversine = require('haversine');
 let https = require('https');
 const image2base64 = require('image-to-base64');
+var secret = require('./config/secret')
+
+// Set up mongoose connection
+const mongoose = require('mongoose');
+let mongoDB = `mongodb://Admin:${secret.mongoDBpass}@citytogocluster-shard-00-00-93g0j.gcp.mongodb.net:27017,citytogocluster-shard-00-01-93g0j.gcp.mongodb.net:27017,citytogocluster-shard-00-02-93g0j.gcp.mongodb.net:27017/test?ssl=true&replicaSet=CitytogoCluster-shard-0&authSource=admin&retryWrites=true`;
+//let mongoDB = process.env.MONGODB_URI || dev_db_url;
+mongoose.connect(mongoDB, { useNewUrlParser: true });
+mongoose.Promise = global.Promise;
+let db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(bodyparser.json({ limit: '10mb', extended: true }))
 app.use(bodyparser.urlencoded({ limit: '10mb', extended: true }))
@@ -21,8 +31,6 @@ let response_handler = function (response) {
         shortest.properties.imageUrl = obj.value[0].contentUrl;
         sqr.json(shortest);
         console.log(shortest);
-        console.log('base64 !!!!!!!!!!!!!!!!');
-        //Buffer.alloc()
         converBingImageToBase64();
     });
 };
@@ -44,6 +52,8 @@ var jwtCheck = jwt({
 
 //Disabled jwl token to prevent unauthorized request 
 //app.use(jwtCheck);
+
+app.use('/', require('./routes'));
 
 let arr = [];
 app.get('/api/monumenten', (req, res) => {
@@ -118,7 +128,7 @@ app.post('/api/getNextLocation', (requ, res) => {
             path: '/bing/v7.0/images/search' + '?q=' + encodeURIComponent(term),
             headers: {
                 'Content-Type': 'application/json',
-                'Ocp-Apim-Subscription-Key': '2d238b17838c477fbf02db7183468e51',
+                'Ocp-Apim-Subscription-Key': secret.azureAccesKey,
             }
         },
         response_handler);
@@ -192,18 +202,11 @@ async function getVisionImgLabels(imgBase64) {
             }
         ]
     };
-    return fetch('https://vision.googleapis.com/v1/images:annotate?key=AIzaSyB4HgIDhaV6sv3ddo_Xol9r4fDLj7RpOaU', {
+    return fetch(`https://vision.googleapis.com/v1/images:annotate?key=${secret.googleKey}`, {
         method: 'post',
         body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' },
     })
-    // .then(res => res.json())
-    // .then(json => {
-    //     return json;
-    //     //res.send(json.responses[0].webDetection.webEntities)
-    //     //console.log(json.responses[0].webDetection.webEntities)
-    // })
-    // .catch(err => console.error(err));
 }
 
 //---------------------------

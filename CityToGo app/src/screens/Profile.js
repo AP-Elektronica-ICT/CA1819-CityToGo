@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import {View,Text,StyleSheet,ActivityIndicator,Image} from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator, Image } from "react-native";
 import Auth0 from "react-native-auth0";
 import SInfo from "react-native-sensitive-info"
+import { Button } from 'react-native-elements'
 
 const auth0 = new Auth0({
   domain: "shakir01.eu.auth0.com",
@@ -26,28 +27,67 @@ class Profiel extends Component {
 
     SInfo.getItem("userdata", {}).then(JsonData => {
       data = JSON.parse(JsonData)
-       metadata = data["https://shakir01.net/user_metadata"];
-       Age = metadata.Age;
-       Full_name = metadata.FullName;
+      metadata = data["https://shakir01.net/user_metadata"];
+      Age = metadata.Age;
+      Full_name = metadata.FullName;
       location = metadata.Location;
       this.setState({ fetching: true });
     });
 
   }
 
-  render() {
-     if (!this.state.fetching) {
-       return (
-        <View style={styles.container}>
-           <ActivityIndicator
-             size="large"
-             color="#05a5d1"
-             animating={!this.state.fetching}
-           />
-         </View>
+  stopCurrentSession(sessionId) {
+    fetch(`http://192.168.1.35:3000/api/v1/userSession/update/${sessionId}`, {
+      method: 'PUT',
+      headers: {
+        authorization: 'Bearer ' + global.token,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        isRunning: false,
+      }),
+    }).then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson)
+      }
+      ).catch((error) => {
+        console.error(error);
+      });
+  }
 
-       )
-     }
+  renderSessionStopBttn(sessionId) {
+    if (sessionId !== undefined) {
+      return (
+        <Button
+        onPress={()=>this.stopCurrentSession(sessionId)}
+          title="Stop session"
+        />
+      )
+    }
+
+    return null
+  }
+
+  render() {
+
+    const sessionId = this.props.navigation.getParam("sessionId");
+    console.log(sessionId)
+
+    if (!this.state.fetching) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator
+            size="large"
+            color="#05a5d1"
+            animating={!this.state.fetching}
+          />
+        </View>
+
+      )
+    }
+
+
     return (
 
       <View style={styles.container}>
@@ -62,14 +102,14 @@ class Profiel extends Component {
         </View>
 
         <View style={styles.body}>
-           <View style={styles.item}>
+          <View style={styles.item}>
             <View style={styles.iconContent}>
               <Image style={styles.icon} source={{ uri: 'https://cdn3.iconfinder.com/data/icons/black-easy/512/538642-user_512x512.png' }} />
             </View>
             <View style={styles.infoContent}>
               <Text style={styles.info}>{Full_name}</Text>
             </View>
-          </View> 
+          </View>
 
           <View style={styles.item}>
             <View style={styles.iconContent}>
@@ -78,7 +118,7 @@ class Profiel extends Component {
             <View style={styles.infoContent}>
               <Text style={styles.info}>{Age}</Text>
             </View>
-          </View> 
+          </View>
 
           <View style={styles.item}>
             <View style={styles.iconContent}>
@@ -91,17 +131,18 @@ class Profiel extends Component {
             </View>
           </View>
 
-           <View style={styles.item}>
+          <View style={styles.item}>
             <View style={styles.iconContent}>
               <Image style={styles.icon} source={{ uri: 'https://www.amdtelecom.net/wp-content/uploads/2018/08/loc.png' }} />
             </View>
             <View style={styles.infoContent}>
               <Text style={styles.info}>{location}</Text>
             </View>
-          </View> 
+          </View>
+
+          {this.renderSessionStopBttn(sessionId)}
 
         </View>
-
       </View>
 
     );

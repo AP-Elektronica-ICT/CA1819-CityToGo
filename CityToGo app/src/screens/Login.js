@@ -54,7 +54,7 @@ export default class uniLogin extends Component {
         auth0.auth
           .userInfo({ token: accessToken })
           .then(data => {
-            this.gotoAccount(data);
+            this.gotoHome(data);
           })
           .catch(err => {
 
@@ -111,7 +111,7 @@ export default class uniLogin extends Component {
         auth0.auth
           .userInfo({ token: res.accessToken })
           .then(data => {
-            this.gotoAccount(data);
+            this.gotoHome(data);
           })
           .catch(err => {
             console.log("err: ");
@@ -127,7 +127,7 @@ export default class uniLogin extends Component {
       });
   };
 
-  gotoAccount = data => {
+  gotoHome = data => {
     SInfo.setItem("userdata", JSON.stringify(data), {});
     this.setState({
       hasInitialized: true
@@ -141,9 +141,7 @@ export default class uniLogin extends Component {
           routeName: "Home",
 
           params: {
-
-            name: data.name,
-            picture: data.picture,
+            userData: data
           }
         })
       ]
