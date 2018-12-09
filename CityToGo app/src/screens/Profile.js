@@ -60,7 +60,8 @@ class Profiel extends Component {
     if (sessionId !== undefined) {
       return (
         <Button
-        onPress={()=>this.stopCurrentSession(sessionId)}
+          onPress={() => this.stopCurrentSession(sessionId)}
+          buttonStyle={styles.buttonStyle}
           title="Stop session"
         />
       )
@@ -206,6 +207,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginTop: 20,
     color: "#FFFFFF",
+  }, 
+  buttonStyle: {
+    backgroundColor: "rgba(255,0,0,1)",
+    width: 200,
+    height: 45,
+    borderColor: "transparent",
+    borderWidth: 0,
+    borderRadius: 5
   }
 });
 export default Profiel;

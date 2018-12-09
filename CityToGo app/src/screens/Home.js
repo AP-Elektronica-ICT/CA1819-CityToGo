@@ -279,7 +279,7 @@ class Home extends Component {
                     data={this.state.Name}
                 />
 
-          
+          </View>
         );
 
     }
