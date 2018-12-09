@@ -93,14 +93,15 @@ class Home extends Component {
     componentWillUnmount() {
         navigator.geolocation.clearWatch(this.watchID);
     }
-    getQuizpopup = () => {
-        this.setState({ quiz_visible: true });
+    getQuizpopup= async ()=>{
+        console.log("method is working")
+        this.setState({quiz_visible: true});
         this.refs.quizchild.setModalVisible(this.state.quiz_visible);
     }
 
 
     getMonument = async () => {
-        fetch('http://192.168.1.35:3000/api/getNextLocation', {
+        fetch('http://192.168.1.60:3000/api/getNextLocation', {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
