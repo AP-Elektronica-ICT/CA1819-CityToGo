@@ -1,10 +1,12 @@
 import React, { Component, } from "react";
 import {
+    View,
     StyleSheet,
-    View
+    Image,
+    TouchableOpacity
 } from "react-native";
-import SInfo from "react-native-sensitive-info";
 import { Button } from 'react-native-elements'
+import SInfo from "react-native-sensitive-info";
 import Maps from "./Maps";
 import ModalExample from "./popup"
 import Quiz_popUp from "./Quiz_popup";
@@ -40,62 +42,30 @@ class Home extends Component {
             longitude: LONGITUDE,
             polygonMonument: [],
             monumentsProps: [],
-            visible: false,
-            quiz_visible:false,
-            data:"",
-            Name:"",
+            isStartPopupVisible: false,
+            quiz_visible: false,
+            data: "",
+            Name: "",
             polygons: [],
             randomQuizes: [],
-            randomNumber: 0,
-            showMonument:false,
-
-            markers: [
-                {
-                  coordinate: {
-                    latitude: 45.524548,
-                    longitude: -122.6749817,
-                  },
-                  title: "Best Place",
-                  description: "This is the best place in Portland",
-                  image: Images[0],
-                },
-                {
-                  coordinate: {
-                    latitude: 45.524698,
-                    longitude: -122.6655507,
-                  },
-                  title: "Second Best Place",
-                  description: "This is the second best place in Portland",
-                  image: Images[1],
-                },
-                {
-                  coordinate: {
-                    latitude: 45.5230786,
-                    longitude: -122.6701034,
-                  },
-                  title: "Third Best Place",
-                  description: "This is the third best place in Portland",
-                  image: Images[2],
-                },
-                {
-                  coordinate: {
-                    latitude: 45.521016,
-                    longitude: -122.6561917,
-                  },
-                  title: "Fourth Best Place",
-                  description: "This is the fourth best place in Portland",
-                  image: Images[3],
-                },
-              ],
-
-
-
+            randomNumber: 0
         };
     }
+
     Quiz = () => {
         //button click handler.
-      }
+    }
+
     componentDidMount() {
+
+        // const { navigation } = this.props;
+        // const userData = navigation.getParam("userData");
+
+        // this.setState({ avatarImg: userData.picture })
+
+
+
+        //current localisation 
         this.watchID = navigator.geolocation.watchPosition(
             position => {
                 const { latitude, longitude } = position.coords;
@@ -129,9 +99,8 @@ class Home extends Component {
     componentWillUnmount() {
         navigator.geolocation.clearWatch(this.watchID);
     }
-    getQuizpopup=  ()=>{
-        console.log("method is working")
-        this.setState({quiz_visible: true});
+    getQuizpopup = () => {
+        this.setState({ quiz_visible: true });
         this.refs.quizchild.setModalVisible(this.state.quiz_visible);
     }
 
@@ -141,7 +110,7 @@ class Home extends Component {
     }
 
     getMonument = async () => {
-        fetch('http://192.168.178.20:3000/api/getNextLocation', {
+        fetch('http://192.168.1.60:3000/api/getNextLocation', {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -162,11 +131,12 @@ class Home extends Component {
                     data: responseJson.properties.imageUrl,
                     Name: responseJson.properties.Naam,
                     Name: responseJson.properties.Naam,
-                    visible: true,
-                    polygons: responseJson.geometry.coordinates[0]
+                    isStartPopupVisible: true,
+                    polygons: responseJson.geometry.coordinates[0],
+                    isStartBttnVisible: true
                 })
                 this.getRandomQuizes();
-                this.refs.popupchild.setModalVisible(this.state.visible);
+                this.refs.popupchild.setModalVisible(this.state.isStartPopupVisible);
             })
             .catch((error) => {
                 console.error(error);
@@ -232,10 +202,62 @@ class Home extends Component {
         longitudeDelta: LONGITUDE_DELTA
     });
 
+    startGameSession() {
+        let userProfielData = this.props.navigation.getParam("userData");
 
+        let startTime = new Date().valueOf()
+        let userId = userProfielData.sub
+
+        fetch('http://192.168.1.35:3000/api/v1/userSession/create', {
+            method: 'POST',
+            headers: {
+                authorization: 'Bearer ' + global.token,
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: userId,
+                isRunning: true,
+                subSession: {
+                    startTime: startTime,
+                    stopTime: 0,
+                    isFound: false,
+                    monument: this.state.monumentsProps
+                }
+            }),
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson._id)
+                this.setState({ sessionId: responseJson._id })
+            }
+            ).catch((error) => {
+                console.error(error);
+            });
+
+    }
+
+    //shows the start popup
+    showStartPopup() {
+        this.getMonument()
+    }
+
+    renderStartButton() {
+        if (this.state.isStartBttnVisible !== true) {
+            return (
+                <View style={styles.bottomStartView}>
+                    <Button
+                        onPress={() => this.showStartPopup()}
+                        buttonStyle={styles.buttonStyle}
+                        title="Start"
+                    />
+                </View>
+            )
+        }
+    }
 
     render() {
 
+        const userProfielData = this.props.navigation.getParam("userData");
         const { navigate } = this.props.navigation;
 
         return (
@@ -246,11 +268,7 @@ class Home extends Component {
                     getPolygons={this.state.polygonMonument}
                     getMapRegion={this.getMapRegion.bind(this)}
                     getMonumentProps={this.state.monumentsProps} 
-                    Quiz2={this.Quiz}
-                    getmarker={this.state.markers}
-                    monumentVisibility={this.state.showMonument}
-                    
-                    />
+                    Quiz2={this.Quiz}/>
 
                 
                 <View style={styles.borronProfielView}>
@@ -259,29 +277,21 @@ class Home extends Component {
                         buttonStyle={styles.buttonStyle}
                         title="Profiel"
                     />
-
-                    <Button
-                        onPress={this.ShowMonument}
-                        buttonStyle={styles.buttonStyle}
-                        title="Show visited monuments"
-                    />
-
                 </View>
 
-                <View style={styles.bottomStartView}>
-                    <Button
-                        onPress={this.getMonument}
-                        buttonStyle={styles.buttonStyle}
-                        title="Start"
-                    />
-                </View>
-                
-                <ModalExample ref='popupchild' imageUri={this.state.data}  data={this.state.Name}/>
-                <Quiz_popUp ref='quizchild' imageUri={this.state.data}  data={this.state.Name}/>
-                
-            </View>
+                {this.renderStartButton()}
 
-          
+                <ModalExample ref='popupchild'
+                    imageUri={this.state.data}
+                    data={this.state.Name}
+                    startGameSession={this.startGameSession.bind(this)}
+                />
+                <Quiz_popUp ref='quizchild'
+                    imageUri={this.state.data}
+                    data={this.state.Name}
+                />
+
+          </View>
         );
 
     }
@@ -293,9 +303,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'stretch',
+        alignItems: 'center'
     },
     buttonStyle: {
-        backgroundColor: "rgba(92, 99,216, 1)",
+        backgroundColor: "rgba(51,204,0,1)",
         width: 200,
         height: 45,
         borderColor: "transparent",
@@ -304,12 +315,20 @@ const styles = StyleSheet.create({
     },
     bottomStartView: {
         position: 'absolute',
-        bottom: '2%',
-        alignItems: 'center'
+        bottom: '2%'
     },
-    borronProfielView: {
+    profielView: {
         position: 'absolute',
-        top: '2%',
+        top: '1%',
+        right: '2%',
         alignSelf: 'flex-end'
+    },
+    avatar: {
+        width: 55,
+        height: 55,
+        borderRadius: 63,
+        borderWidth: 4,
+        borderColor: "white"
     }
+
 });
