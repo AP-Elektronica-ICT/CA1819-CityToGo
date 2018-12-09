@@ -26,6 +26,21 @@ exports.session_create = function (req, res) {
     })
 };
 
+exports.session_getAll = function (req, res) {
+    UserSession.find({}, function (err, docs) {
+        var userSessionMap = {};
+
+        if (!docs) return res.status(404).end()
+
+        docs.forEach(function (doc) {
+            userSessionMap[doc._id] = doc;
+        });
+
+        return res.status(200).json(userSessionMap)
+        
+    }).catch(err => next(err))
+}
+
 exports.session_find = function (req, res) {
     let _userId = req.params.userId;
     UserSession.find({ userId: _userId }, function (err, doc) {
