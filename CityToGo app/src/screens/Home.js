@@ -116,6 +116,7 @@ class Home extends Component {
                 //console.log(responseJson.properties)
                 this.mapPolygon(responseJson)
                 this.setState({
+                    allMonument: responseJson,
                     monumentsProps: responseJson.properties,
                     polygons: responseJson.geometry.coordinates[0],
                     data: responseJson.properties.imageUrl,
@@ -212,7 +213,7 @@ class Home extends Component {
                     startTime: startTime,
                     stopTime: 0,
                     isFound: false,
-                    monument: this.state.monumentsProps
+                    monument: this.state.allMonument
                 }
             }),
         }).then((response) => response.json())
