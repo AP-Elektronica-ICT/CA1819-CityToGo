@@ -5,8 +5,8 @@ import {
     Image,
     TouchableOpacity
 } from "react-native";
-import SInfo from "react-native-sensitive-info";
 import { Button } from 'react-native-elements'
+import SInfo from "react-native-sensitive-info";
 import Maps from "./Maps";
 import ModalExample from "./popup"
 import Quiz_popUp from "./Quiz_popup";
@@ -198,11 +198,7 @@ class Home extends Component {
         let startTime = new Date().valueOf()
         let userId = userProfielData.sub
 
-        console.log(userId)
-        console.log(startTime)
-        console.log(this.state.monumentsProps)
-
-        fetch('http://192.168.1.35:3000/api/v1/userdata/create', {
+        fetch('http://192.168.1.35:3000/api/v1/userSession/create', {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -211,14 +207,20 @@ class Home extends Component {
             },
             body: JSON.stringify({
                 userId: userId,
-                startTime: startTime,
-                stopTime: 0,
-                monument: this.state.monumentsProps
+                isRunning: true,
+                subSession: {
+                    startTime: startTime,
+                    stopTime: 0,
+                    isFound: false,
+                    monument: this.state.monumentsProps
+                }
             }),
-        }).then((response) =>
-            console.log(response)
-        )
-            .catch((error) => {
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson._id)
+                this.setState({ sessionId: responseJson._id })
+            }
+            ).catch((error) => {
                 console.error(error);
             });
 
@@ -246,7 +248,7 @@ class Home extends Component {
     render() {
 
         const userProfielData = this.props.navigation.getParam("userData");
-        const {navigate} = this.props.navigation;
+        const { navigate } = this.props.navigation;
 
         return (
             <View style={styles.container}>
@@ -259,7 +261,7 @@ class Home extends Component {
                     Quiz2={this.Quiz} />
 
                 <View style={styles.profielView}>
-                    <TouchableOpacity onPress={() => navigate('Profile')}>
+                    <TouchableOpacity onPress={() => navigate('Profile', { sessionId: this.state.sessionId })}>
                         <Image style={styles.avatar}
                             source={{ uri: userProfielData.picture }} />
                     </TouchableOpacity>
