@@ -50,46 +50,12 @@ class Home extends Component {
             randomQuizes: [],
             randomNumber: 0,
             showMonument:false,
+            rappel:"",
+            markersFromdb:[]
+            ,
           
 
-            markers: [
-                {
-                  coordinate: {
-                    latitude: 45.524548,
-                    longitude: -122.6749817,
-                  },
-                  title: "Best Place",
-                  description: "This is the best place in Portland",
-                  image: Images[0],
-                },
-                {
-                  coordinate: {
-                    latitude: 45.524698,
-                    longitude: -122.6655507,
-                  },
-                  title: "Second Best Place",
-                  description: "This is the second best place in Portland",
-                  image: Images[1],
-                },
-                {
-                  coordinate: {
-                    latitude: 45.5230786,
-                    longitude: -122.6701034,
-                  },
-                  title: "Third Best Place",
-                  description: "This is the third best place in Portland",
-                  image: Images[2],
-                },
-                {
-                  coordinate: {
-                    latitude: 45.521016,
-                    longitude: -122.6561917,
-                  },
-                  title: "Fourth Best Place",
-                  description: "This is the fourth best place in Portland",
-                  image: Images[3],
-                },
-              ]
+            markers: []
         };
     }
 
@@ -146,12 +112,13 @@ class Home extends Component {
     }
 
     ShowMonument=()=>{
+        this.getVisitedMonuments();
         this.setState({showMonument:true})
 
     }
 
     getMonument = async () => {
-        fetch('http://192.168.1.60:3000/api/getNextLocation', {
+        fetch('http://192.168.178.20:3000/api/getNextLocation', {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -249,7 +216,7 @@ class Home extends Component {
         let startTime = new Date().valueOf()
         let userId = userProfielData.sub
 
-        fetch('http://192.168.1.35:3000/api/v1/userSession/create', {
+        fetch('http://192.168.178.20:3000/api/v1/userSession/create', {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -270,6 +237,48 @@ class Home extends Component {
             .then((responseJson) => {
                 console.log(responseJson._id)
                 this.setState({ sessionId: responseJson._id })
+            }
+            ).catch((error) => {
+                console.error(error);
+            });
+
+    }
+
+
+
+    getVisitedMonuments() {
+        let userProfielData = this.props.navigation.getParam("userData");
+
+        let arr=[]
+        let userId = userProfielData.sub
+        console.log(userId);
+
+        fetch(`http://192.168.178.20:3000/api/v1/userSession/find/${userId}`)
+        .then((response) => response.json())
+            .then((responseJson) => {
+                for(let z of responseJson){
+
+                    arr.push(
+                        {
+                            coordinate: {
+                              latitude: 45.524548,
+                              longitude: -122.6749817,
+                            },
+                            title: `${z.subSession.monument.Naam}`,
+                            image: `${z.subSession.monument.imageUrl}`,
+                          }
+                    )
+
+
+
+                }
+                this.setState({markers:arr})
+                
+               
+                debugger
+              //  this.setState({rappel:responseJson[0].subSession.monument.Naam})
+           //  this.setState({rappel:responseJson.userId._id})
+               
             }
             ).catch((error) => {
                 console.error(error);
@@ -324,7 +333,7 @@ class Home extends Component {
                     <Button
                         onPress={this.ShowMonument}
                         buttonStyle={styles.buttonStyle}
-                        title="show visited monuments"
+                        title={this.state.rappel}
                     />
                 </View>
 
