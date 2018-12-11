@@ -31,12 +31,12 @@ class Home extends Component {
         this.Quiz = this.getQuizpopup.bind(this);
 
         const Images = [
-             "https://i.imgur.com/sNam9iJ.jpg" ,
-             "https://i.imgur.com/N7rlQYt.jpg" ,
-             "https://i.imgur.com/UDrH0wm.jpg" ,
-             "https://i.imgur.com/Ka8kNST.jpg" 
-          ]
-        
+            "https://i.imgur.com/sNam9iJ.jpg",
+            "https://i.imgur.com/N7rlQYt.jpg",
+            "https://i.imgur.com/UDrH0wm.jpg",
+            "https://i.imgur.com/Ka8kNST.jpg"
+        ]
+
         this.state = {
             latitude: LATITUDE,
             longitude: LONGITUDE,
@@ -49,13 +49,17 @@ class Home extends Component {
             polygons: [],
             randomQuizes: [],
             randomNumber: 0,
-            showMonument:false,
-            rappel:"",
-            markersFromdb:[]
+            showMonument: false,
+            rappel: "",
+            markersFromdb: []
             ,
-          
 
-            markers: []
+
+            markers: [{
+                coordinate: { latitude: 45.013, longitude: -122.6749817 },
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Berchem_Basiliek3.JPG/220px-Berchem_Basiliek3.JPG",
+                title: "Franciscanessenklooster"
+            }]
         };
     }
 
@@ -111,9 +115,9 @@ class Home extends Component {
         this.refs.quizchild.setModalVisible(this.state.quiz_visible);
     }
 
-    ShowMonument=()=>{
+    ShowMonument = () => {
         this.getVisitedMonuments();
-        this.setState({showMonument:true})
+        this.setState({ showMonument: true })
 
     }
 
@@ -248,42 +252,32 @@ class Home extends Component {
 
     getVisitedMonuments() {
         let userProfielData = this.props.navigation.getParam("userData");
-
-        let arr=[]
+        let arr = []
         let userId = userProfielData.sub
         console.log(userId);
-
+        debugger
         fetch(`http://192.168.178.20:3000/api/v1/userSession/find/${userId}`)
-        .then((response) => response.json())
+            .then((response) => response.json())
             .then((responseJson) => {
-                for(let z of responseJson){
-
+                console.log(responseJson);
+                for (let z of responseJson) {
+                    debugger
                     arr.push(
                         {
                             coordinate: {
-                              latitude: 45.524548,
-                              longitude: -122.6749817,
+                                latitude: 51.2235,
+                                longitude: 4.4368,
                             },
                             title: `${z.subSession.monument.Naam}`,
                             image: `${z.subSession.monument.imageUrl}`,
-                          }
+                        }
                     )
-
-
-
                 }
-                this.setState({markers:arr})
-                
-               
-                debugger
-              //  this.setState({rappel:responseJson[0].subSession.monument.Naam})
-           //  this.setState({rappel:responseJson.userId._id})
-               
+                this.setState({ markers: arr })
             }
             ).catch((error) => {
                 console.error(error);
             });
-
     }
 
     //shows the start popup
@@ -317,13 +311,13 @@ class Home extends Component {
                     getRandom={this.state.randomQuizes}
                     getPolygons={this.state.polygonMonument}
                     getMapRegion={this.getMapRegion.bind(this)}
-                    getMonumentProps={this.state.monumentsProps} 
+                    getMonumentProps={this.state.monumentsProps}
                     Quiz2={this.Quiz}
                     getmarker={this.state.markers}
                     monumentVisibility={this.state.showMonument}
-                    />
+                />
 
-                
+
                 <View style={styles.borronProfielView}>
                     <Button
                         onPress={() => navigate('Profile')}
@@ -349,7 +343,7 @@ class Home extends Component {
                     data={this.state.Name}
                 />
 
-          </View>
+            </View>
         );
 
     }
