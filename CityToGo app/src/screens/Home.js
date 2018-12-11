@@ -30,12 +30,7 @@ class Home extends Component {
         super(props);
         this.Quiz = this.getQuizpopup.bind(this);
 
-        const Images = [
-            "https://i.imgur.com/sNam9iJ.jpg",
-            "https://i.imgur.com/N7rlQYt.jpg",
-            "https://i.imgur.com/UDrH0wm.jpg",
-            "https://i.imgur.com/Ka8kNST.jpg"
-        ]
+        
 
         this.state = {
             latitude: LATITUDE,
@@ -50,9 +45,8 @@ class Home extends Component {
             randomQuizes: [],
             randomNumber: 0,
             showMonument: false,
-            rappel: "",
-            markersFromdb: []
-            ,
+            
+            
 
 
             markers: [{
@@ -256,24 +250,34 @@ class Home extends Component {
         let arr = []
         let userId = userProfielData.sub
         console.log(userId);
-        debugger
+        
         fetch(`http://192.168.178.20:3000/api/v1/userSession/find/${userId}`)
             .then((response) => response.json())
             .then((responseJson) => {
                 console.log(responseJson);
+               
                 for (let z of responseJson) {
-                    debugger
-                    arr.push(
+                 
+
+                console.log(z.subSession.monument.geometry)
+                    
+                 arr.push(
+                        
                         {
                             coordinate: {
-                                latitude: 51.2235,
-                                longitude: 4.4368,
+                                latitude: z.subSession.monument.geometry.coordinates[0][0][1],
+                                longitude:  z.subSession.monument.geometry.coordinates[0][0][0],
                             },
-                            title: `${z.subSession.monument.Naam}`,
-                            image: `${z.subSession.monument.imageUrl}`,
+                            title: `${z.subSession.monument.properties.Naam}`,
+                            image: `${z.subSession.monument.properties.imageUrl}`,
                         }
                     )
+                       
+
+
+                   
                 }
+               
                 this.setState({ markers: arr })
             }
             ).catch((error) => {
@@ -328,7 +332,7 @@ class Home extends Component {
                     <Button
                         onPress={this.ShowMonument}
                         buttonStyle={styles.buttonStyle}
-                        title={this.state.rappel}
+                        title={"Show visited monuments"}
                     />
                 </View>
 
