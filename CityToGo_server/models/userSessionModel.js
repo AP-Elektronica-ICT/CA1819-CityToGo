@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var subSessionSchema = new Schema({
     startTime: { type: Number, required: true },
     stopTime: { type: Number, required: true },
-    isFound: { type: Boolean, required: true }, //change to boolean!
+    isFound: { type: Boolean, required: true },
     monument: { type: JSON, required: true }
 });
 
