@@ -3,6 +3,7 @@ import { StyleSheet, DeviceEventEmitter, View,Button, TouchableHighlight,Text } 
 import MapView, { Polygon } from "react-native-maps";
 import { SensorManager } from 'NativeModules';
 import mapStyle from "../styles/jsons/mapstyle";
+import Mycard from "./Cardcomponent"
 
 class Maps extends Component {
 
@@ -78,6 +79,23 @@ class Maps extends Component {
                     
                 ))}
 
+
+        
+                {this.props.getmarker.map(mark=>(
+                   
+                    <Mycard
+                    key={mark.coordinate.latitude}
+                    latitude= {mark.coordinate.latitude}
+                    longitude={mark.coordinate.longitude}
+                    Uri={mark.image}
+                    Name={mark.title}
+                    visibilty={this.props.monumentVisibility}
+                    
+                    />
+                
+
+                ))}
+            
 
             </MapView>
     
