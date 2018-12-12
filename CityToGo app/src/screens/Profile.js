@@ -28,10 +28,22 @@ class Profiel extends Component {
     SInfo.getItem("userdata", {}).then(JsonData => {
       data = JSON.parse(JsonData)
       metadata = data["https://shakir01.net/user_metadata"];
+      console.log("data goes down here !")
+      console.log(data);
+      if(typeof metadata != "undefined"){
       Age = metadata.Age;
       Full_name = metadata.FullName;
       location = metadata.Location;
       this.setState({ fetching: true });
+      console.log("Meta data is here" + metadata);
+     }
+     else{
+      Full_name=data.name;
+      Age="Unknown"
+      location= "Antwerpen"
+      this.setState({ fetching: true });
+    
+     }
     });
 
   }
@@ -195,13 +207,16 @@ const styles = StyleSheet.create({
   iconContent: {
     flex: 1,
     alignItems: 'flex-start',
-    left: "200%",
-    paddingRight: 3
+    left: 100,
+    paddingRight: 3,
+    
+
   },
   icon: {
     width: 30,
     height: 30,
     marginTop: 20,
+    
   },
   info: {
     fontSize: 18,
@@ -221,20 +236,3 @@ export default Profiel;
 
 
 
-//Extra's
-
-  //   auth0.webAuth.authorize({ scope: 'openid profile email', audience: 'https://shakir01.eu.auth0.com/userinfo' })
-  //   .then((credentials) => { console.log(credentials); token = credentials.accessToken });
-  // console.log(token)
-   // this.componentDidMount = this.componentDidMount.bind(this);
-
-
-     //Fetching Userinfo here
-  // getData(token) {
-  //   return fetch('https://shakir01.eu.auth0.com/userinfo', {
-  //     method: 'GET',
-  //     headers: {
-  //       Authorization: 'Bearer ' + token,
-  //     },
-  //   }).then((response) => { return response.json() })
-  // };

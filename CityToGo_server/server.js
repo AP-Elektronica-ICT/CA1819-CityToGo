@@ -35,7 +35,7 @@ let response_handler = function (response) {
     });
 };
 
-
+var test = "22";
 var port = process.env.PORT || 3000;
 
 var jwtCheck = jwt({
@@ -52,6 +52,7 @@ var jwtCheck = jwt({
 
 //Disabled jwl token to prevent unauthorized request 
 //app.use(jwtCheck);
+let arrQuiz = [];
 
 app.use('/', require('./routes'));
 
@@ -231,4 +232,16 @@ app.listen(port, () => {
             console.error(error);
         });
 });
+//Vragen fetchen van opentdb api voor Quizes en stuur het door naar front-end per gevraagde category
+app.post('/api/quizCategory', (req, res) => {
+    fetch('https://opentdb.com/api.php?amount=10&category=' + req.body.category + '&type=boolean')
+        .then(data => data.json())
+        .then((Quizes) => {
+            console.log(req.body.category)
+            arrQuiz.push(Quizes.results);
+            res.send(Quizes.results)
+        })
+})
+
+
 
