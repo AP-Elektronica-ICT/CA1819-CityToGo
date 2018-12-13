@@ -12,6 +12,7 @@ import ModalExample from "./popup"
 import Quiz_popUp from "./Quiz_popup";
 import randomLocation from 'random-location';
 import geolib from "geolib";
+import Config from '../config/config'
 
 const LATITUDE = 0;
 const LONGITUDE = 0;
@@ -62,14 +63,6 @@ class Home extends Component {
     }
 
     componentDidMount() {
-
-        // const { navigation } = this.props;
-        // const userData = navigation.getParam("userData");
-
-        // this.setState({ avatarImg: userData.picture })
-
-
-
         //current localisation 
         this.watchID = navigator.geolocation.watchPosition(
             position => {
@@ -117,7 +110,7 @@ class Home extends Component {
     }
 
     getMonument = async () => {
-        fetch('http://172.16.185.61:3000/api/getNextLocation', {
+        fetch(`http://${Config.MY_IP_ADRES}:3000/api/getNextLocation`, {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -216,7 +209,7 @@ class Home extends Component {
         let startTime = new Date().valueOf()
         let userId = userProfielData.sub
 
-        fetch('http://192.168.178.20:3000/api/v1/userSession/create', {
+        fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/create`, {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -252,7 +245,7 @@ class Home extends Component {
         let userId = userProfielData.sub
         console.log(userId);
 
-        fetch(`http://192.168.178.20:3000/api/v1/userSession/find/${userId}`)
+        fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/find/${userId}`)
             .then((response) => response.json())
             .then((responseJson) => {
                 console.log(responseJson);
@@ -350,7 +343,7 @@ class Home extends Component {
                     data={this.state.Name}
                 />
 
-            </View>
+            </View >
         );
 
     }

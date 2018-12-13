@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { RNCamera } from 'react-native-camera';
+import Config from '../config/config'
 
 import {
     StyleSheet,
@@ -59,7 +60,7 @@ class Camera extends Component {
     getImageLabels = async (imageBase64) => {
         const { navigate } = this.props.navigation;
 
-        fetch('http://192.168.1.35:3000/api/getImageLabels', {
+        fetch(`http://${Config.MY_IP_ADRES}:3000/api/getImageLabels`, {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,

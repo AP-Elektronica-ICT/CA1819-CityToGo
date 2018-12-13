@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ActivityIndicator, Image } from "react-native";
 import Auth0 from "react-native-auth0";
 import SInfo from "react-native-sensitive-info"
 import { Button } from 'react-native-elements'
+import Config from '../config/config'
 
 const auth0 = new Auth0({
   domain: "shakir01.eu.auth0.com",
@@ -49,7 +50,7 @@ class Profiel extends Component {
   }
 
   stopCurrentSession(sessionId) {
-    fetch(`http://192.168.1.35:3000/api/v1/userSession/update/${sessionId}`, {
+    fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/update/${sessionId}`, {
       method: 'PUT',
       headers: {
         authorization: 'Bearer ' + global.token,

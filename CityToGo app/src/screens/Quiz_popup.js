@@ -3,6 +3,8 @@ import { Modal, Text, TouchableHighlight, View, Alert, Image, StyleSheet } from 
 import { Button } from 'react-native-elements'
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import { bold } from 'ansi-colors';
+import Config from '../config/config'
+
 var radio_props = [
   { label: 'True', value: "True" },
   { label: 'False', value: "False"}
@@ -38,7 +40,7 @@ class Quiz_popUp extends Component {
 }
   //Hier wordt category gepost en in response krijgen wij de vragen en de juiste antwoord!
   QuizCategory = async () => {
-    fetch('http://172.16.185.61:3000/api/QuizCategory', {
+    fetch(`http://${Config.MY_IP_ADRES}:3000/api/QuizCategory`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
