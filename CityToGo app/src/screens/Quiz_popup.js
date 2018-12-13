@@ -38,7 +38,7 @@ class Quiz_popUp extends Component {
 }
   //Hier wordt category gepost en in response krijgen wij de vragen en de juiste antwoord!
   QuizCategory = async () => {
-    fetch('http://192.168.1.60:3000/api/QuizCategory', {
+    fetch('http://172.16.185.61:3000/api/QuizCategory', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
