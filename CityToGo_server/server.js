@@ -52,7 +52,7 @@ var jwtCheck = jwt({
 
 //Disabled jwl token to prevent unauthorized request 
 //app.use(jwtCheck);
-let arrQuiz = [];
+//let arrQuiz = [];
 
 app.use('/', require('./routes'));
 
@@ -238,7 +238,7 @@ app.post('/api/quizCategory', (req, res) => {
         .then(data => data.json())
         .then((Quizes) => {
             console.log(req.body.category)
-            arrQuiz.push(Quizes.results);
+            //arrQuiz.push(Quizes.results);
             res.send(Quizes.results)
         })
 })
