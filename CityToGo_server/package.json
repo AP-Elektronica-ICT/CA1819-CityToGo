@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@google-cloud/vision": "^0.23.0",
+    "event-stream": "^4.0.1",
     "express": "^4.16.4",
     "express-jwt": "^5.3.1",
     "google-images": "^2.1.0",
