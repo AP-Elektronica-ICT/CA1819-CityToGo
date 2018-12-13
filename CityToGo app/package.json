@@ -4,10 +4,12 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
+    "android-shake": "adb shell input keyevent 82",
     "test": "jest"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
+    "@shoutem/ui": "^0.23.9",
     "geolib": "^2.0.24",
     "random-location": "^1.0.12",
     "react": "16.6.0-alpha.8af6728",
