@@ -30,7 +30,7 @@ class Home extends Component {
         super(props);
         this.Quiz = this.getQuizpopup.bind(this);
 
-        
+
 
         this.state = {
             latitude: LATITUDE,
@@ -45,8 +45,8 @@ class Home extends Component {
             randomQuizes: [],
             randomNumber: 0,
             showMonument: false,
-            
-            
+
+
 
 
             markers: [{
@@ -104,9 +104,9 @@ class Home extends Component {
     componentWillUnmount() {
         navigator.geolocation.clearWatch(this.watchID);
     }
-    getQuizpopup= async ()=>{
+    getQuizpopup = async () => {
         console.log("method is working")
-        this.setState({quiz_visible: true});
+        this.setState({ quiz_visible: true });
         this.refs.quizchild.setModalVisible(this.state.quiz_visible);
     }
 
@@ -117,7 +117,7 @@ class Home extends Component {
     }
 
     getMonument = async () => {
-        fetch('http://192.168.178.20:3000/api/getNextLocation', {
+        fetch('http://172.16.185.61:3000/api/getNextLocation', {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -251,34 +251,34 @@ class Home extends Component {
         let arr = []
         let userId = userProfielData.sub
         console.log(userId);
-        
+
         fetch(`http://192.168.178.20:3000/api/v1/userSession/find/${userId}`)
             .then((response) => response.json())
             .then((responseJson) => {
                 console.log(responseJson);
-               
-                for (let z of responseJson) {
-                 
 
-                console.log(z.subSession.monument.geometry)
-                    
-                 arr.push(
-                        
+                for (let z of responseJson) {
+
+
+                    console.log(z.subSession.monument.geometry)
+
+                    arr.push(
+
                         {
                             coordinate: {
                                 latitude: z.subSession.monument.geometry.coordinates[0][0][1],
-                                longitude:  z.subSession.monument.geometry.coordinates[0][0][0],
+                                longitude: z.subSession.monument.geometry.coordinates[0][0][0],
                             },
                             title: `${z.subSession.monument.properties.Naam}`,
                             image: `${z.subSession.monument.properties.imageUrl}`,
                         }
                     )
-                       
 
 
-                   
+
+
                 }
-               
+
                 this.setState({ markers: arr })
             }
             ).catch((error) => {
@@ -323,13 +323,14 @@ class Home extends Component {
                     monumentVisibility={this.state.showMonument}
                 />
 
+                <View style={styles.profielView}>
+                    <TouchableOpacity onPress={() => navigate('Profile')}>
+                        <Image style={styles.avatar}
+                            source={{ uri: userProfielData.picture }} />
+                    </TouchableOpacity>
+                </View>
+                <View >
 
-                <View style={styles.borronProfielView}>
-                    <Button
-                        onPress={() => navigate('Profile')}
-                        buttonStyle={styles.buttonStyle}
-                        title="Profiel"
-                    />
                     <Button
                         onPress={this.ShowMonument}
                         buttonStyle={styles.buttonStyle}
