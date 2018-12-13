@@ -317,7 +317,7 @@ class Home extends Component {
                 />
 
                 <View style={styles.profielView}>
-                    <TouchableOpacity onPress={() => navigate('Profile')}>
+                    <TouchableOpacity onPress={() => navigate('Profile', { sessionId: this.state.sessionId })}>
                         <Image style={styles.avatar}
                             source={{ uri: userProfielData.picture }} />
                     </TouchableOpacity>
