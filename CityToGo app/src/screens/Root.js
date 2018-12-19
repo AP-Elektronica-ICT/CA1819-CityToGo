@@ -6,7 +6,7 @@ import Home from './Home';
 import Profile from './Profile';
 import Camera from './Camera'
 import Maps from './Maps'
-import ARclass from './ARclass'
+import ARscreen from './ARscreen'
 
 
 const Root = createStackNavigator(
@@ -42,7 +42,7 @@ const Root = createStackNavigator(
             }
         },
         ARclass: {
-            screen: ARclass,
+            screen: ARscreen,
             navigationOptions: {
                 header: null
             }
