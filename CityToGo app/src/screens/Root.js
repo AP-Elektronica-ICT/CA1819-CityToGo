@@ -6,6 +6,7 @@ import Home from './Home';
 import Profile from './Profile';
 import Camera from './Camera'
 import Maps from './Maps'
+import ARclass from './ARclass'
 
 
 const Root = createStackNavigator(
@@ -18,7 +19,7 @@ const Root = createStackNavigator(
         },
         Profile: {
             screen: Profile,
-            navigationOptions:{
+            navigationOptions: {
                 title: 'Profiel'
             }
         },
@@ -39,10 +40,16 @@ const Root = createStackNavigator(
             navigationOptions: {
                 header: null
             }
+        },
+        ARclass: {
+            screen: ARclass,
+            navigationOptions: {
+                header: null
+            }
         }
     },
     {
-        initialRouteName: "Login" // show the login screen by default
+        initialRouteName: "ARclass" // show the login screen by default
     }
 );
 
