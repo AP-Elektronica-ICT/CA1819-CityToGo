@@ -23,6 +23,7 @@ var MyLocation;
 const R = 500;
 var center;
 var distanceToCheckpoint;
+var distanceToQuiz;
 var stral;
 
 class Home extends Component {
@@ -98,9 +99,17 @@ class Home extends Component {
         navigator.geolocation.clearWatch(this.watchID);
     }
     getQuizpopup = async () => {
-        console.log("method is working")
-        this.setState({ quiz_visible: true });
-        this.refs.quizchild.setModalVisible(this.state.quiz_visible);
+        for (let i = 0; i < parseInt(this.state.randomQuizes.length); i++){
+            distanceToQuiz=randomLocation.distance(MyLocation, { latitude: parseFloat(this.state.randomQuizes[i].latitude), longitude: parseFloat(this.state.randomQuizes[i].longitude) })
+         console.log( parseInt( distanceToQuiz))
+         if( parseInt( distanceToQuiz)<120){
+            console.log("Quiz unlock")
+             this.setState({ quiz_visible: true });
+             this.refs.quizchild.setModalVisible(this.state.quiz_visible);
+            continue;
+         }
+        }
+        
     }
 
     ShowMonument = () => {
