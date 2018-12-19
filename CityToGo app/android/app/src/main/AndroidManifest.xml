@@ -15,6 +15,10 @@
       <meta-data
       android:name="com.google.android.geo.API_KEY"
       android:value="AIzaSyA1ureQ-rjPUjQdbDOdpcjZc3q7FR7TU6A"/>
+      <meta-data 
+      android:name="com.google.ar.core" 
+      android:value="optional" />
+
 <activity
 android:name=".MainActivity"
 android:label="@string/app_name"

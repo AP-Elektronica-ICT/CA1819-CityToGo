@@ -14,6 +14,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.sensormanager.SensorManagerPackage;
 import org.reactnative.camera.RNCameraPackage;
+import com.viromedia.bridge.ReactViroPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +37,8 @@ public class MainApplication extends Application implements ReactApplication {
             new A0Auth0Package(),
             new MapsPackage(),
             new SensorManagerPackage(),
-            new RNCameraPackage()
+            new RNCameraPackage(),
+            new ReactViroPackage(ReactViroPackage.ViroPlatform.GVR)
       );
     }
 
