@@ -71,7 +71,7 @@ class Maps extends Component {
                         //title={"Quiz"}
                         image={require('../assets/quiz.png')}
                        // description={"description"}
-                        onPress={() => this.props.Quiz2()} >
+                        onPress={() => this.props.Quiz2(marker.latitude,marker.longitude)} >
                        
                         
                         </MapView.Marker>

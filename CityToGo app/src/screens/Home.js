@@ -98,18 +98,14 @@ class Home extends Component {
     componentWillUnmount() {
         navigator.geolocation.clearWatch(this.watchID);
     }
-    getQuizpopup = async () => {
-        for (let i = 0; i < parseInt(this.state.randomQuizes.length); i++){
-            distanceToQuiz=randomLocation.distance(MyLocation, { latitude: parseFloat(this.state.randomQuizes[i].latitude), longitude: parseFloat(this.state.randomQuizes[i].longitude) })
-         console.log( parseInt( distanceToQuiz))
-         if( parseInt( distanceToQuiz)<120){
-            console.log("Quiz unlock")
-             this.setState({ quiz_visible: true });
-             this.refs.quizchild.setModalVisible(this.state.quiz_visible);
-            continue;
-         }
-        }
-        
+    getQuizpopup = async (lat,long) => {
+        distanceToQuiz=randomLocation.distance(MyLocation, { latitude: parseFloat(lat), longitude: parseFloat(long) })
+        console.log("Distance to this quiz is "+distanceToQuiz)
+        if( parseInt( distanceToQuiz)<10){
+                console.log("Quiz unlock")
+                  this.setState({ quiz_visible: true });
+                  this.refs.quizchild.setModalVisible(this.state.quiz_visible);
+        }  
     }
 
     ShowMonument = () => {
