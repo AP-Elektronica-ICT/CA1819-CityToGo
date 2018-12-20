@@ -14,17 +14,17 @@ import {
 var apiKey = "29D8811D-4B5A-4BE1-B17F-82EDDDCF3A73";
 
 var arScenes = {
-    'ARSimpleSample': require('../components/HelloWorldSceneAR'),
+    'ARQuiz': require('../components/QuizAR'),
     'ARPortal': require('../components/PortalAR')
-
 }
 
 class ARscreen extends Component {
-    render() {
+    render() {  
         return (
             <ViroARSceneNavigator
+            
                 initialScene={{
-                    scene: arScenes['ARPortal'],
+                    scene: arScenes['ARQuiz'],
                 }}
                 apiKey={apiKey} />
         );
