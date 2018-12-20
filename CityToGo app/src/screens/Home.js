@@ -1,3 +1,4 @@
+//#region Imports
 import React, { Component, } from "react";
 import {
     View,
@@ -13,13 +14,12 @@ import Quiz_popUp from "./Quiz_popup";
 import randomLocation from 'random-location';
 import geolib from "geolib";
 import Config from '../config/config'
-
+//#endregion
 const LATITUDE = 0;
 const LONGITUDE = 0;
 const LATITUDE_DELTA = 0.003;
 const LONGITUDE_DELTA = 0.003;
 var MyLocation;
-
 const R = 500;
 var center;
 var distanceToCheckpoint;
@@ -27,7 +27,7 @@ var distanceToQuiz;
 var stral;
 
 class Home extends Component {
-
+//#region Constructor
     constructor(props) {
         super(props);
         this.Quiz = this.getQuizpopup.bind(this);
@@ -58,11 +58,8 @@ class Home extends Component {
             }]
         };
     }
-
-    Quiz = () => {
-        //button click handler.
-    }
-
+//#endregion
+//#region Default methodes
     componentDidMount() {
         //current localisation 
         this.watchID = navigator.geolocation.watchPosition(
@@ -98,16 +95,62 @@ class Home extends Component {
     componentWillUnmount() {
         navigator.geolocation.clearWatch(this.watchID);
     }
-    getQuizpopup = async (lat,long) => {
-        distanceToQuiz=randomLocation.distance(MyLocation, { latitude: parseFloat(lat), longitude: parseFloat(long) })
-        console.log("Distance to this quiz is "+distanceToQuiz)
-        if( parseInt( distanceToQuiz)<10){
-                console.log("Quiz unlock")
-                  this.setState({ quiz_visible: true });
-                  this.refs.quizchild.setModalVisible(this.state.quiz_visible);
-        }  
+    //#endregion
+//#region  Quizes
+   Quiz = () => {
+    //button click handler.
+}
+generateRandomint(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+getRandomQuizes() {
+    //Current location
+    MyLocation = {
+        latitude: this.getMapRegion().latitude,
+        longitude: this.getMapRegion().longitude
     }
 
+    //middenpunt tussen bestemming en huidige locatie 
+    center = geolib.getCenter([
+        { latitude: MyLocation.latitude, longitude: MyLocation.longitude },
+        { latitude: parseFloat(this.state.polygons[1][1]), longitude: parseFloat(this.state.polygons[1][0]) }]);
+
+    //Afstand tussen bestemming en huidgie locatie 
+    distanceToCheckpoint = randomLocation.distance(MyLocation, { latitude: parseFloat(this.state.polygons[1][1]), longitude: parseFloat(this.state.polygons[1][0]) })
+
+    //Grootte van de circle waar Quizes gegenereerd worden
+    stral = parseInt(distanceToCheckpoint) / 3;
+    let arr = []
+
+    //Aantal Quizes worden getoond op basis van afstand tot checkpoint .
+    if (parseInt(distanceToCheckpoint) < 1000) {
+        this.setState({ randomNumber: this.generateRandomint(2, 5) })
+    }
+    else {
+        this.setState({ randomNumber: this.generateRandomint(4, 7) })
+    }
+    console.log(this.state.randomNumber)
+
+    // Random Quizes worden in een array gestoken
+    for (let i = 0; i < parseInt(this.state.randomNumber); i++) {
+        var randomPoints = randomLocation.randomCirclePoint(center, stral)
+        arr.push(randomPoints);
+    }
+    this.setState({ randomQuizes: arr })
+
+}
+getQuizpopup = async (lat,long) => {
+    distanceToQuiz=randomLocation.distance(MyLocation, { latitude: parseFloat(lat), longitude: parseFloat(long) })
+    console.log("Distance to this quiz is "+ parseInt( distanceToQuiz) +" meters")
+    if( parseInt( distanceToQuiz)<10){
+            console.log("Quiz unlocked")
+              this.setState({ quiz_visible: true });
+              this.refs.quizchild.setModalVisible(this.state.quiz_visible);
+    }  
+}
+//#endregion
+//#region  Monuments
     ShowMonument = () => {
         this.getVisitedMonuments();
         this.setState({ showMonument: true })
@@ -148,46 +191,7 @@ class Home extends Component {
                 console.error(error);
             });
     }
-    generateRandomint(min, max) {
-        return Math.random() * (max - min) + min;
-    }
 
-    getRandomQuizes() {
-        //Current location
-        MyLocation = {
-            latitude: this.getMapRegion().latitude,
-            longitude: this.getMapRegion().longitude
-        }
-
-        //middenpunt tussen bestemming en huidige locatie 
-        center = geolib.getCenter([
-            { latitude: MyLocation.latitude, longitude: MyLocation.longitude },
-            { latitude: parseFloat(this.state.polygons[1][1]), longitude: parseFloat(this.state.polygons[1][0]) }]);
-
-        //Afstand tussen bestemming en huidgie locatie 
-        distanceToCheckpoint = randomLocation.distance(MyLocation, { latitude: parseFloat(this.state.polygons[1][1]), longitude: parseFloat(this.state.polygons[1][0]) })
-
-        //Grootte van de circle waar Quizes gegenereerd worden
-        stral = parseInt(distanceToCheckpoint) / 3;
-        let arr = []
-
-        //Aantal Quizes worden getoond op basis van afstand tot checkpoint .
-        if (parseInt(distanceToCheckpoint) < 1000) {
-            this.setState({ randomNumber: this.generateRandomint(2, 5) })
-        }
-        else {
-            this.setState({ randomNumber: this.generateRandomint(4, 7) })
-        }
-        console.log(this.state.randomNumber)
-
-        // Random Quizes worden in een array gestoken
-        for (let i = 0; i < parseInt(this.state.randomNumber); i++) {
-            var randomPoints = randomLocation.randomCirclePoint(center, stral)
-            arr.push(randomPoints);
-        }
-        this.setState({ randomQuizes: arr })
-
-    }
 
     mapPolygon(responseJson) {
         const polygon = responseJson.geometry.coordinates[0].map(coordsArr => {
@@ -207,8 +211,9 @@ class Home extends Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
     });
-
-    startGameSession() {
+//#endregion 
+//#region Session   
+startGameSession() {
         let userProfielData = this.props.navigation.getParam("userData");
 
         let startTime = new Date().valueOf()
@@ -283,7 +288,8 @@ class Home extends Component {
                 console.error(error);
             });
     }
-
+    //#endregion
+//#region  Start button 
     //shows the start popup
     showStartPopup() {
         this.getMonument()
@@ -302,7 +308,8 @@ class Home extends Component {
             )
         }
     }
-
+    //#endregion
+//#region render
     render() {
 
         const userProfielData = this.props.navigation.getParam("userData");
@@ -352,10 +359,10 @@ class Home extends Component {
         );
 
     }
+    //#endregion
 }
-
 export default Home;
-
+//#region  Styles
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -389,3 +396,4 @@ const styles = StyleSheet.create({
     }
 
 });
+//#endregion
