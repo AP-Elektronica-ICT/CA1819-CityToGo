@@ -121,8 +121,8 @@ getRandomQuizes() {
       
     //Afstand tussen bestemming en huidgie locatie 
     distanceToCheckpoint = randomLocation.distance(MyLocation, { latitude: parseFloat(this.state.polygons[1][1]), longitude: parseFloat(this.state.polygons[1][0]) })
-     
-    this.setState({checkLat:this.state.polygons[1][1],checkLong:this.state.polygons[1][0],cameraTrigger:distanceToCheckpoint})
+    //Deze props worden gebruikt om Checkpoint op bepaalde afstand van gebruiker klikbaar te maken.
+    this.setState({checkLat:this.state.polygons[1][1],checkLong:this.state.polygons[1][0],cameraTrigger: parseInt(distanceToCheckpoint)})
     //Grootte van de circle waar Quizes gegenereerd worden
     stral = parseInt(distanceToCheckpoint) / 3;
     let arr = []
@@ -134,7 +134,6 @@ getRandomQuizes() {
     else {
         this.setState({ randomNumber: this.generateRandomint(4, 7) })
     }
-    console.log(this.state.randomNumber)
 
     // Random Quizes worden in een array gestoken
     for (let i = 0; i < parseInt(this.state.randomNumber); i++) {
