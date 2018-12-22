@@ -28,19 +28,30 @@ class Maps extends Component {
     }
 
     renderPolygon() {
+        console.log("Map test " +  this.props.lat)
         if (this.props.getPolygons.length > 0) {
             return (
                 <View>
-                    <Polygon
+                    {/* <Polygon
                         coordinates={this.props.getPolygons}
                         fillColor='red'
                         strokeColor='black'
+                        //image={require('../assets/puzzle_stuk.png')}
                         tappable={true}
                         onPress={() => this.props.navigate('Camera', {
                             monumentProps: this.props.getMonumentProps
                         })}
                     >
-                    </Polygon>
+                    </Polygon> */}
+                    <MapView.Marker
+                     coordinate={  { latitude: this.props.lat, longitude:this.props.long}}
+                     image={require('../assets/checkpoint.png')}
+                    onPress={() => this.props.navigate('Camera', {
+                        monumentProps: this.props.getMonumentProps
+                    })}>
+                 
+                        
+                    </MapView.Marker> 
                 </View>
             )
         }

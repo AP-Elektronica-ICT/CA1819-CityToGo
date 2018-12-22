@@ -47,6 +47,9 @@ class Home extends Component {
             randomQuizes: [],
             randomNumber: 0,
             showMonument: false,
+            checkLat:0,
+            checkLong:0,
+            cameraTrigger:0,
 
 
 
@@ -115,10 +118,11 @@ getRandomQuizes() {
     center = geolib.getCenter([
         { latitude: MyLocation.latitude, longitude: MyLocation.longitude },
         { latitude: parseFloat(this.state.polygons[1][1]), longitude: parseFloat(this.state.polygons[1][0]) }]);
-
+      
     //Afstand tussen bestemming en huidgie locatie 
     distanceToCheckpoint = randomLocation.distance(MyLocation, { latitude: parseFloat(this.state.polygons[1][1]), longitude: parseFloat(this.state.polygons[1][0]) })
-
+     
+    this.setState({checkLat:this.state.polygons[1][1],checkLong:this.state.polygons[1][0],cameraTrigger:distanceToCheckpoint})
     //Grootte van de circle waar Quizes gegenereerd worden
     stral = parseInt(distanceToCheckpoint) / 3;
     let arr = []
@@ -181,7 +185,7 @@ getQuizpopup = async (lat,long) => {
                     Name: responseJson.properties.Naam,
                     Name: responseJson.properties.Naam,
                     isStartPopupVisible: true,
-                    polygons: responseJson.geometry.coordinates[0],
+                    //polygons: responseJson.geometry.coordinates[0],
                     isStartBttnVisible: true
                 })
                 this.getRandomQuizes();
@@ -321,6 +325,9 @@ startGameSession() {
                     navigate={navigate}
                     getRandom={this.state.randomQuizes}
                     getPolygons={this.state.polygonMonument}
+                    triggerCamera={this.state.cameraTrigger}
+                    lat={this.state.checkLat}
+                    long={this.state.checkLong}
                     getMapRegion={this.getMapRegion.bind(this)}
                     getMonumentProps={this.state.monumentsProps}
                     Quiz2={this.Quiz}
