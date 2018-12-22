@@ -14,6 +14,7 @@ class Camera extends Component {
     constructor(props) {
         super(props);
         this.state = { isLoading: false }
+      
     }
 
     render() {

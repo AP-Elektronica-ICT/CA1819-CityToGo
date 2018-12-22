@@ -26,31 +26,26 @@ class Maps extends Component {
             return
         }
     }
+    //Trigger Camera
+    Camera = () => {    
+        console.log("Map afstand "+ this.props.triggerCamera)           
+     if(this.props.triggerCamera<15){
+        this.props.navigate('Camera', {
+            monumentProps: this.props.getMonumentProps,
+            
+        })
+    }
+    }
 
     renderPolygon() {
-        console.log("Map test " +  this.props.lat)
         if (this.props.getPolygons.length > 0) {
             return (
                 <View>
-                    {/* <Polygon
-                        coordinates={this.props.getPolygons}
-                        fillColor='red'
-                        strokeColor='black'
-                        //image={require('../assets/puzzle_stuk.png')}
-                        tappable={true}
-                        onPress={() => this.props.navigate('Camera', {
-                            monumentProps: this.props.getMonumentProps
-                        })}
-                    >
-                    </Polygon> */}
+                  
                     <MapView.Marker
                      coordinate={  { latitude: this.props.lat, longitude:this.props.long}}
                      image={require('../assets/checkpoint.png')}
-                    onPress={() => this.props.navigate('Camera', {
-                        monumentProps: this.props.getMonumentProps
-                    })}>
-                 
-                        
+                    onPress={this.Camera}>       
                     </MapView.Marker> 
                 </View>
             )
