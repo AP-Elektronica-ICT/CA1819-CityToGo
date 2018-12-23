@@ -2,7 +2,9 @@
 
 import React, { Component } from 'react';
 
-import { StyleSheet } from 'react-native';
+import {
+  StyleSheet
+} from 'react-native';
 
 import {
   ViroARScene,
@@ -15,135 +17,156 @@ import {
   ViroARPlaneSelector,
   ViroNode,
   ViroAnimations,
-  ViroImage
+  ViroImage,
+  ViroARCamera,
+  ViroScene,
+  ViroConstants
 } from 'react-viro';
 
 export default class QuizAR extends Component {
 
-  constructor() {
-    super();
+  
 
-    // Set initial state here
-    this.state = {
-      text: "Initializing AR..."
-    };
+   state = {
+     opacity: 1,
+     isClickable: false
+   }
 
-    // bind 'this' to functions
-    this._onInitialized = this._onInitialized.bind(this);
+
+
+  onHoveringCategory = (isHovering) => {
+    if (isHovering)
+      this.setState({
+        opacity: 0.5,
+        isClickable: true
+      });
+
+    else
+      this.setState({
+        opacity: 1,
+        isClickable: false
+      });
   }
-
-
 
   render() {
     return (
-      <ViroARScene onTrackingInitialized={() => { this.setState({ text: "Hello World!" }) }}>
-        {/* <ViroText text={this.state.text} scale={[.1, .1, .1]} height={1} width={4} position={[0, 0, -1]} style={styles.helloWorldTextStyle} />  */}
-
-        <ViroAmbientLight color={"#aaaaaa"} />
-        <ViroSpotLight innerAngle={5} outerAngle={90} direction={[0, -1, -.2]} position={[0, 3, 1]} color="#ffffff" castsShadow={true} />
-
-        <ViroImage
-          height={1}
-          width={1}
-          position={[-2.4, 0, -4]}
-          //placeholderSource={require("./res/local_spinner.jpg")}
-          source={require("../assets/category_icons/politics_icon.png")}
-        />
-        <ViroText
-          text='Politics'
-          // height={1} 
-          // width={4} 
-          position={[-2.4, -0.7, -4]}
-          style={styles.helloWorldTextStyle}
-        />
-
-        <ViroImage
-          height={1}
-          width={1}
-          position={[-1.2, 0, -4]}
-          //placeholderSource={require("./res/local_spinner.jpg")}
-          source={require("../assets/category_icons/geography_icon.png")}
-        />
-
-        <ViroText
-          text='Geography'
-          // height={1} 
-          // width={4} 
-          position={[-1.2, -0.7, -4]}
-          style={styles.helloWorldTextStyle}
-        />
-
-        <ViroImage
-          height={1}
-          width={1}
-          position={[0, 0, -4]}
-          //placeholderSource={require("./res/local_spinner.jpg")}
-          source={require("../assets/category_icons/history_icon.png")}
-        />
-        <ViroText
-          text='History'
-          // height={1} 
-          // width={4} 
-          position={[0, -0.7, -4]}
-          style={styles.helloWorldTextStyle}
-        />
-
-        <ViroImage
-          height={1}
-          width={1}
-          position={[1.2, 0, -4]}
-          //placeholderSource={require("./res/local_spinner.jpg")}
-          source={require("../assets/category_icons/science_computer_icon.png")}
-        />
-
-        <ViroText
-          text='Science and technology'
-          // height={1} 
-          // width={4} 
-          position={[1.2, -1, -4]}
-          style={styles.helloWorldTextStyle}
-        />
-
-        <ViroImage
-          height={1}
-          width={1}
-          position={[2.4, 0, -4]}
-          //placeholderSource={require("./res/local_spinner.jpg")}
-          source={require("../assets/category_icons/sports_icon.png")}
-        />
-        <ViroText
-          text='Sports'
-          // height={1} 
-          // width={4} 
-          position={[2.4, -0.7, -4]}
-          style={styles.helloWorldTextStyle}
-        />
 
 
+        <ViroARScene >
+          <ViroAmbientLight color={"#aaaaaa"} />
+          <ViroSpotLight innerAngle={5} outerAngle={90} direction={[0, -1, -.2]} position={[0, 3, 1]} color="#ffffff" castsShadow={true} />
 
-      </ViroARScene>
+          <ViroText
+            text='Please choose one category'
+            height={1}
+            width={4}
+            position={[0, 1, -4]}
+            style={styles.textStyle}
+          />
+
+          <ViroImage
+            onClick={() => {
+              if (this.state.isClickable)
+                console.log('politic clicked')
+            }}
+            onHover={(isHovering) => this.onHoveringCategory(isHovering)}
+            height={1}
+            width={1}
+            position={[-2.4, 0, -4]}
+            source={require("../assets/category_icons/politics_icon.png")}
+            opacity={this.state.opacity}
+          />
+
+          <ViroText
+            onHover={(isHovering) => this.onHoveringCategory(isHovering)}
+            text='Politics'
+            // height={1} 
+            // width={4} 
+            position={[-2.4, -0.7, -4]}
+            style={styles.textStyle}
+          />
+
+          <ViroImage
+            height={1}
+            width={1}
+            position={[-1.2, 0, -4]}
+            source={require("../assets/category_icons/geography_icon.png")}
+          />
+
+          <ViroText
+            text='Geography'
+            // height={1} 
+            // width={4} 
+            position={[-1.2, -0.7, -4]}
+            style={styles.textStyle}
+          />
+
+          <ViroImage
+            height={1}
+            width={1}
+            position={[0, 0, -4]}
+            source={require("../assets/category_icons/history_icon.png")}
+          />
+          <ViroText
+            text='History'
+            // height={1} 
+            // width={4} 
+            position={[0, -0.7, -4]}
+            style={styles.textStyle}
+          />
+
+          <ViroImage
+            height={1}
+            width={1}
+            position={[1.2, 0, -4]}
+            source={require("../assets/category_icons/science_computer_icon.png")}
+          />
+
+          <ViroText
+            text='Science and technology'
+            // height={1} 
+            // width={4} 
+            position={[1.2, -1, -4]}
+            style={styles.textStyle}
+          />
+
+          <ViroImage
+            height={1}
+            width={1}
+            position={[2.4, 0, -4]}
+            source={require("../assets/category_icons/sports_icon.png")}
+          />
+          <ViroText
+            text='Sports'
+            // height={1} 
+            // width={4} 
+            position={[2.4, -0.7, -4]}
+            style={styles.textStyle}
+          />
+        </ViroARScene>
     );
-  }
-
-  _onInitialized(state, reason) {
-    if (state == ViroConstants.TRACKING_NORMAL) {
-      this.setState({
-        text: "AR is gelukt!"
-      });
-    } else if (state == ViroConstants.TRACKING_NONE) {
-      // Handle loss of tracking
-    }
   }
 }
 
 var styles = StyleSheet.create({
-  helloWorldTextStyle: {
+  container: {
+    flex: 1
+  },
+  textStyle: {
     fontFamily: 'Arial',
     fontSize: 20,
     color: '#ffffff',
     textAlignVertical: 'center',
     textAlign: 'center',
   },
+  textCountDownStyle: {
+    fontFamily: 'Arial',
+    fontSize: 50,
+    color: 'red',
+    //textAlignVertical: 'center',
+    textAlign: 'center',
+
+  }
 });
 
 module.exports = QuizAR;
