@@ -21,7 +21,8 @@ import {
   ViroImage,
   ViroARCamera,
   ViroScene,
-  ViroConstants
+  ViroConstants,
+  ViroButton
 } from 'react-viro';
 
 var random;
@@ -38,18 +39,9 @@ export default class QuizAR extends Component {
       given_answer: "",
       category: "",
       category_is_selected: false,
-      opacity: 1,
-      isClickable: false
-
-
     }
 
   }
-
-  // state = {
-  //   opacity: 1,
-  //   isClickable: false
-  // }
 
   generateRandomint(min, max) {
     return Math.random() * (max - min) + min;
@@ -95,17 +87,37 @@ export default class QuizAR extends Component {
 
 
 
-  onHoveringCategory = (isHovering) => {
-    if (isHovering)
-      this.setState({
-        opacity: 0.5,
-        isClickable: true
-      });
+  onHoveringCategory = (isHovering, categoryName) => {
+
+    if (isHovering) {
+
+      switch (categoryName) {
+        case 'POLITICS':
+          this.setState({
+            opacityPolitics: 0.5,
+            isClickablePolitics: true
+          });
+          break;
+        case 'GEOGRAPHY':
+          this.setState({
+            opacityGeography: 0.5,
+            isClickableGeography: true
+          });
+          break;
+
+        default:
+          break;
+      }
+
+    }
+
 
     else
       this.setState({
-        opacity: 1,
-        isClickable: false
+        opacityPolitics: 1,
+        isClickablePolitics: false,
+        opacityGeography: 1,
+        isClickableGeography: false
       });
   }
 
@@ -164,21 +176,20 @@ export default class QuizAR extends Component {
 
           <ViroImage
             onClick={() => {
-              if (this.state.isClickable)
+              if (this.state.isClickablePolitics)
                 console.log('politic clicked')
               this.setState({ category: '24' })
               this.confirmCategory();
             }}
-            onHover={(isHovering) => this.onHoveringCategory(isHovering)}
+            onHover={(isHovering) => this.onHoveringCategory(isHovering, 'POLITICS')}
             height={1}
             width={1}
             position={[-2.4, 0, -4]}
             source={require("../assets/quiz_category_icons/politics_icon.png")}
-            opacity={this.state.opacity}
+            opacity={this.state.opacityPolitics}
           />
 
           <ViroText
-            onHover={(isHovering) => this.onHoveringCategory(isHovering)}
             text='Politics'
             // height={1} 
             // width={4} 
@@ -187,10 +198,12 @@ export default class QuizAR extends Component {
           />
 
           <ViroImage
+            onHover={(isHovering) => this.onHoveringCategory(isHovering, 'GEOGRAPHY')}
             height={1}
             width={1}
             position={[-1.2, 0, -4]}
             source={require("../assets/quiz_category_icons/geography_icon.png")}
+            opacity={this.state.opacityGeography}
           />
 
           <ViroText
