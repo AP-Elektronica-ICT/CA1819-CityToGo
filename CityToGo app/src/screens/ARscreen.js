@@ -7,7 +7,6 @@ import {
 } from "react-native";
 
 import {
-    ViroVRSceneNavigator,
     ViroARSceneNavigator,
 } from 'react-viro';
 
@@ -19,16 +18,29 @@ var arScenes = {
 }
 
 class ARscreen extends Component {
-    render() {  
+    render() {
         return (
-            <ViroARSceneNavigator
-            
-                initialScene={{
-                    scene: arScenes['ARQuiz'],
-                }}
-                apiKey={apiKey} />
+            <View
+                style={styles.container}
+            >
+                <ViroARSceneNavigator
+
+                    initialScene={{
+                        scene: arScenes['ARQuiz'],
+                    }}
+                    apiKey={apiKey} />
+                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{fontSize: 20, fontWeight: 'bold',color: 'red'}}>⊙</Text>
+                </View>
+            </View>
         );
     }
 }
 export default ARscreen;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    }
+});
 
