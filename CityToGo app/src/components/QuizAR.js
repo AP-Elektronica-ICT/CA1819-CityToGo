@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import {
   StyleSheet
 } from 'react-native';
+import Config from '../config/config'
 
 import {
   ViroARScene,
@@ -23,14 +24,74 @@ import {
   ViroConstants
 } from 'react-viro';
 
+var random;
+
 export default class QuizAR extends Component {
 
-  
+  constructor(props) {
+    super(props);
+    this.state = {
+      arrQuiz: [],
+      modalVisible: false,
+      question: "",
+      answer: "",
+      given_answer: "",
+      category: "",
+      category_is_selected: false,
+      opacity: 1,
+      isClickable: false
 
-   state = {
-     opacity: 1,
-     isClickable: false
-   }
+
+    }
+
+  }
+
+  // state = {
+  //   opacity: 1,
+  //   isClickable: false
+  // }
+
+  generateRandomint(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  QuizCategory = async () => {
+    fetch(`http://${Config.MY_IP_ADRES}:3000/api/QuizCategory`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        category: this.state.category,
+
+      })
+    }).then((response) => response.json()).then((data) => {
+      random = this.generateRandomint(1, 9);
+      this.setState({
+        question: data[parseInt(random)].question,
+        answer: data[parseInt(random)].correct_answer
+      })
+
+      console.log(data[parseInt(random)].question)
+    });
+  }
+
+  confirmCategory() {
+    this.setState({ category_is_selected: true })
+    this.QuizCategory();
+  }
+
+  checkAnswer() {
+    if (this.state.given_answer == this.state.answer) {
+      console.log("Correct Answer bro !")
+      this.setState({ category_is_selected: false, modalVisible: false })
+    }
+    else {
+      console.log("Wrong answer bro !")
+      this.setState({ category_is_selected: false, modalVisible: false })
+    }
+  }
 
 
 
@@ -49,12 +110,47 @@ export default class QuizAR extends Component {
   }
 
   render() {
-    return (
+
+    if (this.state.category_is_selected) {
+      return (
+
+        <ViroARScene >
+          {/* <ViroAmbientLight color={"#aaaaaa"} />
+          <ViroSpotLight innerAngle={5} outerAngle={90} direction={[0, -1, -.2]} position={[0, 3, 1]} color="#ffffff" castsShadow={true} /> */}
+          <ViroText
+            text={this.state.question}
+            height={1}
+            width={4}
+            position={[0, 0.5, -4]}
+            style={styles.textStyle}
+          />
+
+          <ViroImage
+            height={1}
+            width={1}
+            position={[-1.2, -0.5, -4]}
+            source={require("../assets/quiz_category_icons/true_icon.png")}
+          />
+
+          <ViroImage
+            height={1}
+            width={1}
+            position={[1.2, -0.5, -4]}
+            source={require("../assets/quiz_category_icons/false_icon.png")}
+          />
+
+        </ViroARScene>
+      );
+    }
+    else {
+
+
+      return (
 
 
         <ViroARScene >
-          <ViroAmbientLight color={"#aaaaaa"} />
-          <ViroSpotLight innerAngle={5} outerAngle={90} direction={[0, -1, -.2]} position={[0, 3, 1]} color="#ffffff" castsShadow={true} />
+          {/* <ViroAmbientLight color={"#aaaaaa"} />
+          <ViroSpotLight innerAngle={5} outerAngle={90} direction={[0, -1, -.2]} position={[0, 3, 1]} color="#ffffff" castsShadow={true} /> */}
 
           <ViroText
             text='Please choose one category'
@@ -64,16 +160,20 @@ export default class QuizAR extends Component {
             style={styles.textStyle}
           />
 
+
+
           <ViroImage
             onClick={() => {
               if (this.state.isClickable)
                 console.log('politic clicked')
+              this.setState({ category: '24' })
+              this.confirmCategory();
             }}
             onHover={(isHovering) => this.onHoveringCategory(isHovering)}
             height={1}
             width={1}
             position={[-2.4, 0, -4]}
-            source={require("../assets/category_icons/politics_icon.png")}
+            source={require("../assets/quiz_category_icons/politics_icon.png")}
             opacity={this.state.opacity}
           />
 
@@ -90,7 +190,7 @@ export default class QuizAR extends Component {
             height={1}
             width={1}
             position={[-1.2, 0, -4]}
-            source={require("../assets/category_icons/geography_icon.png")}
+            source={require("../assets/quiz_category_icons/geography_icon.png")}
           />
 
           <ViroText
@@ -105,7 +205,7 @@ export default class QuizAR extends Component {
             height={1}
             width={1}
             position={[0, 0, -4]}
-            source={require("../assets/category_icons/history_icon.png")}
+            source={require("../assets/quiz_category_icons/history_icon.png")}
           />
           <ViroText
             text='History'
@@ -119,7 +219,7 @@ export default class QuizAR extends Component {
             height={1}
             width={1}
             position={[1.2, 0, -4]}
-            source={require("../assets/category_icons/science_computer_icon.png")}
+            source={require("../assets/quiz_category_icons/science_computer_icon.png")}
           />
 
           <ViroText
@@ -134,7 +234,7 @@ export default class QuizAR extends Component {
             height={1}
             width={1}
             position={[2.4, 0, -4]}
-            source={require("../assets/category_icons/sports_icon.png")}
+            source={require("../assets/quiz_category_icons/sports_icon.png")}
           />
           <ViroText
             text='Sports'
@@ -144,7 +244,8 @@ export default class QuizAR extends Component {
             style={styles.textStyle}
           />
         </ViroARScene>
-    );
+      );
+    }
   }
 }
 
