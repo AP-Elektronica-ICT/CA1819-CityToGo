@@ -30,6 +30,8 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.Quiz = this.getQuizpopup.bind(this);
+        this.CreateSubSession = this.CreateSubSession.bind(this);
+        
 
 
 
@@ -46,6 +48,7 @@ class Home extends Component {
             randomQuizes: [],
             randomNumber: 0,
             showMonument: false,
+            subSession:[],
 
 
 
@@ -79,6 +82,7 @@ class Home extends Component {
 
         SInfo.getItem("accessTokenServer", {}).then(accessToken => {
             global.token = accessToken
+            console.log(global.token)
         })
 
     }
@@ -110,7 +114,7 @@ class Home extends Component {
     }
 
     getMonument = async () => {
-        fetch(`http://${Config.MY_IP_ADRES}:3000/api/getNextLocation`, {
+        fetch(`http://192.168.178.20:3000/api/getNextLocation`, {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -203,13 +207,63 @@ class Home extends Component {
         longitudeDelta: LONGITUDE_DELTA
     });
 
+    CreateSubSession(){
+        // let userProfielData = this.props.navigation.getParam("userData");
+        console.log(this.state.subSession)
+        debugger
+         
+
+        let startTime = new Date().valueOf()
+       // let userId = userProfielData.sub
+
+        let arr =[]
+        arr =this.state.subSession
+        debugger
+
+        arr.push(
+           { startTime: startTime,
+            stopTime: 0,
+            isFound: true,
+            monument: this.state.allMonument}
+    )
+
+        
+
+        fetch(`http://192.168.178.20:3000/api/v1/userSession/update/${this.state.sessionId}`, {
+            method: 'PUT',
+            headers: {
+                authorization: 'Bearer ' + global.token,
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                
+                subSession: arr
+            }),
+        }).then((response) => response.json()).then((responseJson) => {
+            console.log(responseJson);
+            debugger
+
+        }
+        )
+        .catch((error) => {
+            console.error(error);
+        });
+
+
+
+    }
+
+
+
     startGameSession() {
         let userProfielData = this.props.navigation.getParam("userData");
+        let arr = [];
 
         let startTime = new Date().valueOf()
         let userId = userProfielData.sub
 
-        fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/create`, {
+        fetch(`http://192.168.178.20:3000/api/v1/userSession/create`, {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -228,8 +282,15 @@ class Home extends Component {
             }),
         }).then((response) => response.json())
             .then((responseJson) => {
+                
                 console.log(responseJson._id)
                 this.setState({ sessionId: responseJson._id })
+                arr.push(responseJson.subSession[0])
+                debugger
+                this.setState({subSession :arr})
+
+                console.log(this.state.subSession)
+
             }
             ).catch((error) => {
                 console.error(error);
@@ -240,12 +301,13 @@ class Home extends Component {
 
 
     getVisitedMonuments() {
+        CreateSubSession();
         let userProfielData = this.props.navigation.getParam("userData");
         let arr = []
         let userId = userProfielData.sub
         console.log(userId);
 
-        fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/find/${userId}`)
+        fetch(`http://192.168.178.20:3000/api/v1/userSession/find/${userId}`)
             .then((response) => response.json())
             .then((responseJson) => {
                 console.log(responseJson);
@@ -325,7 +387,7 @@ class Home extends Component {
                 <View >
 
                     <Button
-                        onPress={this.ShowMonument}
+                        onPress={this.CreateSubSession}
                         buttonStyle={styles.buttonStyle}
                         title={"Show visited monuments"}
                     />
@@ -335,6 +397,7 @@ class Home extends Component {
 
                 <ModalExample ref='popupchild'
                     imageUri={this.state.data}
+                    blur ={5}
                     data={this.state.Name}
                     startGameSession={this.startGameSession.bind(this)}
                 />

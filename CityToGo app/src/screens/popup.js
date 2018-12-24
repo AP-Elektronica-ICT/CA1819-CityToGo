@@ -29,6 +29,7 @@ class ModalExample extends Component {
             <View>
               <Image
                 style={styles.image}
+                blurRadius={this.props.blur}
 
                 source={{ uri: `${this.props.imageUri}` }}
               />
