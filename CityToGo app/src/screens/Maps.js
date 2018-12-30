@@ -26,21 +26,27 @@ class Maps extends Component {
             return
         }
     }
+    //Trigger Camera
+    Camera = () => {    
+        console.log("Map afstand "+ this.props.triggerCamera)           
+     if(this.props.triggerCamera<15){
+        this.props.navigate('Camera', {
+            monumentProps: this.props.getMonumentProps,
+            
+        })
+    }
+    }
 
     renderPolygon() {
         if (this.props.getPolygons.length > 0) {
             return (
                 <View>
-                    <Polygon
-                        coordinates={this.props.getPolygons}
-                        fillColor='red'
-                        strokeColor='black'
-                        tappable={true}
-                        onPress={() => this.props.navigate('Camera', {
-                            monumentProps: this.props.getMonumentProps
-                        })}
-                    >
-                    </Polygon>
+                  
+                    <MapView.Marker
+                     coordinate={  { latitude: this.props.lat, longitude:this.props.long}}
+                     image={require('../assets/checkpoint.png')}
+                    onPress={this.Camera}>       
+                    </MapView.Marker> 
                 </View>
             )
         }
@@ -71,7 +77,7 @@ class Maps extends Component {
                         //title={"Quiz"}
                         image={require('../assets/quiz.png')}
                        // description={"description"}
-                        onPress={() => this.props.Quiz2()} >
+                        onPress={() => this.props.Quiz2(marker.latitude,marker.longitude)} >
                        
                         
                         </MapView.Marker>

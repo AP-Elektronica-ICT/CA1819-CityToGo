@@ -73,7 +73,7 @@ class SubSessions extends Component {
           showsVerticalScrollIndicator={false}
           renderItem={({item}) =>
           <View style={styles.flatview}>
-            <Text style={styles.name}>`{item.startTime}`</Text>
+            <Text style={styles.name}>{item.startTime}</Text>
             <Text style={styles.email}>{item.stopTime}</Text>
           </View>
           }

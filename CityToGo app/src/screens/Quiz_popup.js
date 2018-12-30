@@ -51,7 +51,7 @@ class Quiz_popUp extends Component {
 
       })
     }).then((response) => response.json()).then((data) => {
-      random=this.generateRandomint(1,9);
+      random=this.generateRandomint(0,10);
       this.setState({
         question: data[parseInt(random)].question,
         answer: data[parseInt(random)].correct_answer
