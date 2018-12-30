@@ -4,15 +4,19 @@ import { Button } from 'react-native-elements'
 class ModalExample extends Component {
   state = {
     modalVisible: false,
+    showButton:true
   };
 
-  setModalVisible(visible) {
-    this.setState({ modalVisible: visible });
+  setModalVisible(visible,btnvisible) {
+    this.setState({ modalVisible: visible })
+    this.setState({showButton :btnvisible})
   }
 
   startGameSession(){
     this.setModalVisible(false);
+    if(this.state.showButton == true){
     this.props.startGameSession()
+    }
   }
 
   render() {
@@ -25,6 +29,7 @@ class ModalExample extends Component {
           visible={this.state.modalVisible}
           onRequestClose={() => {Alert.alert('Modal has been closed.');}}
           >
+      
           <View style={{ marginTop: 22 }}>
             <View>
               <Image
@@ -36,7 +41,7 @@ class ModalExample extends Component {
               <Text>
                 {this.props.data}
               </Text>
-
+            
               < Button style={{ marginTop: 150 }}
                 onPress={() => {this.startGameSession()}}
                 title="Let's go"

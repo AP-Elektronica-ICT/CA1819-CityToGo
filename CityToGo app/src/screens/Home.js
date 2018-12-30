@@ -3,7 +3,8 @@ import {
     View,
     StyleSheet,
     Image,
-    TouchableOpacity
+    TouchableOpacity,
+   
 } from "react-native";
 import { Button } from 'react-native-elements'
 import SInfo from "react-native-sensitive-info";
@@ -42,13 +43,16 @@ class Home extends Component {
             monumentsProps: [],
             isStartPopupVisible: false,
             quiz_visible: false,
-            data: "",
+            data: "https://41z6h24c86pu1h3m6x151ecm-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/miketyson-11-272x439.jpg",
             Name: "",
             polygons: [],
             randomQuizes: [],
             randomNumber: 0,
             showMonument: false,
             subSession:[],
+            blurpercentage:5,
+            canShowCheckpointPhoto : false,
+           
 
 
 
@@ -141,7 +145,7 @@ class Home extends Component {
                     isStartBttnVisible: true
                 })
                 this.getRandomQuizes();
-                this.refs.popupchild.setModalVisible(this.state.isStartPopupVisible);
+                this.refs.popupchild.setModalVisible(this.state.isStartPopupVisible,true);
             })
             .catch((error) => {
                 console.error(error);
@@ -301,40 +305,48 @@ class Home extends Component {
 
 
     getVisitedMonuments() {
-        CreateSubSession();
+       
         let userProfielData = this.props.navigation.getParam("userData");
         let arr = []
         let userId = userProfielData.sub
         console.log(userId);
+        debugger
 
         fetch(`http://192.168.178.20:3000/api/v1/userSession/find/${userId}`)
             .then((response) => response.json())
             .then((responseJson) => {
                 console.log(responseJson);
-
+debugger
                 for (let z of responseJson) {
 
-
-                    console.log(z.subSession.monument.geometry)
+                    for(let k of z.subSession){
+                        if(z._id == this.state.sessionId){
+                            if(k.isFound == true){
+                        
+                    //console.log(z.subSession.monument.geometry)
 
                     arr.push(
 
                         {
                             coordinate: {
-                                latitude: z.subSession.monument.geometry.coordinates[0][0][1],
-                                longitude: z.subSession.monument.geometry.coordinates[0][0][0],
+                                latitude: k.monument.geometry.coordinates[0][0][1],
+                                longitude: k.monument.geometry.coordinates[0][0][0],
                             },
-                            title: `${z.subSession.monument.properties.Naam}`,
-                            image: `${z.subSession.monument.properties.imageUrl}`,
+                            title: `${k.monument.properties.Naam}`,
+                            image: `${k.monument.properties.imageUrl}`,
                         }
                     )
-
-
-
+                }
+                }
 
                 }
 
-                this.setState({ markers: arr })
+
+                }
+                debugger
+                this.setState({ markers: arr });
+                console.log(this.state.markers)
+                debugger
             }
             ).catch((error) => {
                 console.error(error);
@@ -351,7 +363,8 @@ class Home extends Component {
             return (
                 <View style={styles.bottomStartView}>
                     <Button
-                        onPress={() => this.showStartPopup()}
+                        onPress={() =>{ this.showStartPopup(); this.setState({canShowCheckpointPhoto:true})}}
+                        
                         buttonStyle={styles.buttonStyle}
                         title="Start"
                     />
@@ -359,6 +372,24 @@ class Home extends Component {
             )
         }
     }
+
+    renderCheckPointPhoto() {
+        if(this.state.canShowCheckpointPhoto == true){
+            return(
+            <View style={styles.CheckpointView}>
+                <TouchableOpacity onPress={() => this.refs.popupchild.setModalVisible(true,false) }>
+                    <Image style={styles.CheckpointPic}
+                    blurRadius={this.state.blurpercentage}
+                        source={{ uri: this.state.data }} />
+                </TouchableOpacity>
+            </View>
+
+            )
+
+        }
+    }
+
+
 
     render() {
 
@@ -387,18 +418,28 @@ class Home extends Component {
                 <View >
 
                     <Button
-                        onPress={this.CreateSubSession}
+                        onPress={()=> this.ShowMonument()}
                         buttonStyle={styles.buttonStyle}
                         title={"Show visited monuments"}
+                    />
+                     <Button
+                        onPress={() => navigate('ListSubSessions', { sessionId: this.state.sessionId, UserId:this.props.navigation.getParam("userData") })}
+                        buttonStyle={styles.buttonStyle}
+                        title={"Show SubSessions"}
                     />
                 </View>
 
                 {this.renderStartButton()}
+                {this.renderCheckPointPhoto()}
+                
+
+                
 
                 <ModalExample ref='popupchild'
                     imageUri={this.state.data}
-                    blur ={5}
+                    blur ={this.state.blurpercentage}
                     data={this.state.Name}
+                    
                     startGameSession={this.startGameSession.bind(this)}
                 />
                 <Quiz_popUp ref='quizchild'
@@ -408,6 +449,8 @@ class Home extends Component {
 
             </View >
         );
+
+        
 
     }
 }
@@ -432,6 +475,12 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: '2%'
     },
+    CheckpointView:{
+        position: 'absolute',
+        bottom: '2%',
+        right: '2%'
+
+    },
     profielView: {
         position: 'absolute',
         top: '1%',
@@ -442,6 +491,13 @@ const styles = StyleSheet.create({
         width: 55,
         height: 55,
         borderRadius: 63,
+        borderWidth: 4,
+        borderColor: "white"
+    },
+    CheckpointPic: {
+        width: 55,
+        height: 55,
+        borderRadius: 0,
         borderWidth: 4,
         borderColor: "white"
     }
