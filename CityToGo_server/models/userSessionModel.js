@@ -11,7 +11,7 @@ var subSessionSchema = new Schema({
 var userSessionSchema = new Schema({
     userId: { type: String, required: true },
     isRunning: { type: Boolean, required: true },
-    subSession: subSessionSchema
+    subSession: [subSessionSchema]
 })
 
 // Export the model

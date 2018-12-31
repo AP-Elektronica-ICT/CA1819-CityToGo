@@ -4,7 +4,8 @@ import {
     View,
     StyleSheet,
     Image,
-    TouchableOpacity
+    TouchableOpacity,
+   
 } from "react-native";
 import { Button } from 'react-native-elements'
 import SInfo from "react-native-sensitive-info";
@@ -31,6 +32,8 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.Quiz = this.getQuizpopup.bind(this);
+        this.CreateSubSession = this.CreateSubSession.bind(this);
+        
 
 
 
@@ -41,7 +44,7 @@ class Home extends Component {
             monumentsProps: [],
             isStartPopupVisible: false,
             quiz_visible: false,
-            data: "",
+            data: "https://41z6h24c86pu1h3m6x151ecm-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/miketyson-11-272x439.jpg",
             Name: "",
             polygons: [],
             randomQuizes: [],
@@ -50,6 +53,10 @@ class Home extends Component {
             checkLat:0,
             checkLong:0,
             cameraTrigger:0,
+            subSession:[],
+            blurpercentage:5,
+            canShowCheckpointPhoto : false,
+           
 
 
 
@@ -80,6 +87,7 @@ class Home extends Component {
 
         SInfo.getItem("accessTokenServer", {}).then(accessToken => {
             global.token = accessToken
+            console.log(global.token)
         })
 
     }
@@ -161,7 +169,7 @@ getQuizpopup = async (lat,long) => {
     }
 
     getMonument = async () => {
-        fetch(`http://${Config.MY_IP_ADRES}:3000/api/getNextLocation`, {
+        fetch(`http://192.168.178.20:3000/api/getNextLocation`, {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -188,7 +196,7 @@ getQuizpopup = async (lat,long) => {
                     isStartBttnVisible: true
                 })
                 this.getRandomQuizes();
-                this.refs.popupchild.setModalVisible(this.state.isStartPopupVisible);
+                this.refs.popupchild.setModalVisible(this.state.isStartPopupVisible,true);
             })
             .catch((error) => {
                 console.error(error);
@@ -214,15 +222,64 @@ getQuizpopup = async (lat,long) => {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
     });
-//#endregion 
-//#region Session   
-startGameSession() {
+
+    CreateSubSession(){
+        // let userProfielData = this.props.navigation.getParam("userData");
+        console.log(this.state.subSession)
+        debugger
+         
+
+        let startTime = new Date().valueOf()
+       // let userId = userProfielData.sub
+
+        let arr =[]
+        arr =this.state.subSession
+        debugger
+
+        arr.push(
+           { startTime: startTime,
+            stopTime: 0,
+            isFound: true,
+            monument: this.state.allMonument}
+    )
+
+        
+
+        fetch(`http://192.168.178.20:3000/api/v1/userSession/update/${this.state.sessionId}`, {
+            method: 'PUT',
+            headers: {
+                authorization: 'Bearer ' + global.token,
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                
+                subSession: arr
+            }),
+        }).then((response) => response.json()).then((responseJson) => {
+            console.log(responseJson);
+            debugger
+
+        }
+        )
+        .catch((error) => {
+            console.error(error);
+        });
+
+
+
+    }
+
+
+
+    startGameSession() {
         let userProfielData = this.props.navigation.getParam("userData");
+        let arr = [];
 
         let startTime = new Date().valueOf()
         let userId = userProfielData.sub
 
-        fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/create`, {
+        fetch(`http://192.168.178.20:3000/api/v1/userSession/create`, {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -241,8 +298,15 @@ startGameSession() {
             }),
         }).then((response) => response.json())
             .then((responseJson) => {
+                
                 console.log(responseJson._id)
                 this.setState({ sessionId: responseJson._id })
+                arr.push(responseJson.subSession[0])
+                debugger
+                this.setState({subSession :arr})
+
+                console.log(this.state.subSession)
+
             }
             ).catch((error) => {
                 console.error(error);
@@ -253,39 +317,48 @@ startGameSession() {
 
 
     getVisitedMonuments() {
+       
         let userProfielData = this.props.navigation.getParam("userData");
         let arr = []
         let userId = userProfielData.sub
         console.log(userId);
+        debugger
 
-        fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/find/${userId}`)
+        fetch(`http://192.168.178.20:3000/api/v1/userSession/find/${userId}`)
             .then((response) => response.json())
             .then((responseJson) => {
                 console.log(responseJson);
-
+debugger
                 for (let z of responseJson) {
 
-
-                    console.log(z.subSession.monument.geometry)
+                    for(let k of z.subSession){
+                        if(z._id == this.state.sessionId){
+                            if(k.isFound == true){
+                        
+                    //console.log(z.subSession.monument.geometry)
 
                     arr.push(
 
                         {
                             coordinate: {
-                                latitude: z.subSession.monument.geometry.coordinates[0][0][1],
-                                longitude: z.subSession.monument.geometry.coordinates[0][0][0],
+                                latitude: k.monument.geometry.coordinates[0][0][1],
+                                longitude: k.monument.geometry.coordinates[0][0][0],
                             },
-                            title: `${z.subSession.monument.properties.Naam}`,
-                            image: `${z.subSession.monument.properties.imageUrl}`,
+                            title: `${k.monument.properties.Naam}`,
+                            image: `${k.monument.properties.imageUrl}`,
                         }
                     )
-
-
-
+                }
+                }
 
                 }
 
-                this.setState({ markers: arr })
+
+                }
+                debugger
+                this.setState({ markers: arr });
+                console.log(this.state.markers)
+                debugger
             }
             ).catch((error) => {
                 console.error(error);
@@ -303,7 +376,8 @@ startGameSession() {
             return (
                 <View style={styles.bottomStartView}>
                     <Button
-                        onPress={() => this.showStartPopup()}
+                        onPress={() =>{ this.showStartPopup(); this.setState({canShowCheckpointPhoto:true})}}
+                        
                         buttonStyle={styles.buttonStyle}
                         title="Start"
                     />
@@ -313,6 +387,25 @@ startGameSession() {
     }
     //#endregion
 //#region render
+
+    renderCheckPointPhoto() {
+        if(this.state.canShowCheckpointPhoto == true){
+            return(
+            <View style={styles.CheckpointView}>
+                <TouchableOpacity onPress={() => this.refs.popupchild.setModalVisible(true,false) }>
+                    <Image style={styles.CheckpointPic}
+                    blurRadius={this.state.blurpercentage}
+                        source={{ uri: this.state.data }} />
+                </TouchableOpacity>
+            </View>
+
+            )
+
+        }
+    }
+
+
+
     render() {
 
         const userProfielData = this.props.navigation.getParam("userData");
@@ -343,17 +436,28 @@ startGameSession() {
                 <View >
 
                     <Button
-                        onPress={this.ShowMonument}
+                        onPress={()=> this.ShowMonument()}
                         buttonStyle={styles.buttonStyle}
                         title={"Show visited monuments"}
+                    />
+                     <Button
+                        onPress={() => navigate('ListSubSessions', { sessionId: this.state.sessionId, UserId:this.props.navigation.getParam("userData") })}
+                        buttonStyle={styles.buttonStyle}
+                        title={"Show SubSessions"}
                     />
                 </View>
 
                 {this.renderStartButton()}
+                {this.renderCheckPointPhoto()}
+                
+
+                
 
                 <ModalExample ref='popupchild'
                     imageUri={this.state.data}
+                    blur ={this.state.blurpercentage}
                     data={this.state.Name}
+                    
                     startGameSession={this.startGameSession.bind(this)}
                 />
                 <Quiz_popUp ref='quizchild'
@@ -363,6 +467,8 @@ startGameSession() {
 
             </View >
         );
+
+        
 
     }
     //#endregion
@@ -387,6 +493,12 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: '2%'
     },
+    CheckpointView:{
+        position: 'absolute',
+        bottom: '2%',
+        right: '2%'
+
+    },
     profielView: {
         position: 'absolute',
         top: '1%',
@@ -397,6 +509,13 @@ const styles = StyleSheet.create({
         width: 55,
         height: 55,
         borderRadius: 63,
+        borderWidth: 4,
+        borderColor: "white"
+    },
+    CheckpointPic: {
+        width: 55,
+        height: 55,
+        borderRadius: 0,
         borderWidth: 4,
         borderColor: "white"
     }
