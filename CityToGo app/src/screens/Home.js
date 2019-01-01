@@ -15,6 +15,10 @@ import Quiz_popUp from "./Quiz_popup";
 import randomLocation from 'random-location';
 import geolib from "geolib";
 import Config from '../config/config'
+
+import { fetchMonument } from '../redux/actions/monumentAction'
+import { connect } from "react-redux";
+
 //#endregion
 const LATITUDE = 0;
 const LONGITUDE = 0;
@@ -71,6 +75,7 @@ class Home extends Component {
     //#endregion
     //#region Default methodes
     componentDidMount() {
+
         //current localisation 
         this.watchID = navigator.geolocation.watchPosition(
             position => {
@@ -90,9 +95,17 @@ class Home extends Component {
             console.log(global.token)
         })
 
+        this.props.fetchMonument(
+            51.2165,
+            4.4056
+        );
+
+        
     }
 
     componentWillMount() {
+
+
         navigator.geolocation.getCurrentPosition(
             error => alert(error.message),
             {
@@ -413,6 +426,9 @@ class Home extends Component {
         const userProfielData = this.props.navigation.getParam("userData");
         const { navigate } = this.props.navigation;
 
+        if (this.props.state.monument.fetched)
+            console.log(this.props.state.monument.data)
+
         return (
             <View style={styles.container}>
                 <Maps
@@ -475,7 +491,6 @@ class Home extends Component {
     }
     //#endregion
 }
-export default Home;
 //#region  Styles
 const styles = StyleSheet.create({
     container: {
@@ -524,3 +539,11 @@ const styles = StyleSheet.create({
 
 });
 //#endregion
+
+const mapStateToProps = state => {
+    return {
+        state: state
+    }
+}
+
+export default connect(mapStateToProps, { fetchMonument })(Home);

@@ -1,7 +1,7 @@
 const initialState = {
     fetching: false,
     fetched: false,
-    monumnt: [],
+    data: [],
     error: null
 }
 
@@ -19,7 +19,7 @@ const monument = (state = initialState, action) => {
                 ...state,
                 fetching: false,
                 fetched: true,
-                monumnt: action.payload
+                data: action.payload
             }
             break;
         }
