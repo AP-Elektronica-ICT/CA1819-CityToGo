@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, ActivityIndicator, Image } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator, Image,FlatList } from "react-native";
 import Auth0 from "react-native-auth0";
 import SInfo from "react-native-sensitive-info"
 import { Button } from 'react-native-elements'
@@ -153,6 +153,7 @@ class Profiel extends Component {
               <Text style={styles.info}>{location}</Text>
             </View>
           </View>
+        
 
           {this.renderSessionStopBttn(sessionId)}
 
@@ -174,6 +175,19 @@ const styles = StyleSheet.create({
     padding: 30,
     alignItems: 'center',
   },
+  flatview: {
+    justifyContent: 'center',
+    paddingTop: 30,
+    borderRadius: 2,
+  },
+  name: {
+    fontFamily: 'Verdana',
+    fontSize: 18
+  },
+  email: {
+    color: 'red'
+  },
+
   avatar: {
     width: 130,
     height: 130,

@@ -6,6 +6,7 @@ import Home from './Home';
 import Profile from './Profile';
 import Camera from './Camera'
 import Maps from './Maps'
+import ListSubSessions from "./ListSubSessions";
 import ARscreen from './ARscreen'
 
 
@@ -37,6 +38,12 @@ const Root = createStackNavigator(
         },
         Map: {
             screen: Maps,
+            navigationOptions: {
+                header: null
+            }
+        },
+        ListSubSessions: {
+            screen: ListSubSessions,
             navigationOptions: {
                 header: null
             }
