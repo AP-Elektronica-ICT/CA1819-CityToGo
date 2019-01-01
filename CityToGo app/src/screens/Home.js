@@ -5,7 +5,7 @@ import {
     StyleSheet,
     Image,
     TouchableOpacity,
-   
+
 } from "react-native";
 import { Button } from 'react-native-elements'
 import SInfo from "react-native-sensitive-info";
@@ -28,12 +28,12 @@ var distanceToQuiz;
 var stral;
 
 class Home extends Component {
-//#region Constructor
+    //#region Constructor
     constructor(props) {
         super(props);
         this.Quiz = this.getQuizpopup.bind(this);
         this.CreateSubSession = this.CreateSubSession.bind(this);
-        
+
 
 
 
@@ -50,13 +50,13 @@ class Home extends Component {
             randomQuizes: [],
             randomNumber: 0,
             showMonument: false,
-            checkLat:0,
-            checkLong:0,
-            cameraTrigger:0,
-            subSession:[],
-            blurpercentage:5,
-            canShowCheckpointPhoto : false,
-           
+            checkLat: 0,
+            checkLong: 0,
+            cameraTrigger: 0,
+            subSession: [],
+            blurpercentage: 5,
+            canShowCheckpointPhoto: false,
+
 
 
 
@@ -68,8 +68,8 @@ class Home extends Component {
             }]
         };
     }
-//#endregion
-//#region Default methodes
+    //#endregion
+    //#region Default methodes
     componentDidMount() {
         //current localisation 
         this.watchID = navigator.geolocation.watchPosition(
@@ -107,61 +107,61 @@ class Home extends Component {
         navigator.geolocation.clearWatch(this.watchID);
     }
     //#endregion
-//#region  Quizes
-   Quiz = () => {
-    //button click handler.
-}
-generateRandomint(min, max) {
-    return Math.random() * (max - min) + min;
-}
-
-getRandomQuizes() {
-    //Current location
-    MyLocation = {
-        latitude: this.getMapRegion().latitude,
-        longitude: this.getMapRegion().longitude
+    //#region  Quizes
+    Quiz = () => {
+        //button click handler.
+    }
+    generateRandomint(min, max) {
+        return Math.random() * (max - min) + min;
     }
 
-    //middenpunt tussen bestemming en huidige locatie 
-    center = geolib.getCenter([
-        { latitude: MyLocation.latitude, longitude: MyLocation.longitude },
-        { latitude: parseFloat(this.state.polygons[1][1]), longitude: parseFloat(this.state.polygons[1][0]) }]);
-      
-    //Afstand tussen bestemming en huidgie locatie 
-    distanceToCheckpoint = randomLocation.distance(MyLocation, { latitude: parseFloat(this.state.polygons[1][1]), longitude: parseFloat(this.state.polygons[1][0]) })
-    //Deze props worden gebruikt om Checkpoint op bepaalde afstand van gebruiker klikbaar te maken.
-    this.setState({checkLat:this.state.polygons[1][1],checkLong:this.state.polygons[1][0],cameraTrigger: parseInt(distanceToCheckpoint)})
-    //Grootte van de circle waar Quizes gegenereerd worden
-    stral = parseInt(distanceToCheckpoint) / 3;
-    let arr = []
+    getRandomQuizes() {
+        //Current location
+        MyLocation = {
+            latitude: this.getMapRegion().latitude,
+            longitude: this.getMapRegion().longitude
+        }
 
-    //Aantal Quizes worden getoond op basis van afstand tot checkpoint .
-    if (parseInt(distanceToCheckpoint) < 1000) {
-        this.setState({ randomNumber: this.generateRandomint(2, 5) })
-    }
-    else {
-        this.setState({ randomNumber: this.generateRandomint(4, 7) })
-    }
+        //middenpunt tussen bestemming en huidige locatie 
+        center = geolib.getCenter([
+            { latitude: MyLocation.latitude, longitude: MyLocation.longitude },
+            { latitude: parseFloat(this.state.polygons[1][1]), longitude: parseFloat(this.state.polygons[1][0]) }]);
 
-    // Random Quizes worden in een array gestoken
-    for (let i = 0; i < parseInt(this.state.randomNumber); i++) {
-        var randomPoints = randomLocation.randomCirclePoint(center, stral)
-        arr.push(randomPoints);
-    }
-    this.setState({ randomQuizes: arr })
+        //Afstand tussen bestemming en huidgie locatie 
+        distanceToCheckpoint = randomLocation.distance(MyLocation, { latitude: parseFloat(this.state.polygons[1][1]), longitude: parseFloat(this.state.polygons[1][0]) })
+        //Deze props worden gebruikt om Checkpoint op bepaalde afstand van gebruiker klikbaar te maken.
+        this.setState({ checkLat: this.state.polygons[1][1], checkLong: this.state.polygons[1][0], cameraTrigger: parseInt(distanceToCheckpoint) })
+        //Grootte van de circle waar Quizes gegenereerd worden
+        stral = parseInt(distanceToCheckpoint) / 3;
+        let arr = []
 
-}
-getQuizpopup = async (lat,long) => {
-    distanceToQuiz=randomLocation.distance(MyLocation, { latitude: parseFloat(lat), longitude: parseFloat(long) })
-    console.log("Distance to this quiz is "+ parseInt( distanceToQuiz) +" meters")
-    if( parseInt( distanceToQuiz)<10){
+        //Aantal Quizes worden getoond op basis van afstand tot checkpoint .
+        if (parseInt(distanceToCheckpoint) < 1000) {
+            this.setState({ randomNumber: this.generateRandomint(2, 5) })
+        }
+        else {
+            this.setState({ randomNumber: this.generateRandomint(4, 7) })
+        }
+
+        // Random Quizes worden in een array gestoken
+        for (let i = 0; i < parseInt(this.state.randomNumber); i++) {
+            var randomPoints = randomLocation.randomCirclePoint(center, stral)
+            arr.push(randomPoints);
+        }
+        this.setState({ randomQuizes: arr })
+
+    }
+    getQuizpopup = async (lat, long) => {
+        distanceToQuiz = randomLocation.distance(MyLocation, { latitude: parseFloat(lat), longitude: parseFloat(long) })
+        console.log("Distance to this quiz is " + parseInt(distanceToQuiz) + " meters")
+        if (parseInt(distanceToQuiz) < 10) {
             console.log("Quiz unlocked")
-              this.setState({ quiz_visible: true });
-              this.refs.quizchild.setModalVisible(this.state.quiz_visible);
-    }  
-}
-//#endregion
-//#region  Monuments
+            this.setState({ quiz_visible: true });
+            this.refs.quizchild.setModalVisible(this.state.quiz_visible);
+        }
+    }
+    //#endregion
+    //#region  Monuments
     ShowMonument = () => {
         this.getVisitedMonuments();
         this.setState({ showMonument: true })
@@ -169,7 +169,7 @@ getQuizpopup = async (lat,long) => {
     }
 
     getMonument = async () => {
-        fetch(`http://192.168.178.20:3000/api/getNextLocation`, {
+        fetch(`http://${Config.MY_IP_ADRES}:3000/api/getNextLocation`, {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -196,7 +196,7 @@ getQuizpopup = async (lat,long) => {
                     isStartBttnVisible: true
                 })
                 this.getRandomQuizes();
-                this.refs.popupchild.setModalVisible(this.state.isStartPopupVisible,true);
+                this.refs.popupchild.setModalVisible(this.state.isStartPopupVisible, true);
             })
             .catch((error) => {
                 console.error(error);
@@ -223,29 +223,31 @@ getQuizpopup = async (lat,long) => {
         longitudeDelta: LONGITUDE_DELTA
     });
 
-    CreateSubSession(){
+    CreateSubSession() {
         // let userProfielData = this.props.navigation.getParam("userData");
         console.log(this.state.subSession)
         debugger
-         
+
 
         let startTime = new Date().valueOf()
-       // let userId = userProfielData.sub
+        // let userId = userProfielData.sub
 
-        let arr =[]
-        arr =this.state.subSession
+        let arr = []
+        arr = this.state.subSession
         debugger
 
         arr.push(
-           { startTime: startTime,
-            stopTime: 0,
-            isFound: true,
-            monument: this.state.allMonument}
-    )
+            {
+                startTime: startTime,
+                stopTime: 0,
+                isFound: true,
+                monument: this.state.allMonument
+            }
+        )
 
-        
 
-        fetch(`http://192.168.178.20:3000/api/v1/userSession/update/${this.state.sessionId}`, {
+
+        fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/update/${this.state.sessionId}`, {
             method: 'PUT',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -253,7 +255,7 @@ getQuizpopup = async (lat,long) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                
+
                 subSession: arr
             }),
         }).then((response) => response.json()).then((responseJson) => {
@@ -262,9 +264,9 @@ getQuizpopup = async (lat,long) => {
 
         }
         )
-        .catch((error) => {
-            console.error(error);
-        });
+            .catch((error) => {
+                console.error(error);
+            });
 
 
 
@@ -279,7 +281,7 @@ getQuizpopup = async (lat,long) => {
         let startTime = new Date().valueOf()
         let userId = userProfielData.sub
 
-        fetch(`http://192.168.178.20:3000/api/v1/userSession/create`, {
+        fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/create`, {
             method: 'POST',
             headers: {
                 authorization: 'Bearer ' + global.token,
@@ -298,12 +300,12 @@ getQuizpopup = async (lat,long) => {
             }),
         }).then((response) => response.json())
             .then((responseJson) => {
-                
+
                 console.log(responseJson._id)
                 this.setState({ sessionId: responseJson._id })
                 arr.push(responseJson.subSession[0])
                 debugger
-                this.setState({subSession :arr})
+                this.setState({ subSession: arr })
 
                 console.log(this.state.subSession)
 
@@ -317,41 +319,41 @@ getQuizpopup = async (lat,long) => {
 
 
     getVisitedMonuments() {
-       
+
         let userProfielData = this.props.navigation.getParam("userData");
         let arr = []
         let userId = userProfielData.sub
         console.log(userId);
         debugger
 
-        fetch(`http://192.168.178.20:3000/api/v1/userSession/find/${userId}`)
+        fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/find/${userId}`)
             .then((response) => response.json())
             .then((responseJson) => {
                 console.log(responseJson);
-debugger
+                debugger
                 for (let z of responseJson) {
 
-                    for(let k of z.subSession){
-                        if(z._id == this.state.sessionId){
-                            if(k.isFound == true){
-                        
-                    //console.log(z.subSession.monument.geometry)
+                    for (let k of z.subSession) {
+                        if (z._id == this.state.sessionId) {
+                            if (k.isFound == true) {
 
-                    arr.push(
+                                //console.log(z.subSession.monument.geometry)
 
-                        {
-                            coordinate: {
-                                latitude: k.monument.geometry.coordinates[0][0][1],
-                                longitude: k.monument.geometry.coordinates[0][0][0],
-                            },
-                            title: `${k.monument.properties.Naam}`,
-                            image: `${k.monument.properties.imageUrl}`,
+                                arr.push(
+
+                                    {
+                                        coordinate: {
+                                            latitude: k.monument.geometry.coordinates[0][0][1],
+                                            longitude: k.monument.geometry.coordinates[0][0][0],
+                                        },
+                                        title: `${k.monument.properties.Naam}`,
+                                        image: `${k.monument.properties.imageUrl}`,
+                                    }
+                                )
+                            }
                         }
-                    )
-                }
-                }
 
-                }
+                    }
 
 
                 }
@@ -365,7 +367,7 @@ debugger
             });
     }
     //#endregion
-//#region  Start button 
+    //#region  Start button 
     //shows the start popup
     showStartPopup() {
         this.getMonument()
@@ -376,8 +378,8 @@ debugger
             return (
                 <View style={styles.bottomStartView}>
                     <Button
-                        onPress={() =>{ this.showStartPopup(); this.setState({canShowCheckpointPhoto:true})}}
-                        
+                        onPress={() => { this.showStartPopup(); this.setState({ canShowCheckpointPhoto: true }) }}
+
                         buttonStyle={styles.buttonStyle}
                         title="Start"
                     />
@@ -386,18 +388,18 @@ debugger
         }
     }
     //#endregion
-//#region render
+    //#region render
 
     renderCheckPointPhoto() {
-        if(this.state.canShowCheckpointPhoto == true){
-            return(
-            <View style={styles.CheckpointView}>
-                <TouchableOpacity onPress={() => this.refs.popupchild.setModalVisible(true,false) }>
-                    <Image style={styles.CheckpointPic}
-                    blurRadius={this.state.blurpercentage}
-                        source={{ uri: this.state.data }} />
-                </TouchableOpacity>
-            </View>
+        if (this.state.canShowCheckpointPhoto == true) {
+            return (
+                <View style={styles.CheckpointView}>
+                    <TouchableOpacity onPress={() => this.refs.popupchild.setModalVisible(true, false)}>
+                        <Image style={styles.CheckpointPic}
+                            blurRadius={this.state.blurpercentage}
+                            source={{ uri: this.state.data }} />
+                    </TouchableOpacity>
+                </View>
 
             )
 
@@ -436,12 +438,12 @@ debugger
                 <View >
 
                     <Button
-                        onPress={()=> this.ShowMonument()}
+                        onPress={() => this.ShowMonument()}
                         buttonStyle={styles.buttonStyle}
                         title={"Show visited monuments"}
                     />
-                     <Button
-                        onPress={() => navigate('ListSubSessions', { sessionId: this.state.sessionId, UserId:this.props.navigation.getParam("userData") })}
+                    <Button
+                        onPress={() => navigate('ListSubSessions', { sessionId: this.state.sessionId, UserId: this.props.navigation.getParam("userData") })}
                         buttonStyle={styles.buttonStyle}
                         title={"Show SubSessions"}
                     />
@@ -449,15 +451,15 @@ debugger
 
                 {this.renderStartButton()}
                 {this.renderCheckPointPhoto()}
-                
 
-                
+
+
 
                 <ModalExample ref='popupchild'
                     imageUri={this.state.data}
-                    blur ={this.state.blurpercentage}
+                    blur={this.state.blurpercentage}
                     data={this.state.Name}
-                    
+
                     startGameSession={this.startGameSession.bind(this)}
                 />
                 <Quiz_popUp ref='quizchild'
@@ -468,7 +470,7 @@ debugger
             </View >
         );
 
-        
+
 
     }
     //#endregion
@@ -493,7 +495,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: '2%'
     },
-    CheckpointView:{
+    CheckpointView: {
         position: 'absolute',
         bottom: '2%',
         right: '2%'

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, ActivityIndicator, Image,FlatList } from "react-native";
 import { Button } from 'react-native-elements'
-
+import Config from '../config/config'
 
 class SubSessions extends Component {
 
@@ -24,7 +24,7 @@ class SubSessions extends Component {
         let userId = userProfielData.sub
         console.log(userId);
 
-        fetch(`http://192.168.178.20:3000/api/v1/userSession/find/${userId}`)
+        fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/find/${userId}`)
             .then((response) => response.json())
             .then((responseJson) => {
                 console.log(responseJson);
