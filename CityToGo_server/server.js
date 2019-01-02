@@ -21,7 +21,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.use(bodyparser.json({ limit: '10mb', extended: true }))
 app.use(bodyparser.urlencoded({ limit: '10mb', extended: true }))
 
-/*let response_handler = function (response) {
+let response_handler = function (response) {
     let body = '';
     response.on('data', function (d) {
         body += d
@@ -33,7 +33,7 @@ app.use(bodyparser.urlencoded({ limit: '10mb', extended: true }))
         console.log(shortest);
         converBingImageToBase64();
     });
-};*/
+};
 
 var test = "22";
 var port = process.env.PORT || 3000;
@@ -118,9 +118,9 @@ app.post('/api/getNextLocation', (requ, res) => {
 
     });
 
-    sqr.json(shortest);
+    //sqr.json(shortest);
 
-  /*  let term = `'${shortest.properties.Naam} ${shortest.properties.Straatnaam} ${shortest.properties.Straatnaam} ${shortest.properties.Huisnr} ${shortest.properties.District}'`;
+    let term = `'${shortest.properties.Naam} ${shortest.properties.Straatnaam} ${shortest.properties.Straatnaam} ${shortest.properties.Huisnr} ${shortest.properties.District}'`;
 
     let req = https.request(
         {
@@ -134,7 +134,7 @@ app.post('/api/getNextLocation', (requ, res) => {
         },
         response_handler);
 
-    req.end();*/
+    req.end();
 
 });
 
