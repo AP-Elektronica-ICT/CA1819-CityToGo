@@ -1,13 +1,17 @@
 import React, { Component } from "react";
-import { StyleSheet, DeviceEventEmitter, View,Button, TouchableHighlight,Text } from "react-native";
+import { StyleSheet, DeviceEventEmitter, View, Button, TouchableHighlight, Text, ActivityIndicator, } from "react-native";
 import MapView, { Polygon } from "react-native-maps";
 import { SensorManager } from 'NativeModules';
 import mapStyle from "../styles/jsons/mapstyle";
 import Mycard from "./Cardcomponent"
 
+import { getLocation } from "../redux/actions/currentLocationAction";
+import { connect } from "react-redux";
+
 class Maps extends Component {
 
     componentWillMount() {
+        this.props.getLocation()
 
         SensorManager.startOrientation(100);
         DeviceEventEmitter.addListener('Orientation', orientation => {
@@ -27,88 +31,98 @@ class Maps extends Component {
         }
     }
     //Trigger Camera
-    Camera = () => {    
-        console.log("Map afstand "+ this.props.triggerCamera)           
-     if(this.props.triggerCamera<15){
-        this.props.navigate('Camera', {
-            monumentProps: this.props.getMonumentProps,
-            
-        })
-    }
+    Camera = () => {
+        console.log("Map afstand " + this.props.triggerCamera)
+        if (this.props.triggerCamera < 15) {
+            this.props.navigate('Camera', {
+                monumentProps: this.props.getMonumentProps,
+
+            })
+        }
     }
 
     renderPolygon() {
         if (this.props.getPolygons.length > 0) {
             return (
                 <View>
-                  
+
                     <MapView.Marker
-                     coordinate={  { latitude: this.props.lat, longitude:this.props.long}}
-                     image={require('../assets/checkpoint.png')}
-                    onPress={this.Camera}>       
-                    </MapView.Marker> 
+                        coordinate={{ latitude: this.props.lat, longitude: this.props.long }}
+                        image={require('../assets/checkpoint.png')}
+                        onPress={this.Camera}>
+                    </MapView.Marker>
                 </View>
             )
         }
     }
 
+     getMapRegion = () => ({
+         latitude: this.props.state.currentLocation.coords.latitude,
+         longitude: this.props.state.currentLocation.coords.longitude,
+         latitudeDelta: 0.003,
+         longitudeDelta: 0.003
+     });
+
     render() {
-        return (
-           
-            <MapView
-                style={styles.map}
-                region={this.props.getMapRegion()}
-                showsUserLocation={true}
-                //followUserLocation
-                //loadingEnabled
-                //scrollEnabled={false}
-                //pitchEnabled={false}
-                //zoomEnabled={false}
-                //rotateEnabled={false}
-                //customMapStyle={mapStyle}
-                ref="map"
-            >
-                {this.renderPolygon()}
 
-                {this.props.getRandom.map(marker => (
-                    <MapView.Marker
-                        key={marker.latitude}
-                        coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-                        //title={"Quiz"}
-                        image={require('../assets/quiz.png')}
-                       // description={"description"}
-                        onPress={() => this.props.Quiz2(marker.latitude,marker.longitude)} >
-                       
-                        
+        if (this.props.state.currentLocation.fetched) {
+            console.log('from maps coors')
+            console.log(this.props.state.currentLocation.coords)
+        }
+        if (this.props.state.currentLocation.fetched) {
+
+            return (
+
+                <MapView
+                    style={styles.map}
+                    region={this.getMapRegion()}
+                    showsUserLocation={true}
+                    //followUserLocation={true}
+                    //loadingEnabled
+                    //scrollEnabled={false}
+                    //pitchEnabled={false}
+                    //zoomEnabled={false}
+                    //rotateEnabled={false}
+                    //customMapStyle={mapStyle}
+                    ref="map"
+                >
+                    {this.renderPolygon()}
+
+                    {this.props.getRandom.map(marker => (
+                        <MapView.Marker
+                            key={marker.latitude}
+                            coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
+                            //title={"Quiz"}
+                            image={require('../assets/quiz.png')}
+                            // description={"description"}
+                            onPress={() => this.props.Quiz2(marker.latitude, marker.longitude)} >
                         </MapView.Marker>
-                  
-                    
-                ))}
+                    ))}
+                    {this.props.getmarker.map(mark => (
+                        <Mycard
+                            key={mark.coordinate.latitude}
+                            latitude={mark.coordinate.latitude}
+                            longitude={mark.coordinate.longitude}
+                            Uri={mark.image}
+                            Name={mark.title}
+                            visibilty={this.props.monumentVisibility}
 
+                        />
 
-        
-                {this.props.getmarker.map(mark=>(
-                   
-                    <Mycard
-                    key={mark.coordinate.latitude}
-                    latitude= {mark.coordinate.latitude}
-                    longitude={mark.coordinate.longitude}
-                    Uri={mark.image}
-                    Name={mark.title}
-                    visibilty={this.props.monumentVisibility}
-                    
-                    />
-                
+                    ))}
 
-                ))}
-            
+                </MapView>
 
-            </MapView>
-    
-        );
+            );
+        } else
+            return (
+                <View >
+                    <ActivityIndicator size="small" />
+
+                </View>
+            )
     }
 }
-export default Maps;
 
 const styles = StyleSheet.create({
     map: {
@@ -134,3 +148,10 @@ const styles = StyleSheet.create({
         bottom: 20
     },
 });
+
+const mapStateToProps = state => {
+    return {
+        state: state
+    }
+}
+export default connect(mapStateToProps, { getLocation })(Maps);
