@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { RNCamera } from 'react-native-camera';
 import Config from '../config/config'
 
+import { fetchRecognitionImage } from "../redux/actions/imageRecognitionAction";
+import { connect } from "react-redux"
+
 import {
     StyleSheet,
     TouchableOpacity,
@@ -11,20 +14,15 @@ import {
 
 class Camera extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = { isLoading: false }
-      
-    }
-
     render() {
-        if (this.state.isLoading) {
+        if (this.props.state.imageRecognition.fetching) {
             return (
                 <View style={styles.horizontal}>
                     <ActivityIndicator size="large" color="#0000ff" />
                 </View>
             )
         }
+        
         return (
             <View style={styles.container}>
                 <RNCamera
@@ -52,36 +50,19 @@ class Camera extends Component {
         if (this.camera) {
             const options = { quality: 0.5, base64: true };
             const data = await this.camera.takePictureAsync(options)
- 
+
             this.getImageLabels(data.base64)
-            this.setState({ isLoading: true })
         }
     };
 
     getImageLabels = async (imageBase64) => {
         const { navigate } = this.props.navigation;
+        this.props.fetchRecognitionImage(imageBase64)
 
-        fetch(`http://${Config.MY_IP_ADRES}:3000/api/getImageLabels`, {
-            method: 'POST',
-            headers: {
-                authorization: 'Bearer ' + global.token,
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                image: imageBase64
-            }),
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                console.log(responseJson)
-                this.setState({ isLoading: false })
-                if (responseJson == "match")
-                    navigate('Home')
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        if (this.props.state.imageRecognition.data == "match")
+            navigate('Home')
+        else
+            console.log(this.props.state.imageRecognition.data)
     }
 }
 
@@ -115,4 +96,10 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Camera;
+const mapStateToProps = state => {
+    return {
+        state: state
+    }
+}
+
+export default connect(mapStateToProps, { fetchRecognitionImage })(Camera);

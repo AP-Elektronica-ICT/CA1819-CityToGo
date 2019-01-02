@@ -16,6 +16,6 @@ export function fetchMonument(latitude, longitude) {
                 'Content-Type': 'application/json',
             }
         })
-            .then(Response => Response.data)
+            .then(res => res.data)
     }
 }
