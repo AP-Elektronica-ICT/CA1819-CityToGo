@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, Button, ActivityIndicator } from "react-native";
+import { View, Text, ActivityIndicator,ImageBackground} from "react-native";
 import { NavigationActions, StackActions } from "react-navigation";
 import Auth0 from "react-native-auth0";
 //import Config from "react-native-config";
 //import DeviceInfo from "react-native-device-info";
 import SInfo from "react-native-sensitive-info";
 import RNRestart from "react-native-restart";
+import {Button,CardSection} from "./../common"
 
 import {
   headerColorStyle,
@@ -15,6 +16,7 @@ import {
 
 import styles from "../styles/Login";
 import Config from "../config/config"
+import { Button2 } from "../common/Button2";
 
 const auth0 = new Auth0({
   domain: Config.AUTH0_DOMAIN,
@@ -87,14 +89,25 @@ export default class uniLogin extends Component {
   render() {
     return (
       <View style={styles.container}>
+      <ImageBackground source={require('./../assets/background.jpg')} style={styles.container}>
         <ActivityIndicator
           size="large"
           color="#05a5d1"
           animating={!this.state.hasInitialized}
         />
+        <CardSection>
+          <Text style={styles.textStyle}>Welcome to CityToGO</Text>
+        </CardSection>
         {this.state.hasInitialized && (
-          <Button onPress={this.login} title="Login" color={buttonStyle} />
+          <CardSection>
+          <Button onPress={this.login}>CONTINUE</Button>
+          </CardSection>
+ 
         )}
+         <CardSection>
+             <Button2>LEARN MORE</Button2>
+             </CardSection>
+        </ImageBackground> 
       </View>
     );
   }
