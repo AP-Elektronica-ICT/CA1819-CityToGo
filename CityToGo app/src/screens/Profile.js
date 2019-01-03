@@ -5,6 +5,7 @@ import SInfo from "react-native-sensitive-info"
 import { Button } from 'react-native-elements'
 import Config from '../config/config'
 import { Button2 } from "../common/Button2";
+import { NavigationActions, StackActions } from "react-navigation";
 
 const auth0 = new Auth0({
   domain: "shakir01.eu.auth0.com",
@@ -23,9 +24,6 @@ class Profiel extends Component {
     super(props)
     this.state = { fetching: false };
   }
-test(){
-  console.log("it's working !")
-}
 
   async componentWillMount() {
 
@@ -51,6 +49,41 @@ test(){
     });
 
   }
+  logout = () => {
+    SInfo.deleteItem("accessToken", {});
+    SInfo.deleteItem("refreshToken", {});
+
+    auth0.webAuth
+      .clearSession()
+      .then(res => {
+        console.log("clear session ok");
+      })
+      .catch(err => {
+        console.log("error clearing session: ", err);
+      });
+
+    this.gotoLogin(); // go to login screen
+  };
+  gotoLogin = () => {
+    // const { navigate } = this.props.navigation;
+    //  navigate('Login');
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({
+          routeName: "Login",
+
+          params: {
+            userData: data
+          }
+        })
+      ]
+
+    });
+    this.props.navigation.dispatch(resetAction);
+  };
+     
+
 
   stopCurrentSession(sessionId) {
     fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/update/${sessionId}`, {
@@ -109,8 +142,8 @@ test(){
     return (
 
       <View style={styles.container}>
-        <View style={styles.header}>
-        <ImageBackground source={require('./../assets/background.jpg')} style={styles.header}>
+        <View >
+        <ImageBackground source={require('./../assets/background.jpg')} style={styles.header}  imageStyle={{ borderRadius: 12 }} >
           <View style={styles.headerContent}>
             <Image style={styles.avatar}
               source={{ uri: data.picture }} />
@@ -167,6 +200,8 @@ test(){
               <Text style={styles.text} onPress={() => navigate('LearnMore')}>Learn More</Text>
               <Text style={styles.text}>About us</Text>
               <Text style={styles.text}>Privacy policy</Text>
+              <Text style={styles.logout} onPress={this.logout}>Logout</Text>
+
             </View>
          
             
@@ -194,6 +229,12 @@ const styles = StyleSheet.create({
      fontSize: 18,
      marginTop: 10
    },
+   logout:{
+    marginTop: 30,
+    color: "#999999",
+     fontSize: 18
+   },
+
    extra: {
     flex: 1,
     alignItems: 'flex-start',
@@ -203,7 +244,8 @@ const styles = StyleSheet.create({
 
   },
   header: {
-    backgroundColor: "#DCDCDC",
+    backgroundColor: "#2A2E43",
+    padding:10,
   },
   headerContent: {
     padding: 30,
@@ -227,8 +269,6 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 20,
-    borderWidth: 3,
-    borderColor: "white",
     marginBottom: 10,
   },
   name: {
@@ -241,9 +281,13 @@ const styles = StyleSheet.create({
     color: "#778899",
     fontWeight: '600',
   },
+  container: {
+    backgroundColor: "#2A2E43",
+    flex:1
+ 
+  },
   body: {
     backgroundColor: "#2A2E43",
-    height: 500,
     alignItems: 'center',
   },
   item: {
