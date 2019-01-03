@@ -13,18 +13,17 @@ export const getLocationFailure = (error) => ({
 })
 
 export const getLocation = () => {
-    
+
 
     return async dispatch => {
         dispatch(getLocationRequest());
 
-        await navigator.geolocation.watchPosition(position => {
+        navigator.geolocation.watchPosition(position => {
             let coords = position.coords
             dispatch(getLocationSucces(coords))
-        }, (error) => dispatch(getLocationFailure(error)),
+        },
+            (error) => dispatch(getLocationFailure(error)),
             { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
         );
-
-
     }
 }

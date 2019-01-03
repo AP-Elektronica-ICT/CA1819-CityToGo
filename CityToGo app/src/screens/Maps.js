@@ -56,20 +56,16 @@ class Maps extends Component {
         }
     }
 
-     getMapRegion = () => ({
-         latitude: this.props.state.currentLocation.coords.latitude,
-         longitude: this.props.state.currentLocation.coords.longitude,
-         latitudeDelta: 0.003,
-         longitudeDelta: 0.003
-     });
+    getMapRegion = () => ({
+        latitude: this.props.currentLocation.coords.latitude,
+        longitude: this.props.currentLocation.coords.longitude,
+        latitudeDelta: 0.003,
+        longitudeDelta: 0.003
+    });
 
     render() {
 
-        if (this.props.state.currentLocation.fetched) {
-            console.log('from maps coors')
-            console.log(this.props.state.currentLocation.coords)
-        }
-        if (this.props.state.currentLocation.fetched) {
+        if (this.props.currentLocation.fetched) {
 
             return (
 
@@ -149,9 +145,9 @@ const styles = StyleSheet.create({
     },
 });
 
-const mapStateToProps = state => {
+function mapStateToProps(state) {
     return {
-        state: state
-    }
+        currentLocation: state.currentLocation
+    };
 }
 export default connect(mapStateToProps, { getLocation })(Maps);

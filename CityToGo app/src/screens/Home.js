@@ -17,7 +17,7 @@ import geolib from "geolib";
 import Config from '../config/config'
 
 import { fetchMonument } from '../redux/actions/monumentAction'
-//import { getLocation } from '../redux/actions/currentLocationAction'
+import { getLocation } from '../redux/actions/currentLocationAction'
 import { connect } from "react-redux";
 
 //#endregion
@@ -25,7 +25,7 @@ const LATITUDE = 0;
 const LONGITUDE = 0;
 const LATITUDE_DELTA = 0.003;
 const LONGITUDE_DELTA = 0.003;
-var MyLocation;
+var currentLocation;
 const R = 500;
 var center;
 var distanceToCheckpoint;
@@ -77,6 +77,8 @@ class Home extends Component {
     //#region Default methodes
     componentDidMount() {
 
+
+
         //current localisation 
         this.watchID = navigator.geolocation.watchPosition(
             position => {
@@ -105,16 +107,18 @@ class Home extends Component {
     }
 
     componentWillMount() {
-      
-
-         navigator.geolocation.getCurrentPosition(
-             error => alert(error.message),
-             {
-                 enableHighAccuracy: true,
-                 timeout: 20000,
-                 maximumAge: 1000
+        navigator.geolocation.getCurrentPosition(
+            error => alert(error.message),
+            {
+                enableHighAccuracy: true,
+                timeout: 20000,
+                maximumAge: 1000
             }
-            );
+        );
+
+        this.props.getLocation()
+
+
     }
 
     componentWillUnmount() {
@@ -131,18 +135,18 @@ class Home extends Component {
 
     getRandomQuizes() {
         //Current location
-        MyLocation = {
-            latitude: this.getMapRegion().latitude,
-            longitude: this.getMapRegion().longitude
+        currentLocation = {
+            latitude: this.props.currentCoords.latitude,
+            longitude: this.props.currentCoords.longitude
         }
 
         //middenpunt tussen bestemming en huidige locatie 
         center = geolib.getCenter([
-            { latitude: MyLocation.latitude, longitude: MyLocation.longitude },
+            { latitude: currentLocation.latitude, longitude: currentLocation.longitude },
             { latitude: parseFloat(this.state.polygons[1][1]), longitude: parseFloat(this.state.polygons[1][0]) }]);
 
         //Afstand tussen bestemming en huidgie locatie 
-        distanceToCheckpoint = randomLocation.distance(MyLocation, { latitude: parseFloat(this.state.polygons[1][1]), longitude: parseFloat(this.state.polygons[1][0]) })
+        distanceToCheckpoint = randomLocation.distance(currentLocation, { latitude: parseFloat(this.state.polygons[1][1]), longitude: parseFloat(this.state.polygons[1][0]) })
         //Deze props worden gebruikt om Checkpoint op bepaalde afstand van gebruiker klikbaar te maken.
         this.setState({ checkLat: this.state.polygons[1][1], checkLong: this.state.polygons[1][0], cameraTrigger: parseInt(distanceToCheckpoint) })
         //Grootte van de circle waar Quizes gegenereerd worden
@@ -166,7 +170,7 @@ class Home extends Component {
 
     }
     getQuizpopup = async (lat, long) => {
-        distanceToQuiz = randomLocation.distance(MyLocation, { latitude: parseFloat(lat), longitude: parseFloat(long) })
+        distanceToQuiz = randomLocation.distance(currentLocation, { latitude: parseFloat(lat), longitude: parseFloat(long) })
         console.log("Distance to this quiz is " + parseInt(distanceToQuiz) + " meters")
         if (parseInt(distanceToQuiz) < 10) {
             console.log("Quiz unlocked")
@@ -182,6 +186,7 @@ class Home extends Component {
 
     }
     getMonument = async () => {
+        
         fetch(`http://${Config.MY_IP_ADRES}:3000/api/getNextLocation`, {
             method: 'POST',
             headers: {
@@ -190,8 +195,8 @@ class Home extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                latitude: String(this.state.latitude),
-                longitude: String(this.state.longitude)
+                latitude: String(this.props.currentCoords.latitude),
+                longitude: String(this.props.currentCoords.longitude)
             }),
         }).then((response) => response.json())
             .then((responseJson) => {
@@ -423,6 +428,10 @@ class Home extends Component {
 
     render() {
 
+
+
+
+
         const userProfielData = this.props.navigation.getParam("userData");
         const { navigate } = this.props.navigation;
 
@@ -540,10 +549,12 @@ const styles = StyleSheet.create({
 });
 //#endregion
 
-const mapStateToProps = state => {
+function mapStateToProps(state) {
     return {
-        state: state
+        state: state,
+        currentLocationState: state.currentLocation,
+        currentCoords: state.currentLocation.coords
     }
 }
 
-export default connect(mapStateToProps, { fetchMonument })(Home);
+export default connect(mapStateToProps, { fetchMonument, getLocation })(Home)
