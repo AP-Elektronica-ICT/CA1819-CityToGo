@@ -87,6 +87,7 @@ export default class uniLogin extends Component {
   }
 
   render() {
+    const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
       <ImageBackground source={require('./../assets/background.jpg')} style={styles.container}>
@@ -105,7 +106,7 @@ export default class uniLogin extends Component {
  
         )}
          <CardSection>
-             <Button2>LEARN MORE</Button2>
+             <Button2 onPress={() => navigate('LearnMore')}>LEARN MORE</Button2>
              </CardSection>
         </ImageBackground> 
       </View>
