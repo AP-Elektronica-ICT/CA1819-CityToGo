@@ -244,7 +244,6 @@ class Home extends Component {
     CreateSubSession() {
         // let userProfielData = this.props.navigation.getParam("userData");
         console.log(this.state.subSession)
-        debugger
 
 
         let startTime = new Date().valueOf()
@@ -252,7 +251,6 @@ class Home extends Component {
 
         let arr = []
         arr = this.state.subSession
-        debugger
 
         arr.push(
             {
@@ -278,8 +276,6 @@ class Home extends Component {
             }),
         }).then((response) => response.json()).then((responseJson) => {
             console.log(responseJson);
-            debugger
-
         }
         )
             .catch((error) => {
@@ -322,7 +318,6 @@ class Home extends Component {
                 console.log(responseJson._id)
                 this.setState({ sessionId: responseJson._id })
                 arr.push(responseJson.subSession[0])
-                debugger
                 this.setState({ subSession: arr })
 
                 console.log(this.state.subSession)
@@ -342,13 +337,11 @@ class Home extends Component {
         let arr = []
         let userId = userProfielData.sub
         console.log(userId);
-        debugger
 
         fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/find/${userId}`)
             .then((response) => response.json())
             .then((responseJson) => {
                 console.log(responseJson);
-                debugger
                 for (let z of responseJson) {
 
                     for (let k of z.subSession) {
@@ -375,10 +368,10 @@ class Home extends Component {
 
 
                 }
-                debugger
+     
                 this.setState({ markers: arr });
                 console.log(this.state.markers)
-                debugger
+
             }
             ).catch((error) => {
                 console.error(error);
