@@ -143,7 +143,7 @@ class Profiel extends Component {
 
       <View style={styles.container}>
         <View >
-        <ImageBackground source={require('./../assets/background.jpg')} style={styles.header}  imageStyle={{ borderRadius: 12 }} >
+        <ImageBackground source={require('./../assets/background.jpg')} style={styles.header}  imageStyle={{ borderBottomLeftRadius: 12, borderBottomRightRadius:12 }} >
           <View style={styles.headerContent}>
             <Image style={styles.avatar}
               source={{ uri: data.picture }} />
