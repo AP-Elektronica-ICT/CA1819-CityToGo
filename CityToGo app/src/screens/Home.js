@@ -172,7 +172,7 @@ class Home extends Component {
     getQuizpopup = async (lat, long) => {
         distanceToQuiz = randomLocation.distance(currentLocation, { latitude: parseFloat(lat), longitude: parseFloat(long) })
         console.log("Distance to this quiz is " + parseInt(distanceToQuiz) + " meters")
-        if (parseInt(distanceToQuiz) < 10) {
+        if (parseInt(distanceToQuiz) < 100) {
             console.log("Quiz unlocked")
             this.setState({ quiz_visible: true });
             this.refs.quizchild.setModalVisible(this.state.quiz_visible);

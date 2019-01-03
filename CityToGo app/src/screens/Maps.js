@@ -33,7 +33,7 @@ class Maps extends Component {
     //Trigger Camera
     Camera = () => {
         console.log("Map afstand " + this.props.triggerCamera)
-        if (this.props.triggerCamera < 15) {
+        if (this.props.triggerCamera < 100) {
             this.props.navigate('Camera', {
                 monumentProps: this.props.getMonumentProps,
 
