@@ -181,7 +181,6 @@ class Home extends Component {
         this.setState({ showMonument: true })
 
     }
-x
     getMonument = async () => {
         fetch(`http://${Config.MY_IP_ADRES}:3000/api/getNextLocation`, {
             method: 'POST',
