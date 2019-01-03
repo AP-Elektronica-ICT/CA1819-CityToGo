@@ -1,3 +1,5 @@
+import { FETCHING_IMAGE_RECOGNITION, _FULFILLED, _REJECTED, _PENDING } from "../actions/types";
+
 const initialState = {
     fetching: false,
     fetched: false,
@@ -7,14 +9,14 @@ const initialState = {
 
 const getImageRecognition = (state = initialState, action) => {
     switch (action.type) {
-        case 'FETCHING_IMAGE_RECOGNITION_PENDING': {
+        case FETCHING_IMAGE_RECOGNITION + _PENDING: {
             state = {
                 ...state,
                 fetching: true
             }
             break;
         }
-        case 'FETCHING_IMAGE_RECOGNITION_FULFILLED': {
+        case FETCHING_IMAGE_RECOGNITION + _FULFILLED: {
             state = {
                 ...state,
                 fetching: false,
@@ -23,7 +25,7 @@ const getImageRecognition = (state = initialState, action) => {
             }
             break;
         }
-        case 'FETCHING_IMAGE_RECOGNITIONFETCHING_IMAGE_RECOGNITIONFETCHING_IMAGE_RECOGNITION_REJECTED': {
+        case FETCHING_IMAGE_RECOGNITION + _REJECTED: {
             state = {
                 ...state,
                 fetching: false,

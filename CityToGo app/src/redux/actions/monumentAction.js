@@ -1,5 +1,6 @@
 import Config from '../../config/config'
 import axios from "axios";
+import { FETCHING_MONUMENTS } from "./types";
 
 export function fetchMonument(latitude, longitude) {
     let body = JSON.stringify({
@@ -8,7 +9,7 @@ export function fetchMonument(latitude, longitude) {
     })
 
     return {
-        type: "FETCHING_MONUMENTS",
+        type: FETCHING_MONUMENTS,
         payload: axios.post(`http://${Config.MY_IP_ADRES}:3000/api/getNextLocation`, body, {
             headers: {
                 // authorization: 'Bearer ' + global.token,

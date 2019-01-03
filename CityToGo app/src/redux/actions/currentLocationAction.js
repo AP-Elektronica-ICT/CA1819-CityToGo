@@ -1,14 +1,17 @@
+import { GET_CURRENT_LOCATION_PENDING, GET_CURRENT_LOCATION_FULFILLED, GET_CURRENT_LOCATION_REJECTED } from "./types";
+
+
 export const getLocationRequest = () => ({
-    type: 'GET_CURRENT_LOCATION_PENDING'
+    type: GET_CURRENT_LOCATION_PENDING
 })
 
 export const getLocationSucces = (coords) => ({
-    type: 'GET_CURRENT_LOCATION_FULFILLED',
+    type: GET_CURRENT_LOCATION_FULFILLED,
     payload: coords
 })
 
 export const getLocationFailure = (error) => ({
-    type: 'GET_CURRENT_LOCATION_REJECTED',
+    type: GET_CURRENT_LOCATION_REJECTED,
     payload: error
 })
 
