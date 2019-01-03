@@ -4,7 +4,7 @@ import {
     View,
     StyleSheet,
     Image,
-    TouchableOpacity,
+    TouchableOpacity
 
 } from "react-native";
 import { Button } from 'react-native-elements'
@@ -17,6 +17,7 @@ import geolib from "geolib";
 import Config from '../config/config'
 
 import { fetchMonument } from '../redux/actions/monumentAction'
+//import { getLocation } from '../redux/actions/currentLocationAction'
 import { connect } from "react-redux";
 
 //#endregion
@@ -100,20 +101,20 @@ class Home extends Component {
             4.4056
         );
 
-        
+
     }
 
     componentWillMount() {
+      
 
-
-        navigator.geolocation.getCurrentPosition(
-            error => alert(error.message),
-            {
-                enableHighAccuracy: true,
-                timeout: 20000,
-                maximumAge: 1000
+         navigator.geolocation.getCurrentPosition(
+             error => alert(error.message),
+             {
+                 enableHighAccuracy: true,
+                 timeout: 20000,
+                 maximumAge: 1000
             }
-        );
+            );
     }
 
     componentWillUnmount() {
@@ -180,7 +181,7 @@ class Home extends Component {
         this.setState({ showMonument: true })
 
     }
-
+x
     getMonument = async () => {
         fetch(`http://${Config.MY_IP_ADRES}:3000/api/getNextLocation`, {
             method: 'POST',
