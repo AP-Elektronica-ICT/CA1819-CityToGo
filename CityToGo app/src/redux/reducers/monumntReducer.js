@@ -33,7 +33,7 @@ const monument = (state = initialState, action) => {
             }
             break;
 
-
+            
     }
     return state;
 }

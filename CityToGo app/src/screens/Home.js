@@ -16,8 +16,10 @@ import randomLocation from 'random-location';
 import geolib from "geolib";
 import Config from '../config/config'
 
+//Redux
 import { fetchMonument } from '../redux/actions/monumentAction'
 import { getLocation } from '../redux/actions/currentLocationAction'
+import { getfetchUserSession } from "../redux/actions/getUserSessionAction";
 import { connect } from "react-redux";
 
 //#endregion
@@ -136,8 +138,8 @@ class Home extends Component {
     getRandomQuizes() {
         //Current location
         currentLocation = {
-            latitude: this.props.currentCoords.latitude,
-            longitude: this.props.currentCoords.longitude
+            latitude: this.props.currentLocationCoords.latitude,
+            longitude: this.props.currentLocationCoords.longitude
         }
 
         //middenpunt tussen bestemming en huidige locatie 
@@ -186,7 +188,7 @@ class Home extends Component {
 
     }
     getMonument = async () => {
-        
+
         fetch(`http://${Config.MY_IP_ADRES}:3000/api/getNextLocation`, {
             method: 'POST',
             headers: {
@@ -195,8 +197,8 @@ class Home extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                latitude: String(this.props.currentCoords.latitude),
-                longitude: String(this.props.currentCoords.longitude)
+                latitude: String(this.props.currentLocationCoords.latitude),
+                longitude: String(this.props.currentLocationCoords.longitude)
             }),
         }).then((response) => response.json())
             .then((responseJson) => {
@@ -335,10 +337,14 @@ class Home extends Component {
 
         let userProfielData = this.props.navigation.getParam("userData");
         let arr = []
-        let userId = userProfielData.sub
-        console.log(userId);
+        let userID = userProfielData.sub
+        console.log(userID);
 
-        fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/find/${userId}`)
+        // this.props.getfetchUserSession(userID)
+        // console.log('from home print user session')
+        // console.log(this.state.getUserSession.data[0])
+
+        fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/find/${userID}`)
             .then((response) => response.json())
             .then((responseJson) => {
                 console.log(responseJson);
@@ -368,7 +374,7 @@ class Home extends Component {
 
 
                 }
-     
+
                 this.setState({ markers: arr });
                 console.log(this.state.markers)
 
@@ -546,8 +552,14 @@ function mapStateToProps(state) {
     return {
         state: state,
         currentLocationState: state.currentLocation,
-        currentCoords: state.currentLocation.coords
+        currentLocationCoords: state.currentLocation.coords,
+        monument: state.monument,
+        getUserSession: state.getUserSession
     }
 }
 
-export default connect(mapStateToProps, { fetchMonument, getLocation })(Home)
+export default connect(mapStateToProps, {
+    fetchMonument,
+    getLocation,
+    getfetchUserSession
+})(Home)
