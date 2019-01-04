@@ -19,7 +19,7 @@ import Config from '../config/config'
 //Redux
 import { monument } from '../redux/actions/monumentAction'
 import { location } from '../redux/actions/currentLocationAction'
-import { userSession } from "../redux/actions/userSessionAction";
+import { getUserSession, postUserSession } from "../redux/actions/userSessionAction";
 import { connect } from "react-redux";
 
 //#endregion
@@ -136,8 +136,8 @@ class Home extends Component {
     getRandomQuizes() {
         //Current location
         currentLocation = {
-            latitude: this.props.currentLocation.coords.latitude,
-            longitude: this.props.currentLocation.coords.longitude
+            latitude: this.props.currentLocationState.coords.latitude,
+            longitude: this.props.currentLocationState.coords.longitude
         }
 
         //middenpunt tussen bestemming en huidige locatie 
@@ -195,8 +195,8 @@ class Home extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                latitude: String(this.props.currentLocation.coords.latitude),
-                longitude: String(this.props.currentLocation.coords.longitude)
+                latitude: String(this.props.currentLocationState.coords.latitude),
+                longitude: String(this.props.currentLocationState.coords.longitude)
             }),
         }).then((response) => response.json())
             .then((responseJson) => {
@@ -289,6 +289,8 @@ class Home extends Component {
         let startTime = new Date().valueOf()
         let userId = userProfielData.sub
 
+       // this.props.postUserSession(userId, true, startTime, 0, false, this.state.allMonument)
+
         fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/create`, {
             method: 'POST',
             headers: {
@@ -309,12 +311,12 @@ class Home extends Component {
         }).then((response) => response.json())
             .then((responseJson) => {
 
-                console.log(responseJson._id)
+            //    console.log(responseJson._id)
                 this.setState({ sessionId: responseJson._id })
                 arr.push(responseJson.subSession[0])
                 this.setState({ subSession: arr })
 
-                console.log(this.state.subSession)
+            //    console.log(this.state.subSession)
 
             }
             ).catch((error) => {
@@ -332,14 +334,16 @@ class Home extends Component {
         let userID = userProfielData.sub
         console.log(userID);
 
-        // this.props.getfetchUserSession(userID)
+        // this.props.getUserSession(userID)
+
         // console.log('from home print user session')
-        // console.log(this.state.getUserSession.data[0])
+        // if (this.props.getUserSession.fetched)
+        //     console.log(this.props.getUserSession.data[0].isRunning)
 
         fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/find/${userID}`)
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log(responseJson);
+                // console.log(responseJson);
                 for (let z of responseJson) {
 
                     for (let k of z.subSession) {
@@ -426,7 +430,7 @@ class Home extends Component {
             <View style={styles.container}>
                 <Maps
                     navigate={navigate}
-                    currentLocation={this.props.currentLocation}
+                    currentLocation={this.props.currentLocationState}
                     getRandom={this.state.randomQuizes}
                     getPolygons={this.state.polygonMonument}
                     triggerCamera={this.state.cameraTrigger}
@@ -535,14 +539,16 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
     return {
-        currentLocation: state.currentLocation,
-        monument: state.monument,
-        userSession: state.userSession
+        currentLocationState: state.currentLocation,
+        monumentState: state.monument,
+        getUserSessionState: state.getUserSession,
+        postUserSessionState: state.postUserSession
     }
 }
 
 export default connect(mapStateToProps, {
     monument,
     location,
-    userSession
+    getUserSession,
+    postUserSession
 })(Home)
