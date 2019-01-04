@@ -45,12 +45,7 @@ class Maps extends Component {
             })
         }
     }
-    componentWillUpdate() {
-        if (this.props.currentLocation.fetched) {
-            this.map.animateToBearing(this.state.orientationAzimuth, 1000);
-            console.log(this.state.orientationAzimuth)
-        }
-    }
+
 
     renderPolygon() {
         if (this.props.getPolygons.length > 0) {
