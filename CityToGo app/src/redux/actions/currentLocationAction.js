@@ -15,7 +15,7 @@ export const getLocationFailure = (error) => ({
     payload: error
 })
 
-export const getLocation = () => {
+export const location = () => {
 
 
     return async dispatch => {

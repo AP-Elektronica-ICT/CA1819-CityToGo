@@ -2,7 +2,7 @@ import Config from '../../config/config'
 import axios from "axios";
 import { FETCHING_MONUMENTS } from "./types";
 
-export function fetchMonument(latitude, longitude) {
+export function monument(latitude, longitude) {
     let body = JSON.stringify({
         latitude: String(latitude),
         longitude: String(longitude)
