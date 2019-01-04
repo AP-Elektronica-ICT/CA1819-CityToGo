@@ -5,24 +5,29 @@ import { SensorManager } from 'NativeModules';
 import mapStyle from "../styles/jsons/mapstyle";
 import Mycard from "./Cardcomponent"
 
-import { getLocation } from "../redux/actions/currentLocationAction";
-import { connect } from "react-redux";
+// import { orientation } from "../redux/actions/orientationAction";
+// import { connect } from "react-redux";
+
+const LATITUDE_DELTA = 0.003;
+const LONGITUDE_DELTA = 0.003;
+
 
 class Maps extends Component {
 
     componentWillMount() {
-        this.props.getLocation()
 
-        SensorManager.startOrientation(100);
-        DeviceEventEmitter.addListener('Orientation', orientation => {
-            //this.refs.map.animateToBearing(Math.round(orientation.azimuth), 200);
-        });
-        SensorManager.stopAccelerometer();
+        // SensorManager.startOrientation(100);
+        // DeviceEventEmitter.addListener('Orientation', orientation => {
+        //     if (this.props.currentLocation.fetched) {
+        //        // this.map.animateToBearing(Math.round(orientation.azimuth), 100); 
+        //     }
+        // });
+        // SensorManager.stopAccelerometer();
+
     }
 
     componentWillUnmount() {
-        //DeviceEventEmitter.listeners('Orientation').remove()
-        console.log(this.props.children)
+        // DeviceEventEmitter.listeners('Orientation').remove();
     }
 
     renderQuizes() {
@@ -38,6 +43,12 @@ class Maps extends Component {
                 monumentProps: this.props.getMonumentProps,
 
             })
+        }
+    }
+    componentWillUpdate() {
+        if (this.props.currentLocation.fetched) {
+            this.map.animateToBearing(this.state.orientationAzimuth, 1000);
+            console.log(this.state.orientationAzimuth)
         }
     }
 
@@ -59,13 +70,14 @@ class Maps extends Component {
     getMapRegion = () => ({
         latitude: this.props.currentLocation.coords.latitude,
         longitude: this.props.currentLocation.coords.longitude,
-        latitudeDelta: 0.003,
-        longitudeDelta: 0.003
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA
     });
 
     render() {
 
         if (this.props.currentLocation.fetched) {
+
 
             return (
 
@@ -80,7 +92,9 @@ class Maps extends Component {
                     //zoomEnabled={false}
                     //rotateEnabled={false}
                     //customMapStyle={mapStyle}
-                    ref="map"
+                    // ref="map"
+                    ref={ref => { this.map = ref; }}
+                //onLayout={() => }
                 >
                     {this.renderPolygon()}
 
@@ -145,9 +159,10 @@ const styles = StyleSheet.create({
     },
 });
 
-function mapStateToProps(state) {
-    return {
-        currentLocation: state.currentLocation
-    };
-}
-export default connect(mapStateToProps, { getLocation })(Maps);
+// function mapStateToProps(state) {
+//     return {
+//         orientation: state.orientation
+//     };
+// }
+//export default connect(mapStateToProps, { orientation })(Maps);
+export default Maps;

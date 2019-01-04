@@ -17,16 +17,14 @@ import geolib from "geolib";
 import Config from '../config/config'
 
 //Redux
-import { fetchMonument } from '../redux/actions/monumentAction'
-import { getLocation } from '../redux/actions/currentLocationAction'
-import { getfetchUserSession } from "../redux/actions/getUserSessionAction";
+import { monument } from '../redux/actions/monumentAction'
+import { location } from '../redux/actions/currentLocationAction'
+import { userSession } from "../redux/actions/userSessionAction";
 import { connect } from "react-redux";
 
 //#endregion
 const LATITUDE = 0;
 const LONGITUDE = 0;
-const LATITUDE_DELTA = 0.003;
-const LONGITUDE_DELTA = 0.003;
 var currentLocation;
 const R = 500;
 var center;
@@ -100,7 +98,7 @@ class Home extends Component {
             console.log(global.token)
         })
 
-        this.props.fetchMonument(
+        this.props.monument(
             51.2165,
             4.4056
         );
@@ -118,7 +116,7 @@ class Home extends Component {
             }
         );
 
-        this.props.getLocation()
+        this.props.location()
 
 
     }
@@ -138,8 +136,8 @@ class Home extends Component {
     getRandomQuizes() {
         //Current location
         currentLocation = {
-            latitude: this.props.currentLocationCoords.latitude,
-            longitude: this.props.currentLocationCoords.longitude
+            latitude: this.props.currentLocation.coords.latitude,
+            longitude: this.props.currentLocation.coords.longitude
         }
 
         //middenpunt tussen bestemming en huidige locatie 
@@ -197,8 +195,8 @@ class Home extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                latitude: String(this.props.currentLocationCoords.latitude),
-                longitude: String(this.props.currentLocationCoords.longitude)
+                latitude: String(this.props.currentLocation.coords.latitude),
+                longitude: String(this.props.currentLocation.coords.longitude)
             }),
         }).then((response) => response.json())
             .then((responseJson) => {
@@ -236,12 +234,6 @@ class Home extends Component {
         this.setState({ polygonMonument: polygon })
     }
 
-    getMapRegion = () => ({
-        latitude: this.state.latitude,
-        longitude: this.state.longitude,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA
-    });
 
     CreateSubSession() {
         // let userProfielData = this.props.navigation.getParam("userData");
@@ -427,26 +419,19 @@ class Home extends Component {
 
     render() {
 
-
-
-
-
         const userProfielData = this.props.navigation.getParam("userData");
         const { navigate } = this.props.navigation;
-
-        if (this.props.state.monument.fetched)
-            console.log(this.props.state.monument.data)
 
         return (
             <View style={styles.container}>
                 <Maps
                     navigate={navigate}
+                    currentLocation={this.props.currentLocation}
                     getRandom={this.state.randomQuizes}
                     getPolygons={this.state.polygonMonument}
                     triggerCamera={this.state.cameraTrigger}
                     lat={this.state.checkLat}
                     long={this.state.checkLong}
-                    getMapRegion={this.getMapRegion.bind(this)}
                     getMonumentProps={this.state.monumentsProps}
                     Quiz2={this.Quiz}
                     getmarker={this.state.markers}
@@ -550,16 +535,14 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
     return {
-        state: state,
-        currentLocationState: state.currentLocation,
-        currentLocationCoords: state.currentLocation.coords,
+        currentLocation: state.currentLocation,
         monument: state.monument,
-        getUserSession: state.getUserSession
+        userSession: state.userSession
     }
 }
 
 export default connect(mapStateToProps, {
-    fetchMonument,
-    getLocation,
-    getfetchUserSession
+    monument,
+    location,
+    userSession
 })(Home)
