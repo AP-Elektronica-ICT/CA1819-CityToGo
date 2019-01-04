@@ -16,7 +16,6 @@ export function monument(latitude, longitude) {
                 // Accept: 'application/json',
                 'Content-Type': 'application/json',
             }
-        })
-            .then(res => res.data)
+        }).then(res => res.data)
     }
 }
