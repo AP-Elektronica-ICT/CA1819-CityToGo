@@ -15,6 +15,10 @@ import Quiz_popUp from "./Quiz_popup";
 import randomLocation from 'random-location';
 import geolib from "geolib";
 import Config from '../config/config'
+import { CardSection } from "./../common"
+import { Button_White } from "./../common/Button_White"
+import { Button_Start } from "./../common/Button_Start"
+
 //#endregion
 const LATITUDE = 0;
 const LONGITUDE = 0;
@@ -376,13 +380,19 @@ class Home extends Component {
     renderStartButton() {
         if (this.state.isStartBttnVisible !== true) {
             return (
-                <View style={styles.bottomStartView}>
-                    <Button
+                <View >
+                    {/* <Button
                         onPress={() => { this.showStartPopup(); this.setState({ canShowCheckpointPhoto: true }) }}
 
                         buttonStyle={styles.buttonStyle}
                         title="Start"
-                    />
+                    /> */}
+
+                    <Button_Start buttonStyle={styles} children={require('./../assets/Play.png')} onPress={() => { this.showStartPopup(); this.setState({ canShowCheckpointPhoto: true }) }}></Button_Start>
+
+
+
+
                 </View>
             )
         }
@@ -393,12 +403,14 @@ class Home extends Component {
     renderCheckPointPhoto() {
         if (this.state.canShowCheckpointPhoto == true) {
             return (
-                <View style={styles.CheckpointView}>
-                    <TouchableOpacity onPress={() => this.refs.popupchild.setModalVisible(true, false)}>
+                <View >
+                    {/* <TouchableOpacity onPress={() => this.refs.popupchild.setModalVisible(true, false)}>
                         <Image style={styles.CheckpointPic}
                             blurRadius={this.state.blurpercentage}
                             source={{ uri: this.state.data }} />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
+
+                    <Button_White children={require('./../assets/Museum.png')} onPress={() => this.refs.popupchild.setModalVisible(true, false)}></Button_White>
                 </View>
 
             )
@@ -429,13 +441,8 @@ class Home extends Component {
                     monumentVisibility={this.state.showMonument}
                 />
 
-                <View style={styles.profielView}>
-                    <TouchableOpacity onPress={() => navigate('Profile', { sessionId: this.state.sessionId })}>
-                        <Image style={styles.avatar}
-                            source={{ uri: userProfielData.picture }} />
-                    </TouchableOpacity>
-                </View>
-                <View >
+
+                {/* <View >
 
                     <Button
                         onPress={() => this.ShowMonument()}
@@ -447,10 +454,8 @@ class Home extends Component {
                         buttonStyle={styles.buttonStyle}
                         title={"Show SubSessions"}
                     />
-                </View>
+                </View> */}
 
-                {this.renderStartButton()}
-                {this.renderCheckPointPhoto()}
 
 
 
@@ -466,6 +471,20 @@ class Home extends Component {
                     imageUri={this.state.data}
                     data={this.state.Name}
                 />
+                <View style={styles.buttonsContainer}>
+
+                    <View style={styles.buttonsGroup1}>
+                        {this.renderCheckPointPhoto()}
+                        {this.renderStartButton()}
+                    </View>
+
+                    <View style={styles.buttonsGroup2}>
+                        <Button_White children={require('./../assets/Person.png')} onPress={() => navigate('Profile', { sessionId: this.state.sessionId })}></Button_White>
+                        <Button_White children={require('./../assets/loc.png')} ></Button_White>
+                    </View>
+
+
+                </View>
 
             </View >
         );
@@ -479,9 +498,27 @@ export default Home;
 //#region  Styles
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        alignItems: 'stretch',
-        alignItems: 'center'
+         flex: 1,
+
+        alignItems: 'flex-end',
+        alignItems: 'stretch'
+    },
+    buttonsContainer: {
+        display:'flex',
+        flexDirection: 'row',
+        justifyContent: "space-between",
+        alignItems: 'flex-end'
+    },
+    buttonsGroup1: {
+        flexDirection: 'column',
+        marginLeft: 10,
+        marginBottom:10,
+  
+    },
+    buttonsGroup2: {
+        flexDirection: 'column',
+        marginBottom:10,
+        marginRight:10
     },
     buttonStyle: {
         backgroundColor: "rgba(51,204,0,1)",
@@ -491,22 +528,7 @@ const styles = StyleSheet.create({
         borderWidth: 0,
         borderRadius: 5
     },
-    bottomStartView: {
-        position: 'absolute',
-        bottom: '2%'
-    },
-    CheckpointView: {
-        position: 'absolute',
-        bottom: '2%',
-        right: '2%'
 
-    },
-    profielView: {
-        position: 'absolute',
-        top: '1%',
-        right: '2%',
-        alignSelf: 'flex-end'
-    },
     avatar: {
         width: 55,
         height: 55,
