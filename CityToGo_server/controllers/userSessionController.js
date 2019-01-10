@@ -37,8 +37,8 @@ exports.session_getAll = function (req, res) {
         });
 
         return res.status(200).json(userSessionMap)
-        
-    }).catch(err => next(err))
+
+    }).catch(err =>console.log(err))
 }
 
 exports.session_find = function (req, res) {
@@ -47,7 +47,7 @@ exports.session_find = function (req, res) {
         if (!doc) return res.status(404).end()
         return res.status(200).json(doc)
     })
-        .catch(err => next(err))
+        .catch(err => console.log(err))
 }
 
 exports.session_update = function (req, res) {
@@ -58,6 +58,6 @@ exports.session_update = function (req, res) {
             if (!doc) return res.status(404).end()
             return res.status(200).json(doc)
         })
-        .catch(err => next(err))
+        .catch(err => console.log(err))
 
 }
