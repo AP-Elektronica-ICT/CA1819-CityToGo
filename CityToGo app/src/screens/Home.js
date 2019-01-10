@@ -19,7 +19,8 @@ import Config from '../config/config'
 //Redux
 import { monument } from '../redux/actions/monumentAction'
 import { location } from '../redux/actions/currentLocationAction'
-import { getUserSession, postUserSession } from "../redux/actions/userSessionAction";
+import { getUserSession, postUserSession, createUserSubsession } from "../redux/actions/userSessionAction";
+
 import { connect } from "react-redux";
 
 //#endregion
@@ -90,21 +91,22 @@ class Home extends Component {
     }
 
     getRandomQuizes() {
-        //Current location
-        currentLocation = {
-            latitude: this.props.currentLocationState.coords.latitude,
-            longitude: this.props.currentLocationState.coords.longitude
-        }
+        const { fetched, monument } = this.props.monumentState;
+        const { latitude, longitude } = this.props.currentLocationState.coords;
+
+        const polygons = monument.geometry.coordinates[0];
+
+        currentLocation = { latitude: latitude, longitude: longitude }
 
         //middenpunt tussen bestemming en huidige locatie 
         center = geolib.getCenter([
             { latitude: currentLocation.latitude, longitude: currentLocation.longitude },
-            { latitude: parseFloat(this.state.polygons[1][1]), longitude: parseFloat(this.state.polygons[1][0]) }]);
+            { latitude: parseFloat(polygons[1][1]), longitude: parseFloat(polygons[1][0]) }]);
 
         //Afstand tussen bestemming en huidgie locatie 
-        distanceToCheckpoint = randomLocation.distance(currentLocation, { latitude: parseFloat(this.state.polygons[1][1]), longitude: parseFloat(this.state.polygons[1][0]) })
+        distanceToCheckpoint = randomLocation.distance(currentLocation, { latitude: parseFloat(polygons[1][1]), longitude: parseFloat(polygons[1][0]) })
         //Deze props worden gebruikt om Checkpoint op bepaalde afstand van gebruiker klikbaar te maken.
-        this.setState({ checkLat: this.state.polygons[1][1], checkLong: this.state.polygons[1][0], cameraTrigger: parseInt(distanceToCheckpoint) })
+        this.setState({ checkLat: polygons[1][1], checkLong: polygons[1][0], cameraTrigger: parseInt(distanceToCheckpoint) })
         //Grootte van de circle waar Quizes gegenereerd worden
         stral = parseInt(distanceToCheckpoint) / 3;
         let arr = []
@@ -142,65 +144,35 @@ class Home extends Component {
 
     }
 
-
-    getMonument = async () => {
-
-        const { latitude, longitude } = this.props.currentLocationState.coords;
+    componentDidUpdate(prevProps) {
         const { fetched, monument } = this.props.monumentState;
 
-        this.props.monument(latitude, longitude);
+        if (prevProps.monumentState.fetched !== fetched) {
 
-        if (fetched) {
-            console.log('heres is monument')
-            console.log(monument)
             this.mapPolygon(monument)
             this.setState({
                 allMonument: monument,
                 monumentsProps: monument.properties,
                 polygons: monument.geometry.coordinates[0],
                 data: monument.properties.imageUrl,
-                Name: monument.properties.Naam,
+                Name: monument.properties.imageUrl,
                 Name: monument.properties.Naam,
                 isStartPopupVisible: true,
                 //polygons: responseJson.geometry.coordinates[0],
                 isStartBttnVisible: true
             })
+
+            this.refs.popupchild.setModalVisible(true, true);
             this.getRandomQuizes();
-            this.refs.popupchild.setModalVisible(this.state.isStartPopupVisible, true);
         }
 
-        // fetch(`http://${Config.MY_IP_ADRES}:3000/api/getNextLocation`, {
-        //     method: 'POST',
-        //     headers: {
-        //         authorization: 'Bearer ' + global.token,
-        //         Accept: 'application/json',
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         latitude: String(this.props.currentLocationState.coords.latitude),
-        //         longitude: String(this.props.currentLocationState.coords.longitude)
-        //     }),
-        // }).then((response) => response.json())
-        //     .then((responseJson) => {
-        //         //console.log(responseJson.properties)
-        //         this.mapPolygon(responseJson)
-        //         this.setState({
-        //             allMonument: responseJson,
-        //             monumentsProps: responseJson.properties,
-        //             polygons: responseJson.geometry.coordinates[0],
-        //             data: responseJson.properties.imageUrl,
-        //             Name: responseJson.properties.Naam,
-        //             Name: responseJson.properties.Naam,
-        //             isStartPopupVisible: true,
-        //             //polygons: responseJson.geometry.coordinates[0],
-        //             isStartBttnVisible: true
-        //         })
-        //         this.getRandomQuizes();
-        //         this.refs.popupchild.setModalVisible(this.state.isStartPopupVisible, true);
-        //     })
-        //     .catch((error) => {
-        //         console.error(error);
-        //     });
+    }
+
+
+    getMonument() {
+        const { latitude, longitude } = this.props.currentLocationState.coords;
+
+        this.props.monument(latitude, longitude);
     }
 
 
@@ -219,44 +191,42 @@ class Home extends Component {
 
     CreateSubSession() {
         // let userProfielData = this.props.navigation.getParam("userData");
-        console.log(this.state.subSession)
-
+        //console.log(this.state.subSession)
+        const { fetched, monument } = this.props.monumentState;
 
         let startTime = new Date().valueOf()
-        // let userId = userProfielData.sub
 
         let arr = []
         arr = this.state.subSession
-
         arr.push(
             {
                 startTime: startTime,
                 stopTime: 0,
                 isFound: true,
-                monument: this.state.allMonument
+                monument: monument
             }
         )
+        this.props.createUserSubsession(arr, this.state.sessionId)
 
 
+        // fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/update/${this.state.sessionId}`, {
+        //     method: 'PUT',
+        //     headers: {
+        //         authorization: 'Bearer ' + global.token,
+        //         Accept: 'application/json',
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
 
-        fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/update/${this.state.sessionId}`, {
-            method: 'PUT',
-            headers: {
-                authorization: 'Bearer ' + global.token,
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-
-                subSession: arr
-            }),
-        }).then((response) => response.json()).then((responseJson) => {
-            console.log(responseJson);
-        }
-        )
-            .catch((error) => {
-                console.error(error);
-            });
+        //         subSession: arr
+        //     }),
+        // }).then((response) => response.json()).then((responseJson) => {
+        //     console.log(responseJson);
+        // }
+        // )
+        //     .catch((error) => {
+        //         console.error(error);
+        //     });
 
 
 
@@ -265,6 +235,9 @@ class Home extends Component {
 
 
     startGameSession() {
+
+        const { fetched, monument } = this.props.monumentState;
+
         let userProfielData = this.props.navigation.getParam("userData");
         let arr = [];
 
@@ -287,7 +260,7 @@ class Home extends Component {
                     startTime: startTime,
                     stopTime: 0,
                     isFound: false,
-                    monument: this.state.allMonument
+                    monument: monument
                 }
             }),
         }).then((response) => response.json())
@@ -382,8 +355,6 @@ class Home extends Component {
             )
         }
     }
-    //#endregion
-    //#region render
 
     renderCheckPointPhoto() {
         if (this.state.canShowCheckpointPhoto == true) {
@@ -407,6 +378,7 @@ class Home extends Component {
 
         const userProfielData = this.props.navigation.getParam("userData");
         const { navigate } = this.props.navigation;
+        const { fetched, monument } = this.props.monumentState;
 
         return (
             <View style={styles.container}>
@@ -418,7 +390,7 @@ class Home extends Component {
                     triggerCamera={this.state.cameraTrigger}
                     lat={this.state.checkLat}
                     long={this.state.checkLong}
-                    getMonumentProps={this.state.monumentsProps}
+                    getMonumentProps={monument.properties}
                     Quiz2={this.Quiz}
                     getmarker={this.state.markers}
                     monumentVisibility={this.state.showMonument}
@@ -524,7 +496,8 @@ function mapStateToProps(state) {
         currentLocationState: state.currentLocation,
         monumentState: state.monument,
         getUserSessionState: state.getUserSession,
-        postUserSessionState: state.postUserSession
+        postUserSessionState: state.postUserSession,
+
     }
 }
 
@@ -532,5 +505,6 @@ export default connect(mapStateToProps, {
     monument,
     location,
     getUserSession,
-    postUserSession
+    postUserSession,
+    createUserSubsession
 })(Home)
