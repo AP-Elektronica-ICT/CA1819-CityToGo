@@ -15,14 +15,16 @@ import {
 class Camera extends Component {
 
     render() {
-        if (this.props.state.imageRecognition.fetching) {
+        let { fetching } = this.props.imageRecognition;
+
+        if (fetching) {
             return (
                 <View style={styles.horizontal}>
-                    <ActivityIndicator size="large" color="#0000ff" />
+                    <ActivityIndicator size="large" color="#454F63"/>
                 </View>
             )
         }
-        
+
         return (
             <View style={styles.container}>
                 <RNCamera
@@ -57,12 +59,13 @@ class Camera extends Component {
 
     getImageLabels = async (imageBase64) => {
         const { navigate } = this.props.navigation;
+
         this.props.fetchRecognitionImage(imageBase64)
 
-        if (this.props.state.imageRecognition.data == "match")
+        if (this.props.imageRecognition.data == "match")
             navigate('Home')
         else
-            console.log(this.props.state.imageRecognition.data)
+            console.log(this.props.imageRecognition.data)
     }
 }
 
@@ -98,7 +101,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        state: state
+        state: state,
+        imageRecognition: state.imageRecognition
     }
 }
 
