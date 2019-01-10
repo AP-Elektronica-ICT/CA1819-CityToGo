@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, ActivityIndicator, Image,FlatList } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator, Image,FlatList,ImageBackground } from "react-native";
 import Auth0 from "react-native-auth0";
 import SInfo from "react-native-sensitive-info"
 import { Button } from 'react-native-elements'
 import Config from '../config/config'
+import { Button2 } from "../common/Button2";
+import { NavigationActions, StackActions } from "react-navigation";
 
 const auth0 = new Auth0({
   domain: "shakir01.eu.auth0.com",
@@ -22,7 +24,6 @@ class Profiel extends Component {
     super(props)
     this.state = { fetching: false };
   }
-
 
   async componentWillMount() {
 
@@ -48,6 +49,41 @@ class Profiel extends Component {
     });
 
   }
+  logout = () => {
+    SInfo.deleteItem("accessToken", {});
+    SInfo.deleteItem("refreshToken", {});
+
+    auth0.webAuth
+      .clearSession()
+      .then(res => {
+        console.log("clear session ok");
+      })
+      .catch(err => {
+        console.log("error clearing session: ", err);
+      });
+
+    this.gotoLogin(); // go to login screen
+  };
+  gotoLogin = () => {
+    // const { navigate } = this.props.navigation;
+    //  navigate('Login');
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({
+          routeName: "Login",
+
+          params: {
+            userData: data
+          }
+        })
+      ]
+
+    });
+    this.props.navigation.dispatch(resetAction);
+  };
+     
+
 
   stopCurrentSession(sessionId) {
     fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/update/${sessionId}`, {
@@ -86,6 +122,7 @@ class Profiel extends Component {
   render() {
 
     const sessionId = this.props.navigation.getParam("sessionId");
+    const { navigate } = this.props.navigation;
     console.log(sessionId)
 
     if (!this.state.fetching) {
@@ -105,20 +142,23 @@ class Profiel extends Component {
     return (
 
       <View style={styles.container}>
-        <View style={styles.header}>
+        <View >
+        <ImageBackground source={require('./../assets/background.jpg')} style={styles.header}  imageStyle={{ borderBottomLeftRadius: 12, borderBottomRightRadius:12 }} >
           <View style={styles.headerContent}>
             <Image style={styles.avatar}
               source={{ uri: data.picture }} />
 
             <Text style={styles.name}>{Full_name} </Text>
+            <Text style={styles.name2}>@{data.nickname} </Text>
 
           </View>
+          </ImageBackground>
         </View>
 
         <View style={styles.body}>
           <View style={styles.item}>
             <View style={styles.iconContent}>
-              <Image style={styles.icon} source={{ uri: 'https://cdn3.iconfinder.com/data/icons/black-easy/512/538642-user_512x512.png' }} />
+              <Image style={styles.icon} source={require('./../assets/User.png')} />
             </View>
             <View style={styles.infoContent}>
               <Text style={styles.info}>{Full_name}</Text>
@@ -127,7 +167,7 @@ class Profiel extends Component {
 
           <View style={styles.item}>
             <View style={styles.iconContent}>
-              <Image style={styles.icon} source={{ uri: 'http://icons.iconarchive.com/icons/icons8/windows-8/256/Users-Age-icon.png' }} />
+              <Image style={styles.icon} source={require('./../assets/Age.png')} />
             </View>
             <View style={styles.infoContent}>
               <Text style={styles.info}>{Age}</Text>
@@ -136,7 +176,7 @@ class Profiel extends Component {
 
           <View style={styles.item}>
             <View style={styles.iconContent}>
-              <Image style={styles.icon} source={{ uri: 'http://icons.iconarchive.com/icons/graphicloads/100-flat/256/email-2-icon.png' }} />
+              <Image style={styles.icon}  source={require('./../assets/Email.png')} />
             </View>
 
 
@@ -147,12 +187,28 @@ class Profiel extends Component {
 
           <View style={styles.item}>
             <View style={styles.iconContent}>
-              <Image style={styles.icon} source={{ uri: 'https://www.amdtelecom.net/wp-content/uploads/2018/08/loc.png' }} />
+              <Image style={styles.icon} source={require('./../assets/Location.png')} />
             </View>
             <View style={styles.infoContent}>
               <Text style={styles.info}>{location}</Text>
             </View>
+            
           </View>
+          <View style={styles.item}>
+            <View style={styles.extra}>
+            
+              <Text style={styles.text} onPress={() => navigate('LearnMore')}>Learn More</Text>
+              <Text style={styles.text}>About us</Text>
+              <Text style={styles.text}>Privacy policy</Text>
+              <Text style={styles.logout} onPress={this.logout}>Logout</Text>
+
+            </View>
+         
+            
+          </View>
+          
+      
+
         
 
           {this.renderSessionStopBttn(sessionId)}
@@ -168,8 +224,28 @@ class Profiel extends Component {
 
 
 const styles = StyleSheet.create({
+   text:{
+     color: "#999999",
+     fontSize: 18,
+     marginTop: 10
+   },
+   logout:{
+    marginTop: 30,
+    color: "#999999",
+     fontSize: 18
+   },
+
+   extra: {
+    flex: 1,
+    alignItems: 'flex-start',
+    left: 30,
+    paddingTop: 30,
+    
+
+  },
   header: {
-    backgroundColor: "#DCDCDC",
+    backgroundColor: "#2A2E43",
+    padding:10,
   },
   headerContent: {
     padding: 30,
@@ -182,23 +258,22 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: 'Verdana',
-    fontSize: 18
+    fontSize: 18,
+    color: "#FFFFFF"
   },
   email: {
     color: 'red'
   },
 
   avatar: {
-    width: 130,
-    height: 130,
-    borderRadius: 63,
-    borderWidth: 4,
-    borderColor: "white",
+    width: 100,
+    height: 100,
+    borderRadius: 20,
     marginBottom: 10,
   },
   name: {
     fontSize: 22,
-    color: "#000000",
+    color: "#FFFFFF",
     fontWeight: '600',
   },
   userInfo: {
@@ -206,23 +281,27 @@ const styles = StyleSheet.create({
     color: "#778899",
     fontWeight: '600',
   },
+  container: {
+    backgroundColor: "#2A2E43",
+    flex:1
+ 
+  },
   body: {
-    backgroundColor: "#778899",
-    height: 500,
+    backgroundColor: "#2A2E43",
     alignItems: 'center',
   },
   item: {
     flexDirection: 'row',
   },
   infoContent: {
-    flex: 1,
+    flex: 3,
     alignItems: 'flex-start',
     paddingLeft: 5
   },
   iconContent: {
     flex: 1,
     alignItems: 'flex-start',
-    left: 100,
+    left: 30,
     paddingRight: 3,
     
 
@@ -232,6 +311,10 @@ const styles = StyleSheet.create({
     height: 30,
     marginTop: 20,
     
+  },
+  name2:{
+    fontSize: 18,
+    color: "#EFEFEF"
   },
   info: {
     fontSize: 18,

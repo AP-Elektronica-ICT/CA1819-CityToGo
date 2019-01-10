@@ -6,6 +6,7 @@ import Home from './Home';
 import Profile from './Profile';
 import Camera from './Camera'
 import Maps from './Maps'
+import LearnMore from './LearnMore'
 import ListSubSessions from "./ListSubSessions";
 
 
@@ -20,9 +21,15 @@ const Root = createStackNavigator(
         Profile: {
             screen: Profile,
             navigationOptions:{
-                title: 'Profiel'
+                title: 'Profiel',header: null 
             }
         },
+        LearnMore:{
+            screen:LearnMore,
+            navigationOptions:{
+                title: 'LearnMore',header: null 
+        }
+    },
         Home: {
             screen: Home,
             navigationOptions: {

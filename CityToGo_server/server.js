@@ -118,9 +118,9 @@ app.post('/api/getNextLocation', (requ, res) => {
 
     });
 
-    //sqr.json(shortest);
+    
 
-    let term = `'${shortest.properties.Naam} ${shortest.properties.Straatnaam} ${shortest.properties.Straatnaam} ${shortest.properties.Huisnr} ${shortest.properties.District}'`;
+   let term = `'${shortest.properties.Naam} ${shortest.properties.Straatnaam} ${shortest.properties.Straatnaam} ${shortest.properties.Huisnr} ${shortest.properties.District}'`;
 
     let req = https.request(
         {
