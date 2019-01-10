@@ -39,9 +39,6 @@ class Home extends Component {
         this.Quiz = this.getQuizpopup.bind(this);
         this.CreateSubSession = this.CreateSubSession.bind(this);
 
-
-
-
         this.state = {
             latitude: LATITUDE,
             longitude: LONGITUDE,
@@ -62,48 +59,12 @@ class Home extends Component {
             blurpercentage: 5,
             canShowCheckpointPhoto: false,
 
-
-
-
-
             markers: [{
                 coordinate: { latitude: 45.013, longitude: -122.6749817 },
                 image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Berchem_Basiliek3.JPG/220px-Berchem_Basiliek3.JPG",
                 title: "Franciscanessenklooster"
             }]
         };
-    }
-    //#endregion
-    //#region Default methodes
-    componentDidMount() {
-
-
-
-        //current localisation 
-        this.watchID = navigator.geolocation.watchPosition(
-            position => {
-                const { latitude, longitude } = position.coords;
-
-                this.setState({
-                    latitude,
-                    longitude,
-                });
-            },
-            error => console.log(error),
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-        );
-
-        SInfo.getItem("accessTokenServer", {}).then(accessToken => {
-            global.token = accessToken
-            console.log(global.token)
-        })
-
-        this.props.monument(
-            51.2165,
-            4.4056
-        );
-
-
     }
 
     componentWillMount() {
@@ -117,18 +78,13 @@ class Home extends Component {
         );
 
         this.props.location()
-
-
     }
 
-    componentWillUnmount() {
-        navigator.geolocation.clearWatch(this.watchID);
-    }
-    //#endregion
-    //#region  Quizes
+
     Quiz = () => {
         //button click handler.
     }
+
     generateRandomint(min, max) {
         return Math.random() * (max - min) + min;
     }
@@ -169,6 +125,7 @@ class Home extends Component {
         this.setState({ randomQuizes: arr })
 
     }
+
     getQuizpopup = async (lat, long) => {
         distanceToQuiz = randomLocation.distance(currentLocation, { latitude: parseFloat(lat), longitude: parseFloat(long) })
         console.log("Distance to this quiz is " + parseInt(distanceToQuiz) + " meters")
@@ -178,47 +135,72 @@ class Home extends Component {
             this.refs.quizchild.setModalVisible(this.state.quiz_visible);
         }
     }
-    //#endregion
-    //#region  Monuments
+
     ShowMonument = () => {
         this.getVisitedMonuments();
         this.setState({ showMonument: true })
 
     }
+
+
     getMonument = async () => {
 
-        fetch(`http://${Config.MY_IP_ADRES}:3000/api/getNextLocation`, {
-            method: 'POST',
-            headers: {
-                authorization: 'Bearer ' + global.token,
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                latitude: String(this.props.currentLocationState.coords.latitude),
-                longitude: String(this.props.currentLocationState.coords.longitude)
-            }),
-        }).then((response) => response.json())
-            .then((responseJson) => {
-                //console.log(responseJson.properties)
-                this.mapPolygon(responseJson)
-                this.setState({
-                    allMonument: responseJson,
-                    monumentsProps: responseJson.properties,
-                    polygons: responseJson.geometry.coordinates[0],
-                    data: responseJson.properties.imageUrl,
-                    Name: responseJson.properties.Naam,
-                    Name: responseJson.properties.Naam,
-                    isStartPopupVisible: true,
-                    //polygons: responseJson.geometry.coordinates[0],
-                    isStartBttnVisible: true
-                })
-                this.getRandomQuizes();
-                this.refs.popupchild.setModalVisible(this.state.isStartPopupVisible, true);
+        const { latitude, longitude } = this.props.currentLocationState.coords;
+        const { fetched, monument } = this.props.monumentState;
+
+        this.props.monument(latitude, longitude);
+
+        if (fetched) {
+            console.log('heres is monument')
+            console.log(monument)
+            this.mapPolygon(monument)
+            this.setState({
+                allMonument: monument,
+                monumentsProps: monument.properties,
+                polygons: monument.geometry.coordinates[0],
+                data: monument.properties.imageUrl,
+                Name: monument.properties.Naam,
+                Name: monument.properties.Naam,
+                isStartPopupVisible: true,
+                //polygons: responseJson.geometry.coordinates[0],
+                isStartBttnVisible: true
             })
-            .catch((error) => {
-                console.error(error);
-            });
+            this.getRandomQuizes();
+            this.refs.popupchild.setModalVisible(this.state.isStartPopupVisible, true);
+        }
+
+        // fetch(`http://${Config.MY_IP_ADRES}:3000/api/getNextLocation`, {
+        //     method: 'POST',
+        //     headers: {
+        //         authorization: 'Bearer ' + global.token,
+        //         Accept: 'application/json',
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+        //         latitude: String(this.props.currentLocationState.coords.latitude),
+        //         longitude: String(this.props.currentLocationState.coords.longitude)
+        //     }),
+        // }).then((response) => response.json())
+        //     .then((responseJson) => {
+        //         //console.log(responseJson.properties)
+        //         this.mapPolygon(responseJson)
+        //         this.setState({
+        //             allMonument: responseJson,
+        //             monumentsProps: responseJson.properties,
+        //             polygons: responseJson.geometry.coordinates[0],
+        //             data: responseJson.properties.imageUrl,
+        //             Name: responseJson.properties.Naam,
+        //             Name: responseJson.properties.Naam,
+        //             isStartPopupVisible: true,
+        //             //polygons: responseJson.geometry.coordinates[0],
+        //             isStartBttnVisible: true
+        //         })
+        //         this.getRandomQuizes();
+        //         this.refs.popupchild.setModalVisible(this.state.isStartPopupVisible, true);
+        //     })
+        //     .catch((error) => {
+        //         console.error(error);
+        //     });
     }
 
 
@@ -289,7 +271,7 @@ class Home extends Component {
         let startTime = new Date().valueOf()
         let userId = userProfielData.sub
 
-       // this.props.postUserSession(userId, true, startTime, 0, false, this.state.allMonument)
+        // this.props.postUserSession(userId, true, startTime, 0, false, this.state.allMonument)
 
         fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/create`, {
             method: 'POST',
@@ -311,12 +293,12 @@ class Home extends Component {
         }).then((response) => response.json())
             .then((responseJson) => {
 
-            //    console.log(responseJson._id)
+                //    console.log(responseJson._id)
                 this.setState({ sessionId: responseJson._id })
                 arr.push(responseJson.subSession[0])
                 this.setState({ subSession: arr })
 
-            //    console.log(this.state.subSession)
+                //    console.log(this.state.subSession)
 
             }
             ).catch((error) => {
@@ -348,7 +330,7 @@ class Home extends Component {
 
                     for (let k of z.subSession) {
                         if (z._id == this.state.sessionId) {
-                            if (k.isFound == true) {
+                            if (k.isFound == false) {
 
                                 //console.log(z.subSession.monument.geometry)
 
