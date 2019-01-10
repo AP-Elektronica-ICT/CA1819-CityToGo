@@ -12,8 +12,8 @@ export function monument(latitude, longitude) {
         type: FETCHING_MONUMENTS,
         payload: axios.post(`http://${Config.MY_IP_ADRES}:3000/api/getNextLocation`, body, {
             headers: {
-                // authorization: 'Bearer ' + global.token,
-                // Accept: 'application/json',
+                authorization: 'Bearer ' + global.token,
+                Accept: 'application/json',
                 'Content-Type': 'application/json',
             }
         }).then(res => res.data)

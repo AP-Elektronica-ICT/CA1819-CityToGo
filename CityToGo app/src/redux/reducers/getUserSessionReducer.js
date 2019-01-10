@@ -4,7 +4,7 @@ import { FETCHING_GET_USER_SESSION, _FULFILLED, _REJECTED, _PENDING } from "../a
 const initialState = {
     fetching: false,
     fetched: false,
-    data: [],
+    response: {},
     error: null
 }
 
@@ -21,7 +21,7 @@ const getUserSession = (state = initialState, action) => {
                 ...state,
                 fetching: false,
                 fetched: true,
-                data: action.payload
+                response: action.payload
             }
             break;
 

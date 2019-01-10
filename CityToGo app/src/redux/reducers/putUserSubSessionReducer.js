@@ -1,5 +1,5 @@
 import {
-    FETCHING_POST_USER_SESSION,
+    FETCHING_PUT_USER_SUBSESSION,
     _FULFILLED,
     _REJECTED,
     _PENDING
@@ -13,15 +13,15 @@ const initialState = {
     error: null
 }
 
-const postUserSession = (state = initialState, action) => {
+const putUserSession = (state = initialState, action) => {
     switch (action.type) {
-        case FETCHING_POST_USER_SESSION + _PENDING:
+        case FETCHING_PUT_USER_SUBSESSION + _PENDING:
             state = {
                 ...state,
                 fetching: true
             }
             break;
-        case FETCHING_POST_USER_SESSION + _FULFILLED:
+        case FETCHING_PUT_USER_SUBSESSION + _FULFILLED:
             state = {
                 ...state,
                 fetching: false,
@@ -30,7 +30,7 @@ const postUserSession = (state = initialState, action) => {
             }
             break;
 
-        case FETCHING_POST_USER_SESSION + _REJECTED:
+        case FETCHING_PUT_USER_SUBSESSION + _REJECTED:
             state = {
                 ...state,
                 fetching: false,
@@ -41,4 +41,4 @@ const postUserSession = (state = initialState, action) => {
     return state;
 }
 
-export default postUserSession;
+export default putUserSession;

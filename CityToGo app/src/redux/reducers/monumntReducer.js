@@ -3,7 +3,7 @@ import { FETCHING_MONUMENTS, _FULFILLED, _REJECTED, _PENDING } from "../actions/
 const initialState = {
     fetching: false,
     fetched: false,
-    data: [],
+    monument: {},
     error: null
 }
 
@@ -21,7 +21,7 @@ const monument = (state = initialState, action) => {
                 ...state,
                 fetching: false,
                 fetched: true,
-                data: action.payload
+                monument: action.payload
             }
             break;
 

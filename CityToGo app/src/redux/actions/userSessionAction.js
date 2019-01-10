@@ -1,7 +1,7 @@
 import {
     FETCHING_GET_USER_SESSION,
     FETCHING_POST_USER_SESSION,
-    FETCHING_PUT_USER_SESSION
+    FETCHING_PUT_USER_SUBSESSION
 } from "./types";
 
 import Config from '../../config/config'
@@ -11,7 +11,7 @@ export function getUserSession(userID) {
     return {
         type: FETCHING_GET_USER_SESSION,
         payload: axios.get(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/find/${userID}`)
-            .then((res) => res.data)
+        .then((res) => res.data)
     }
 }
 
@@ -36,5 +36,23 @@ export function postUserSession(userId, isRunning, startTime, stopTime, isFound,
                 'Content-Type': 'application/json',
             }
         }).then(res => res.data)
+    }
+}
+
+export function createUserSubsession(arr, sessionID) {
+    let body = JSON.stringify({
+        subSession: arr
+    })
+
+    return {
+        type: FETCHING_PUT_USER_SUBSESSION,
+        payload: axios.put(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/update/${sessionID}`, body, {
+            headers: {
+                authorization: 'Bearer ' + global.token,
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }).then(res => console.log(res))
+
     }
 }
