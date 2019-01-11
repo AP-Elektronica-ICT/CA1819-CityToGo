@@ -38,6 +38,9 @@ class Home extends Component {
         this.Quiz = this.getQuizpopup.bind(this);
         this.CreateSubSession = this.CreateSubSession.bind(this);
 
+        
+        
+
 
 
 
@@ -466,6 +469,7 @@ class Home extends Component {
                     data={this.state.Name}
 
                     startGameSession={this.startGameSession.bind(this)}
+                    
                 />
                 <Quiz_popUp ref='quizchild'
                     imageUri={this.state.data}
@@ -511,14 +515,14 @@ const styles = StyleSheet.create({
     },
     buttonsGroup1: {
         flexDirection: 'column',
-        marginLeft: 10,
-        marginBottom:10,
+        marginLeft: 14,
+        marginBottom:14,
   
     },
     buttonsGroup2: {
         flexDirection: 'column',
-        marginBottom:10,
-        marginRight:10
+        marginBottom:14,
+        marginRight:14
     },
     buttonStyle: {
         backgroundColor: "rgba(51,204,0,1)",

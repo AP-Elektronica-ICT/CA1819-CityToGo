@@ -13,8 +13,8 @@ const Button_Start =({onPress,children})=>{
 
 var styles={
     iconStyle:{
-        height:30,
-        width:30,
+         //height:30,
+         //width:30,
     },
     buttonStyle:{
         backgroundColor: '#3ACCE1',
