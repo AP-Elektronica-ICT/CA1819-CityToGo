@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { StyleSheet, DeviceEventEmitter, View,Button, TouchableHighlight,Text } from "react-native";
-import MapView, { Polygon } from "react-native-maps";
+import { StyleSheet, DeviceEventEmitter, View, Button, TouchableHighlight, Text, Image } from "react-native";
+import MapView, { Polygon, Marker } from "react-native-maps";
 import { SensorManager } from 'NativeModules';
 import mapStyle from "../styles/jsons/mapstyle";
 import Mycard from "./Cardcomponent"
@@ -27,26 +27,26 @@ class Maps extends Component {
         }
     }
     //Trigger Camera
-    Camera = () => {    
-        console.log("Map afstand "+ this.props.triggerCamera)           
-     if(this.props.triggerCamera<15){
-        this.props.navigate('Camera', {
-            monumentProps: this.props.getMonumentProps,
-            
-        })
-    }
+    Camera = () => {
+        console.log("Map afstand " + this.props.triggerCamera)
+        if (this.props.triggerCamera < 15) {
+            this.props.navigate('Camera', {
+                monumentProps: this.props.getMonumentProps,
+
+            })
+        }
     }
 
     renderPolygon() {
         if (this.props.getPolygons.length > 0) {
             return (
                 <View>
-                  
+
                     <MapView.Marker
-                     coordinate={  { latitude: this.props.lat, longitude:this.props.long}}
-                     image={require('../assets/checkpoint.png')}
-                    onPress={this.Camera}>       
-                    </MapView.Marker> 
+                        coordinate={{ latitude: this.props.lat, longitude: this.props.long }}
+                        image={require('../assets/checkpoint.png')}
+                        onPress={this.Camera}>
+                    </MapView.Marker>
                 </View>
             )
         }
@@ -54,13 +54,14 @@ class Maps extends Component {
 
     render() {
         return (
-           
+
             <MapView
                 style={styles.map}
                 region={this.props.getMapRegion()}
-                showsUserLocation={true}
-                //followUserLocation
-                //loadingEnabled
+                showsUserLocation={false}
+                showsMyLocationButton
+                followUserLocation
+                loadingEnabled
                 //scrollEnabled={false}
                 //pitchEnabled={false}
                 //zoomEnabled={false}
@@ -70,41 +71,52 @@ class Maps extends Component {
             >
                 {this.renderPolygon()}
 
+                <Marker
+                    ref={marker => {
+                        this.marker = marker;
+                    }}
+                    coordinate={{ latitude: this.props.currentLat, longitude: this.props.currentLong }}
+                >
+                    <View><Image source={{ uri: this.props.profilePic }} style={styles.avatar} /></View>
+
+                </Marker>
+
+
                 {this.props.getRandom.map(marker => (
                     <MapView.Marker
                         key={marker.latitude}
                         coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
                         //title={"Quiz"}
                         image={require('../assets/quiz.png')}
-                       // description={"description"}
-                        onPress={() => this.props.Quiz2(marker.latitude,marker.longitude)} >
-                       
-                        
-                        </MapView.Marker>
-                  
-                    
+                        // description={"description"}
+                        onPress={() => this.props.Quiz2(marker.latitude, marker.longitude)} >
+
+
+                    </MapView.Marker>
+
+
                 ))}
 
 
-        
-                {this.props.getmarker.map(mark=>(
-                   
+
+                {this.props.getmarker.map(mark => (
+
                     <Mycard
-                    key={mark.coordinate.latitude}
-                    latitude= {mark.coordinate.latitude}
-                    longitude={mark.coordinate.longitude}
-                    Uri={mark.image}
-                    Name={mark.title}
-                    visibilty={this.props.monumentVisibility}
-                    
+                        key={mark.coordinate.latitude}
+                        latitude={mark.coordinate.latitude}
+                        longitude={mark.coordinate.longitude}
+                        Uri={mark.image}
+                        Name={mark.title}
+                        visibilty={this.props.monumentVisibility}
+
                     />
-                
+
 
                 ))}
-            
+
 
             </MapView>
-    
+
         );
     }
 }
@@ -133,4 +145,12 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 20
     },
+
+    avatar: {
+        width: 28,
+        height: 28,
+        borderRadius: 63,
+        borderWidth: 2,
+        borderColor: "#78849E"
+    }
 });

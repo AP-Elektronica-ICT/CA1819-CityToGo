@@ -5,6 +5,7 @@ import {
     StyleSheet,
     Image,
     TouchableOpacity,
+    Platform
 
 } from "react-native";
 import { Button } from 'react-native-elements'
@@ -18,12 +19,13 @@ import Config from '../config/config'
 import { CardSection } from "./../common"
 import { Button_White } from "./../common/Button_White"
 import { Button_Start } from "./../common/Button_Start"
+import MapView, { AnimatedRegion } from 'react-native-maps';
 
 //#endregion
-const LATITUDE = 0;
-const LONGITUDE = 0;
-const LATITUDE_DELTA = 0.003;
-const LONGITUDE_DELTA = 0.003;
+const LATITUDE = 38.9248;
+const LONGITUDE = -77.0258;
+const LATITUDE_DELTA = 0.009;
+const LONGITUDE_DELTA = 0.009;
 var MyLocation;
 const R = 500;
 var center;
@@ -64,6 +66,7 @@ class Home extends Component {
             blurpercentage: 5,
             canShowCheckpointPhoto: false,
 
+       
 
 
 
@@ -79,18 +82,36 @@ class Home extends Component {
     //#region Default methodes
     componentDidMount() {
         //current localisation 
+        const { coordinate } = this.state;
         this.watchID = navigator.geolocation.watchPosition(
-            position => {
-                const { latitude, longitude } = position.coords;
-
-                this.setState({
-                    latitude,
-                    longitude,
-                });
-            },
-            error => console.log(error),
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-        );
+          position => {
+            const { coordinate, routeCoordinates, distanceTravelled } = this.state;
+            const { latitude, longitude } = position.coords;
+    
+            const newCoordinate = {
+              latitude,
+              longitude
+            };
+    
+            if (Platform.OS === "android") {
+              if (this.marker) {
+                this.marker._component.animateMarkerToCoordinate(
+                  newCoordinate,
+                  500
+                );
+              }
+            } else {
+              coordinate.timing(newCoordinate).start();
+            }
+    
+            this.setState({
+              latitude,
+              longitude,
+            });
+          },
+          error => console.log(error),
+          { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter:0}
+        )
 
         SInfo.getItem("accessTokenServer", {}).then(accessToken => {
             global.token = accessToken
@@ -98,6 +119,7 @@ class Home extends Component {
         })
 
     }
+
 
     componentWillMount() {
         navigator.geolocation.getCurrentPosition(
@@ -442,6 +464,10 @@ class Home extends Component {
                     Quiz2={this.Quiz}
                     getmarker={this.state.markers}
                     monumentVisibility={this.state.showMonument}
+                    currentLat={this.state.latitude}
+                    currentLong={this.state.longitude}
+                    coord={this.state.coordinate}
+                    profilePic={userProfielData.picture}
                 />
 
 
