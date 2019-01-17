@@ -3,7 +3,7 @@ import React, { Component, } from "react";
 import { View, StyleSheet, } from "react-native";
 import SInfo from "react-native-sensitive-info";
 import Maps from "./Maps";
-import ModalExample from "./popup"
+import MonumentModal from "../modals/MonumentModal"
 import Quiz_popUp from "./Quiz_popup";
 import randomLocation from 'random-location';
 import geolib from "geolib";
@@ -19,7 +19,7 @@ import { connect } from "react-redux";
 
 import { CardSection } from "./../common"
 import { Button_White } from "./../common/Button_White"
-import { CustomButton } from "../common/CustomButton"
+import { CustomShortButton } from "../common/CustomShortButton"
 
 //#endregion
 const LATITUDE = 0;
@@ -331,7 +331,7 @@ class Home extends Component {
         if (!isCurrentSessionStarted) {
             return (
                 <View >
-                    <CustomButton
+                    <CustomShortButton
                         color={COLORS.PRIMARY}
                         heightIcon={34}
                         widthIcon={34}
@@ -345,7 +345,7 @@ class Home extends Component {
         } else {
             return (
                 <View>
-                    <CustomButton
+                    <CustomShortButton
                         color={COLORS.SECONDARY}
                         heightIcon={34}
                         widthIcon={34}
@@ -365,7 +365,7 @@ class Home extends Component {
         if (this.state.canShowCheckpointPhoto == true) {
             return (
                 <View >
-                    <CustomButton
+                    <CustomShortButton
                         color='#FFFFFF'
                         heightIcon={30}
                         widthIcon={30}
@@ -423,7 +423,7 @@ class Home extends Component {
 
 
 
-                <ModalExample ref='popupchild'
+                <MonumentModal ref='popupchild'
                     imageUri={this.state.data}
                     blur={this.state.blurpercentage}
                     data={this.state.Name}

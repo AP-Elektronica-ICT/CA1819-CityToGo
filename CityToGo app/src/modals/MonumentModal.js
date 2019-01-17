@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Text, TouchableHighlight, View, Alert, Image, StyleSheet } from 'react-native';
-import { Button } from "./../common"
-class ModalExample extends Component {
+import { CustomLargeButton } from "../common/CustomLargeButton"
+class MonumentModal extends Component {
   state = {
     modalVisible: false,
     showButton: true
@@ -14,7 +14,7 @@ class ModalExample extends Component {
 
   startGameSession() {
     this.setModalVisible(false);
-    if (this.state.showButton == true) {
+    if (this.state.showButton) {
       this.props.startGameSession()
     }
   }
@@ -31,16 +31,16 @@ class ModalExample extends Component {
         >
 
 
-           <View style={styles.Model}>
-          <View style={styles.background}>
-          <View></View>
-            <Image style={styles.image}    source={{ uri: `${this.props.imageUri}` }}/>
-            {/* blurRadius={this.props.blur} */}
-            <Text style={styles.Text} > {this.props.data}</Text>
-         
-            < Button onPress={() => { this.startGameSession() }} >LET'S GO</Button>
-          
-          </View>
+          <View style={styles.Model}>
+            <View style={styles.background}>
+              <View></View>
+              <Image style={styles.image} source={{ uri: `${this.props.imageUri}` }} />
+              {/* blurRadius={this.props.blur} */}
+              <Text style={styles.Text} > {this.props.data}</Text>
+
+              < CustomLargeButton onPress={() => { this.startGameSession() }} >LET'S GO</CustomLargeButton>
+
+            </View>
           </View>
 
         </Modal>
@@ -52,48 +52,48 @@ class ModalExample extends Component {
 }
 
 
-export default ModalExample;
+export default MonumentModal;
 
 const styles = StyleSheet.create({
   image: {
-   // flex:1,
+    // flex:1,
     marginTop: 20,
-    height:300,
+    height: 300,
     borderRadius: 15,
     width: 220
   },
-  
-  Model:{
-    flexDirection:'row',
-    flex:1,
-   //backgroundColor: 'black',
-   backgroundColor : 'rgba(255,255,255,0.5)',
-     justifyContent: 'center',
-     alignItems: 'center',
-     
+
+  Model: {
+    flexDirection: 'row',
+    flex: 1,
+    //backgroundColor: 'black',
+    backgroundColor: 'rgba(255,255,255,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+
   },
   background: {
     position: 'absolute',
     backgroundColor: '#2A2E43',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop:60,
-    marginBottom:60,
-    marginRight:50,
-    marginLeft:50,
+    marginTop: 60,
+    marginBottom: 60,
+    marginRight: 50,
+    marginLeft: 50,
     borderRadius: 20,
-    paddingTop:10,
-    paddingBottom:20,
-    width:350,
-    padding:10
+    paddingTop: 10,
+    paddingBottom: 20,
+    width: 350,
+    padding: 10
 
   },
-  Text:{
+  Text: {
     alignSelf: 'center',
     color: 'rgba(255,255,255, 0.68);',
     paddingTop: 20,
     paddingBottom: 20,
-    paddingRight:25,
-    paddingLeft:25
-},
+    paddingRight: 25,
+    paddingLeft: 25
+  },
 });

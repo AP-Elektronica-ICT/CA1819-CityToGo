@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, ActivityIndicator,ImageBackground} from "react-native";
+import { View, Text, ActivityIndicator, ImageBackground } from "react-native";
 import { NavigationActions, StackActions } from "react-navigation";
 import Auth0 from "react-native-auth0";
 //import Config from "react-native-config";
 //import DeviceInfo from "react-native-device-info";
 import SInfo from "react-native-sensitive-info";
 import RNRestart from "react-native-restart";
-import {Button,CardSection} from "./../common"
+import { CustomLargeButton, CardSection } from "./../common"
 
 import {
   headerColorStyle,
@@ -90,25 +90,25 @@ export default class uniLogin extends Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-      <ImageBackground source={require('./../assets/background.jpg')} style={styles.container}>
-        <ActivityIndicator
-          size="large"
-          color="#05a5d1"
-          animating={!this.state.hasInitialized}
-        />
-        <CardSection>
-          <Text style={styles.textStyle}>Welcome to CityToGO</Text>
-        </CardSection>
-        {this.state.hasInitialized && (
+        <ImageBackground source={require('./../assets/background.jpg')} style={styles.container}>
+          <ActivityIndicator
+            size="large"
+            color="#05a5d1"
+            animating={!this.state.hasInitialized}
+          />
           <CardSection>
-          <Button onPress={this.login}>CONTINUE</Button>
+            <Text style={styles.textStyle}>Welcome to CityToGO</Text>
           </CardSection>
- 
-        )}
-         <CardSection>
-             <Button2 onPress={() => navigate('LearnMore')}>LEARN MORE</Button2>
-             </CardSection>
-        </ImageBackground> 
+          {this.state.hasInitialized && (
+            <CardSection>
+              <CustomLargeButton onPress={this.login}>CONTINUE</CustomLargeButton>
+            </CardSection>
+
+          )}
+          <CardSection>
+            <Button2 onPress={() => navigate('LearnMore')}>LEARN MORE</Button2>
+          </CardSection>
+        </ImageBackground>
       </View>
     );
   }

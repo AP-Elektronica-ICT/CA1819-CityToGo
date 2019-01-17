@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, TouchableOpacity, Image } from 'react-native';
 
 
-const CustomButton = ({ onPress, children, color, heightIcon, widthIcon }) => {
+const CustomShortButton = ({ onPress, children, color, heightIcon, widthIcon }) => {
     return (
         <TouchableOpacity
             onPress={onPress}
@@ -31,4 +31,4 @@ const CustomButton = ({ onPress, children, color, heightIcon, widthIcon }) => {
     );
 };
 
-export { CustomButton };
+export { CustomShortButton };
