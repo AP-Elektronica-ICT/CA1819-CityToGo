@@ -51,7 +51,6 @@ class Home extends Component {
             Name: "",
             polygons: [],
             randomQuizes: [],
-            randomNumber: 0,
             showMonument: false,
             checkLat: 0,
             checkLong: 0,
@@ -94,6 +93,9 @@ class Home extends Component {
         const { fetched, monument } = this.props.monumentState;
         const { latitude, longitude } = this.props.currentLocationState.coords;
 
+        let arr = []
+        let randomNumber = 0
+
         const polygons = monument.geometry.coordinates[0];
 
         currentLocation = { latitude: latitude, longitude: longitude }
@@ -105,26 +107,30 @@ class Home extends Component {
 
         //Afstand tussen bestemming en huidgie locatie 
         distanceToCheckpoint = randomLocation.distance(currentLocation, { latitude: parseFloat(polygons[1][1]), longitude: parseFloat(polygons[1][0]) })
+
+
         //Deze props worden gebruikt om Checkpoint op bepaalde afstand van gebruiker klikbaar te maken.
         this.setState({ checkLat: polygons[1][1], checkLong: polygons[1][0], cameraTrigger: parseInt(distanceToCheckpoint) })
+
         //Grootte van de circle waar Quizes gegenereerd worden
         stral = parseInt(distanceToCheckpoint) / 3;
-        let arr = []
-
         //Aantal Quizes worden getoond op basis van afstand tot checkpoint .
         if (parseInt(distanceToCheckpoint) < 1000) {
-            this.setState({ randomNumber: this.generateRandomint(2, 5) })
+            randomNumber = this.generateRandomint(2, 4)
         }
         else {
-            this.setState({ randomNumber: this.generateRandomint(4, 7) })
+            randomNumber = this.generateRandomint(4, 7)
+            console.log('randomNumber !!!!!!!!!!!!!!')
+            console.log(randomNumber)
         }
 
         // Random Quizes worden in een array gestoken
-        for (let i = 0; i < parseInt(this.state.randomNumber); i++) {
+        for (let i = 0; i < parseInt(randomNumber); i++) {
             var randomPoints = randomLocation.randomCirclePoint(center, stral)
             arr.push(randomPoints);
         }
         this.setState({ randomQuizes: arr })
+        //debugger
 
     }
 
