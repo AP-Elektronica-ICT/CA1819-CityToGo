@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { StyleSheet, DeviceEventEmitter, View, Button, TouchableHighlight, Text, ActivityIndicator, } from "react-native";
-import MapView, { Polygon } from "react-native-maps";
+import { StyleSheet, DeviceEventEmitter, View, Button, TouchableHighlight, Text, ActivityIndicator, Image, Platform } from "react-native";
+import MapView, { Polygon, Marker, AnimatedRegion } from "react-native-maps";
 import { SensorManager } from 'NativeModules';
 import mapStyle from "../styles/jsons/mapstyle";
 import Mycard from "./Cardcomponent"
@@ -45,6 +45,25 @@ class Maps extends Component {
             })
         }
     }
+    componentDidUpdate(prevProps) {
+        const { fetched, coords } = this.props.currentLocation
+        if (prevProps.currentLocation.coords.fetched !== fetched) {
+
+
+            if (Platform.OS === "android") {
+                if (this.marker) {
+                    this.marker.animateMarkerToCoordinate(
+                        coords,
+                        500
+                    );
+                }
+            } else {
+                coordinate.timing(coords).start();
+            }
+
+
+        }
+    }
 
 
     renderPolygon() {
@@ -71,6 +90,9 @@ class Maps extends Component {
 
     render() {
 
+        const { latitude, longitude } = this.props.currentLocation.coords
+
+
         if (this.props.currentLocation.fetched) {
 
 
@@ -79,19 +101,29 @@ class Maps extends Component {
                 <MapView
                     style={styles.map}
                     region={this.getMapRegion()}
-                    showsUserLocation={true}
-                    //followUserLocation={true}
-                    //loadingEnabled
+                    showsUserLocation={false}
+                    showsMyLocationButton
+                    followUserLocation
+                    loadingEnabled
                     //scrollEnabled={false}
                     //pitchEnabled={false}
                     //zoomEnabled={false}
                     //rotateEnabled={false}
                     //customMapStyle={mapStyle}
-                    // ref="map"
                     ref={ref => { this.map = ref; }}
                 //onLayout={() => }
                 >
                     {this.renderPolygon()}
+
+                    <Marker
+                        ref={marker => {
+                            this.marker = marker;
+                        }}
+                        coordinate={{ latitude: latitude, longitude: longitude }}
+                    >
+                        <View><Image source={{ uri: this.props.profilePic }} style={styles.avatar} /></View>
+
+                    </Marker>
 
                     {this.props.getRandom.map(marker => (
                         <MapView.Marker
@@ -152,6 +184,13 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 20
     },
+    avatar: {
+        width: 28,
+        height: 28,
+        borderRadius: 63,
+        borderWidth: 2,
+        borderColor: "#78849E"
+    }
 });
 
 // function mapStateToProps(state) {
