@@ -60,8 +60,6 @@ class Maps extends Component {
             } else {
                 coordinate.timing(coords).start();
             }
-
-
         }
     }
 

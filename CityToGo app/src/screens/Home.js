@@ -1,14 +1,6 @@
 //#region Imports
 import React, { Component, } from "react";
-import {
-    View,
-    StyleSheet,
-    Image,
-    TouchableOpacity,
-    Platform
-
-} from "react-native";
-import { Button } from 'react-native-elements'
+import { View, StyleSheet, } from "react-native";
 import SInfo from "react-native-sensitive-info";
 import Maps from "./Maps";
 import ModalExample from "./popup"
@@ -21,13 +13,12 @@ import Config from '../config/config'
 import { monument } from '../redux/actions/monumentAction'
 import { location } from '../redux/actions/currentLocationAction'
 import { getUserSession, postUserSession, createUserSubsession } from "../redux/actions/userSessionAction";
-
 import { connect } from "react-redux";
+
 
 import { CardSection } from "./../common"
 import { Button_White } from "./../common/Button_White"
 import { Button_Start } from "./../common/Button_Start"
-import MapView, { AnimatedRegion } from 'react-native-maps';
 
 //#endregion
 const LATITUDE = 0;
@@ -80,7 +71,31 @@ class Home extends Component {
         })
 
     }
-    
+
+    componentDidUpdate(prevProps) {
+        const { fetched, monument } = this.props.monumentState;
+
+        if (prevProps.monumentState.fetched !== fetched) {
+
+            this.mapPolygon(monument)
+            this.setState({
+                allMonument: monument,
+                monumentsProps: monument.properties,
+                polygons: monument.geometry.coordinates[0],
+                data: monument.properties.imageUrl,
+                Name: monument.properties.imageUrl,
+                Name: monument.properties.Naam,
+                isStartPopupVisible: true,
+                //polygons: responseJson.geometry.coordinates[0],
+                isStartBttnVisible: true
+            })
+
+            this.refs.popupchild.setModalVisible(true, true);
+            this.getRandomQuizes();
+        }
+
+    }
+
     componentWillMount() {
         navigator.geolocation.getCurrentPosition(
             error => alert(error.message),
@@ -164,36 +179,9 @@ class Home extends Component {
 
     }
 
-    componentDidUpdate(prevProps) {
-        const { fetched, monument } = this.props.monumentState;
-
-        if (prevProps.monumentState.fetched !== fetched) {
-
-            this.mapPolygon(monument)
-            this.setState({
-                allMonument: monument,
-                monumentsProps: monument.properties,
-                polygons: monument.geometry.coordinates[0],
-                data: monument.properties.imageUrl,
-                Name: monument.properties.imageUrl,
-                Name: monument.properties.Naam,
-                isStartPopupVisible: true,
-                //polygons: responseJson.geometry.coordinates[0],
-                isStartBttnVisible: true
-            })
-
-            this.refs.popupchild.setModalVisible(true, true);
-            this.getRandomQuizes();
-        }
-
-    }
 
 
-    getMonument() {
-        const { latitude, longitude } = this.props.currentLocationState.coords;
-
-        this.props.monument(latitude, longitude);
-    }
+  
 
 
     mapPolygon(responseJson) {
@@ -252,56 +240,6 @@ class Home extends Component {
 
     }
 
-
-
-    startGameSession() {
-
-        const { fetched, monument } = this.props.monumentState;
-
-        let userProfielData = this.props.navigation.getParam("userData");
-        let arr = [];
-
-        let startTime = new Date().valueOf()
-        let userId = userProfielData.sub
-
-        // this.props.postUserSession(userId, true, startTime, 0, false, this.state.allMonument)
-
-        fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/create`, {
-            method: 'POST',
-            headers: {
-                authorization: 'Bearer ' + global.token,
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                userId: userId,
-                isRunning: true,
-                subSession: {
-                    startTime: startTime,
-                    stopTime: 0,
-                    isFound: false,
-                    monument: monument
-                }
-            }),
-        }).then((response) => response.json())
-            .then((responseJson) => {
-
-                //    console.log(responseJson._id)
-                this.setState({ sessionId: responseJson._id })
-                arr.push(responseJson.subSession[0])
-                this.setState({ subSession: arr })
-
-                //    console.log(this.state.subSession)
-
-            }
-            ).catch((error) => {
-                console.error(error);
-            });
-
-    }
-
-
-
     getVisitedMonuments() {
 
         let userProfielData = this.props.navigation.getParam("userData");
@@ -354,9 +292,33 @@ class Home extends Component {
                 console.error(error);
             });
     }
-    //#endregion
-    //#region  Start button 
-    //shows the start popup
+
+
+
+    startGameSession() {
+
+        const { fetched, monument } = this.props.monumentState;
+
+        let userProfielData = this.props.navigation.getParam("userData");
+        let arr = [];
+
+        let startTime = new Date().valueOf()
+        let userId = userProfielData.sub
+
+         this.props.postUserSession(userId, true, startTime, 0, false, this.state.allMonument)
+
+    }
+
+
+
+   
+   
+    getMonument() {
+        const { latitude, longitude } = this.props.currentLocationState.coords;
+
+        this.props.monument(latitude, longitude);
+    }
+
     showStartPopup() {
         this.getMonument()
     }
@@ -529,7 +491,6 @@ const styles = StyleSheet.create({
     }
 
 });
-//#endregion
 
 function mapStateToProps(state) {
     return {
