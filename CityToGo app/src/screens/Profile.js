@@ -158,7 +158,7 @@ class Profiel extends Component {
         <View style={styles.body}>
           <View style={styles.item}>
             <View style={styles.iconContent}>
-              <Image style={styles.icon} source={require('./../assets/User.png')} />
+              <Image style={styles.icon} source={require('./../assets/icons/User.png')} />
             </View>
             <View style={styles.infoContent}>
               <Text style={styles.info}>{Full_name}</Text>
@@ -167,7 +167,7 @@ class Profiel extends Component {
 
           <View style={styles.item}>
             <View style={styles.iconContent}>
-              <Image style={styles.icon} source={require('./../assets/Age.png')} />
+              <Image style={styles.icon} source={require('./../assets/icons/Age.png')} />
             </View>
             <View style={styles.infoContent}>
               <Text style={styles.info}>{Age}</Text>
@@ -176,7 +176,7 @@ class Profiel extends Component {
 
           <View style={styles.item}>
             <View style={styles.iconContent}>
-              <Image style={styles.icon}  source={require('./../assets/Email.png')} />
+              <Image style={styles.icon}  source={require('./../assets/icons/Email.png')} />
             </View>
 
 
@@ -187,7 +187,7 @@ class Profiel extends Component {
 
           <View style={styles.item}>
             <View style={styles.iconContent}>
-              <Image style={styles.icon} source={require('./../assets/Location.png')} />
+              <Image style={styles.icon} source={require('./../assets/icons/Location.png')} />
             </View>
             <View style={styles.infoContent}>
               <Text style={styles.info}>{location}</Text>

@@ -56,7 +56,7 @@ class Maps extends Component {
 
                     <MapView.Marker
                         coordinate={{ latitude: this.props.lat, longitude: this.props.long }}
-                        image={require('../assets/checkpoint.png')}
+                        image={require('../assets/icons/checkpoint.png')}
                         onPress={this.Camera}>
                     </MapView.Marker>
                 </View>
@@ -77,16 +77,14 @@ class Maps extends Component {
 
         const { latitude, longitude } = this.props.currentLocation.coords
         const { fetched, coords } = this.props.currentLocation
-        const { coordinate } = this.state;
 
-        if (this.props.currentLocation.fetched) {
+
+        if (fetched) {
             if (this.marker) {
                 this.marker.animateMarkerToCoordinate(
                     coords,
                     500
                 );
-
-            } 
             }
             if (this.map) {
 
@@ -131,7 +129,7 @@ class Maps extends Component {
                             key={marker.latitude}
                             coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
                             //title={"Quiz"}
-                            image={require('../assets/quiz.png')}
+                            image={require('../assets/icons/quiz.png')}
                             // description={"description"}
                             onPress={() => this.props.Quiz2(marker.latitude, marker.longitude)} >
                         </MapView.Marker>

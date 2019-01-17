@@ -8,6 +8,7 @@ import Quiz_popUp from "./Quiz_popup";
 import randomLocation from 'random-location';
 import geolib from "geolib";
 import Config from '../config/config'
+import COLORS from "../common/Colors";
 
 //Redux
 import { monument } from '../redux/actions/monumentAction'
@@ -18,7 +19,7 @@ import { connect } from "react-redux";
 
 import { CardSection } from "./../common"
 import { Button_White } from "./../common/Button_White"
-import { Button_Start } from "./../common/Button_Start"
+import { CustomButton } from "../common/CustomButton"
 
 //#endregion
 const LATITUDE = 0;
@@ -86,7 +87,6 @@ class Home extends Component {
                 Name: monument.properties.imageUrl,
                 Name: monument.properties.Naam,
                 isStartPopupVisible: true,
-                //polygons: responseJson.geometry.coordinates[0],
                 isStartBttnVisible: true
             })
 
@@ -178,11 +178,6 @@ class Home extends Component {
         this.setState({ showMonument: true })
 
     }
-
-
-
-  
-
 
     mapPolygon(responseJson) {
         const polygon = responseJson.geometry.coordinates[0].map(coordsArr => {
@@ -296,23 +291,19 @@ class Home extends Component {
 
 
     startGameSession() {
-
-        const { fetched, monument } = this.props.monumentState;
-
         let userProfielData = this.props.navigation.getParam("userData");
-        let arr = [];
 
         let startTime = new Date().valueOf()
         let userId = userProfielData.sub
 
-         this.props.postUserSession(userId, true, startTime, 0, false, this.state.allMonument)
+        this.props.postUserSession(userId, true, startTime, 0, false, this.state.allMonument)
 
     }
 
 
 
-   
-   
+
+
     getMonument() {
         const { latitude, longitude } = this.props.currentLocationState.coords;
 
@@ -327,18 +318,30 @@ class Home extends Component {
         if (this.state.isStartBttnVisible !== true) {
             return (
                 <View >
-                    {/* <Button
-                        onPress={() => { this.showStartPopup(); this.setState({ canShowCheckpointPhoto: true }) }}
-
-                        buttonStyle={styles.buttonStyle}
-                        title="Start"
-                    /> */}
-
-                    <Button_Start buttonStyle={styles} children={require('./../assets/Play.png')} onPress={() => { this.showStartPopup(); this.setState({ canShowCheckpointPhoto: true }) }}></Button_Start>
-
-
-
-
+                    <CustomButton
+                        color={COLORS.PRIMARY}
+                        heightIcon={34}
+                        widthIcon={34}
+                        children={require('./../assets/icons/Play.png')}
+                        onPress={() => {
+                            this.showStartPopup();
+                            this.setState({ canShowCheckpointPhoto: true })
+                        }} />
+                </View>
+            )
+        } else {
+            return (
+                <View>
+                    <CustomButton
+                        color={COLORS.SECONDARY}
+                        heightIcon={34}
+                        widthIcon={34}
+                        children={require('./../assets/icons/stop.png')}
+                        // onPress={() => {
+                        //     this.showStartPopup();
+                        //     this.setState({ canShowCheckpointPhoto: true })
+                        // }} 
+                        />
                 </View>
             )
         }
@@ -348,13 +351,13 @@ class Home extends Component {
         if (this.state.canShowCheckpointPhoto == true) {
             return (
                 <View >
-                    {/* <TouchableOpacity onPress={() => this.refs.popupchild.setModalVisible(true, false)}>
-                        <Image style={styles.CheckpointPic}
-                            blurRadius={this.state.blurpercentage}
-                            source={{ uri: this.state.data }} />
-                    </TouchableOpacity> */}
-
-                    <Button_White children={require('./../assets/Museum.png')} onPress={() => this.refs.popupchild.setModalVisible(true, false)}></Button_White>
+                    <CustomButton
+                        color='#FFFFFF'
+                        heightIcon={30}
+                        widthIcon={30}
+                        children={require('./../assets/icons/Museum.png')}
+                        onPress={() => this.refs.popupchild.setModalVisible(true, false)}
+                    />
                 </View>
 
             )
@@ -426,8 +429,8 @@ class Home extends Component {
                     </View>
 
                     <View style={styles.buttonsGroup2}>
-                        <Button_White children={require('./../assets/Person.png')} onPress={() => navigate('Profile', { sessionId: this.state.sessionId })}></Button_White>
-                        <Button_White children={require('./../assets/loc.png')} ></Button_White>
+                        <Button_White children={require('./../assets/icons/Person.png')} onPress={() => navigate('Profile', { sessionId: this.state.sessionId })}></Button_White>
+                        <Button_White children={require('./../assets/icons/loc.png')} ></Button_White>
                     </View>
 
 
