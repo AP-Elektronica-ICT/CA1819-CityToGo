@@ -16,7 +16,7 @@ export const getLocationFailure = (error) => ({
 })
 
 export const location = () => {
-
+ 
 
     return async dispatch => {
         dispatch(getLocationRequest());
@@ -26,7 +26,9 @@ export const location = () => {
             dispatch(getLocationSucces(coords))
         },
             (error) => dispatch(getLocationFailure(error)),
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+            { enableHighAccuracy: true, timeout: 1000, maximumAge: 0, distanceFilter: 5 }
         );
+
     }
+
 }

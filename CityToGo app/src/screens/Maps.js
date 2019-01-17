@@ -10,6 +10,8 @@ import Mycard from "./Cardcomponent"
 
 const LATITUDE_DELTA = 0.003;
 const LONGITUDE_DELTA = 0.003;
+const LATITUDE = 0;
+const LONGITUDE = 0;
 
 
 class Maps extends Component {
@@ -19,7 +21,7 @@ class Maps extends Component {
         // SensorManager.startOrientation(100);
         // DeviceEventEmitter.addListener('Orientation', orientation => {
         //     if (this.props.currentLocation.fetched) {
-        //        // this.map.animateToBearing(Math.round(orientation.azimuth), 100); 
+        //         this.map.animateToBearing(Math.round(orientation.azimuth), 100); 
         //     }
         // });
         // SensorManager.stopAccelerometer();
@@ -45,23 +47,6 @@ class Maps extends Component {
             })
         }
     }
-    componentDidUpdate(prevProps) {
-        const { fetched, coords } = this.props.currentLocation
-        if (prevProps.currentLocation.coords.fetched !== fetched) {
-
-
-            if (Platform.OS === "android") {
-                if (this.marker) {
-                    this.marker.animateMarkerToCoordinate(
-                        coords,
-                        500
-                    );
-                }
-            } else {
-                coordinate.timing(coords).start();
-            }
-        }
-    }
 
 
     renderPolygon() {
@@ -79,26 +64,46 @@ class Maps extends Component {
         }
     }
 
-    getMapRegion = () => ({
-        latitude: this.props.currentLocation.coords.latitude,
-        longitude: this.props.currentLocation.coords.longitude,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA
-    });
+    getMapRegion() {
+        return ({
+            latitude: this.props.currentLocation.coords.latitude,
+            longitude: this.props.currentLocation.coords.longitude,
+            latitudeDelta: LATITUDE_DELTA,
+            longitudeDelta: LONGITUDE_DELTA
+        })
+    }
 
     render() {
 
         const { latitude, longitude } = this.props.currentLocation.coords
-
+        const { fetched, coords } = this.props.currentLocation
+        const { coordinate } = this.state;
 
         if (this.props.currentLocation.fetched) {
+            if (this.marker) {
+                this.marker.animateMarkerToCoordinate(
+                    coords,
+                    500
+                );
+
+            } 
+            }
+            if (this.map) {
+
+                this.map.animateToRegion(
+                    this.getMapRegion(),
+                    500
+                )
+            }
+
+
 
 
             return (
 
                 <MapView
                     style={styles.map}
-                    region={this.getMapRegion()}
+                    initialRegion={this.getMapRegion()}
                     showsUserLocation={false}
                     showsMyLocationButton
                     followUserLocation
@@ -114,9 +119,7 @@ class Maps extends Component {
                     {this.renderPolygon()}
 
                     <Marker
-                        ref={marker => {
-                            this.marker = marker;
-                        }}
+                        ref={marker => { this.marker = marker; }}
                         coordinate={{ latitude: latitude, longitude: longitude }}
                     >
                         <View><Image source={{ uri: this.props.profilePic }} style={styles.avatar} /></View>
