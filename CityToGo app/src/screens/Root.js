@@ -8,6 +8,7 @@ import Camera from './Camera'
 import Maps from './Maps'
 import LearnMore from './LearnMore'
 import ListSubSessions from "./ListSubSessions";
+import ARscreen from './ARscreen'
 
 
 const Root = createStackNavigator(
@@ -50,6 +51,12 @@ const Root = createStackNavigator(
         },
         ListSubSessions: {
             screen: ListSubSessions,
+            navigationOptions: {
+                header: null
+            }
+        },
+        ARclass: {
+            screen: ARscreen,
             navigationOptions: {
                 header: null
             }
