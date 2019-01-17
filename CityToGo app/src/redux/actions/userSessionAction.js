@@ -11,7 +11,7 @@ export function getUserSession(userID) {
     return {
         type: FETCHING_GET_USER_SESSION,
         payload: axios.get(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/find/${userID}`)
-        .then((res) => res.data)
+            .then((res) => res.data)
     }
 }
 
@@ -35,13 +35,13 @@ export function postUserSession(userId, isRunning, startTime, stopTime, isFound,
                 // Accept: 'application/json',
                 'Content-Type': 'application/json',
             }
-        }).then(res => res.data)
+        }).then(res => res.data )
     }
 }
 
-export function createUserSubsession(arr, sessionID) {
+export function createUserSubsession(isRunning, sessionID) {
     let body = JSON.stringify({
-        subSession: arr
+        isRunning: isRunning
     })
 
     return {

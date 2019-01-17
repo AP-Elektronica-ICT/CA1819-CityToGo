@@ -85,39 +85,39 @@ class Profiel extends Component {
      
 
 
-  stopCurrentSession(sessionId) {
-    fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/update/${sessionId}`, {
-      method: 'PUT',
-      headers: {
-        authorization: 'Bearer ' + global.token,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        isRunning: false,
-      }),
-    }).then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson)
-      }
-      ).catch((error) => {
-        console.error(error);
-      });
-  }
+  // stopCurrentSession(sessionId) {
+  //   fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/update/${sessionId}`, {
+  //     method: 'PUT',
+  //     headers: {
+  //       authorization: 'Bearer ' + global.token,
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       isRunning: false,
+  //     }),
+  //   }).then((response) => response.json())
+  //     .then((responseJson) => {
+  //       console.log(responseJson)
+  //     }
+  //     ).catch((error) => {
+  //       console.error(error);
+  //     });
+  // }
 
-  renderSessionStopBttn(sessionId) {
-    if (sessionId !== undefined) {
-      return (
-        <Button
-          onPress={() => this.stopCurrentSession(sessionId)}
-          buttonStyle={styles.buttonStyle}
-          title="Stop session"
-        />
-      )
-    }
+  // renderSessionStopBttn(sessionId) {
+  //   if (sessionId !== undefined) {
+  //     return (
+  //       <Button
+  //         onPress={() => this.stopCurrentSession(sessionId)}
+  //         buttonStyle={styles.buttonStyle}
+  //         title="Stop session"
+  //       />
+  //     )
+  //   }
 
-    return null
-  }
+  //   return null
+  // }
 
   render() {
 
@@ -211,7 +211,7 @@ class Profiel extends Component {
 
         
 
-          {this.renderSessionStopBttn(sessionId)}
+          {/* {this.renderSessionStopBttn(sessionId)} */}
 
         </View>
       </View>

@@ -56,6 +56,7 @@ class Home extends Component {
             subSession: [],
             blurpercentage: 5,
             canShowCheckpointPhoto: false,
+            isCurrentSessionStarted: false,
 
             markers: [{
                 coordinate: { latitude: 45.013, longitude: -122.6749817 },
@@ -87,7 +88,7 @@ class Home extends Component {
                 Name: monument.properties.imageUrl,
                 Name: monument.properties.Naam,
                 isStartPopupVisible: true,
-                isStartBttnVisible: true
+                isCurrentSessionStarted: true
             })
 
             this.refs.popupchild.setModalVisible(true, true);
@@ -290,14 +291,24 @@ class Home extends Component {
 
 
 
-    startGameSession() {
+    startSession() {
         let userProfielData = this.props.navigation.getParam("userData");
-
-        let startTime = new Date().valueOf()
         let userId = userProfielData.sub
 
-        this.props.postUserSession(userId, true, startTime, 0, false, this.state.allMonument)
+        const { fetched, monument } = this.props.monumentState;
 
+        let time = new Date().valueOf()
+
+
+        this.props.postUserSession(userId, true, time, 0, false, monument)
+
+    }
+
+    stopSession() {
+        const { _id } = this.props.postUserSessionState.response
+
+        this.props.createUserSubsession(false, _id)
+        console.log(_id)
     }
 
 
@@ -314,8 +325,10 @@ class Home extends Component {
         this.getMonument()
     }
 
-    renderStartButton() {
-        if (this.state.isStartBttnVisible !== true) {
+    renderStartStopButton() {
+        const { isCurrentSessionStarted } = this.state
+
+        if (!isCurrentSessionStarted) {
             return (
                 <View >
                     <CustomButton
@@ -337,11 +350,12 @@ class Home extends Component {
                         heightIcon={34}
                         widthIcon={34}
                         children={require('./../assets/icons/stop.png')}
-                        // onPress={() => {
-                        //     this.showStartPopup();
-                        //     this.setState({ canShowCheckpointPhoto: true })
-                        // }} 
-                        />
+                        onPress={() => {
+                            this.setState({ isCurrentSessionStarted: false })
+                            this.stopSession()
+                            console.log('hellooooooo')
+                        }}
+                    />
                 </View>
             )
         }
@@ -414,7 +428,7 @@ class Home extends Component {
                     blur={this.state.blurpercentage}
                     data={this.state.Name}
 
-                    startGameSession={this.startGameSession.bind(this)}
+                    startGameSession={this.startSession.bind(this)}
 
                 />
                 <Quiz_popUp ref='quizchild'
@@ -425,7 +439,7 @@ class Home extends Component {
 
                     <View style={styles.buttonsGroup1}>
                         {this.renderCheckPointPhoto()}
-                        {this.renderStartButton()}
+                        {this.renderStartStopButton()}
                     </View>
 
                     <View style={styles.buttonsGroup2}>
