@@ -4,11 +4,13 @@ import { View, StyleSheet, } from "react-native";
 import SInfo from "react-native-sensitive-info";
 import Maps from "./Maps";
 import MonumentModal from "../modals/MonumentModal"
+import StopModal from "../modals/StopModal";
+
 import Quiz_popUp from "./Quiz_popup";
 import randomLocation from 'random-location';
 import geolib from "geolib";
 import Config from '../config/config'
-import COLORS from "../common/Colors";
+import { PRIMARY, SECONDARY, WHITE } from "../styles/Colors";
 
 //Redux
 import { monument } from '../redux/actions/monumentAction'
@@ -91,7 +93,7 @@ class Home extends Component {
                 isCurrentSessionStarted: true
             })
 
-            this.refs.popupchild.setModalVisible(true, true);
+            this.refs.refMonumentModal.setModalVisible(true, true);
             this.getRandomQuizes();
         }
 
@@ -305,10 +307,12 @@ class Home extends Component {
     }
 
     stopSession() {
-        const { _id } = this.props.postUserSessionState.response
+        // const { _id } = this.props.postUserSessionState.response
 
-        this.props.createUserSubsession(false, _id)
-        console.log(_id)
+
+        //  this.props.createUserSubsession(false, _id)
+        console.log('STOP')
+
     }
 
 
@@ -332,7 +336,7 @@ class Home extends Component {
             return (
                 <View >
                     <CustomShortButton
-                        color={COLORS.PRIMARY}
+                        color={PRIMARY}
                         heightIcon={34}
                         widthIcon={34}
                         children={require('./../assets/icons/Play.png')}
@@ -346,13 +350,14 @@ class Home extends Component {
             return (
                 <View>
                     <CustomShortButton
-                        color={COLORS.SECONDARY}
+                        color={SECONDARY}
                         heightIcon={34}
                         widthIcon={34}
                         children={require('./../assets/icons/stop.png')}
                         onPress={() => {
                             this.setState({ isCurrentSessionStarted: false })
-                            this.stopSession()
+                            this.refs.refStopModal.setModalVisible(true)
+
                             console.log('hellooooooo')
                         }}
                     />
@@ -366,11 +371,11 @@ class Home extends Component {
             return (
                 <View >
                     <CustomShortButton
-                        color='#FFFFFF'
+                        color={WHITE}
                         heightIcon={30}
                         widthIcon={30}
                         children={require('./../assets/icons/Museum.png')}
-                        onPress={() => this.refs.popupchild.setModalVisible(true, false)}
+                        onPress={() => this.refs.refMonumentModal.setModalVisible(true, false)}
                     />
                 </View>
 
@@ -419,14 +424,18 @@ class Home extends Component {
                     />
                 </View> */}
 
+                <StopModal
+                    ref='refStopModal'
 
+                    onPress={() => this.stopSession()}
 
+                />
 
-
-                <MonumentModal ref='popupchild'
+                <MonumentModal
+                    ref='refMonumentModal'
                     imageUri={this.state.data}
                     blur={this.state.blurpercentage}
-                    data={this.state.Name}
+                    monumentName={this.state.Name}
 
                     startGameSession={this.startSession.bind(this)}
 

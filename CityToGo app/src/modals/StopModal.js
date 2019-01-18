@@ -8,7 +8,9 @@ import {
     Image,
     StyleSheet
 } from 'react-native';
-import { Button } from "../common"
+import { CustomLargeButton } from "../common/CustomLargeButton"
+import { PRIMARY, SECONDARY, WHITE } from '../styles/Colors'
+import { bold } from "ansi-colors";
 
 
 class StopModal extends Component {
@@ -28,17 +30,26 @@ class StopModal extends Component {
                     transparent={true}
                     animationType="fade"
                     visible={this.state.modalVisible}
-                    onRequestClose={() => { Alert.alert('Modal has been closed.'); }}
+                    onRequestClose={() => { this.setModalVisible(!this.state.modalVisible) }}
                 >
 
 
                     <View style={styles.Model}>
                         <View style={styles.background}>
-                            <View></View>
-                            <Text style={styles.Text} > {this.props.data}</Text>
 
-                            <Button>YES</Button>
-                            <Button>CANCEL</Button>
+
+                            <Text style={styles.Title}>Stop session</Text>
+
+                            <Text style={styles.Text} >Are you sure you want to stop the current session</Text>
+
+                            <CustomLargeButton
+                                color={PRIMARY}
+                                onPress={this.props.onPress}
+                            >YES </CustomLargeButton>
+
+                            <CustomLargeButton
+                                color={SECONDARY}
+                                onPress={() => { this.setModalVisible(!this.state.modalVisible); }} >CANCEL</CustomLargeButton>
 
                         </View>
                     </View>
@@ -50,18 +61,10 @@ class StopModal extends Component {
         );
     }
 }
-}
+
 export default StopModal;
 
 const styles = StyleSheet.create({
-    image: {
-        // flex:1,
-        marginTop: 20,
-        height: 300,
-        borderRadius: 15,
-        width: 220
-    },
-
     Model: {
         flexDirection: 'row',
         flex: 1,
@@ -88,11 +91,15 @@ const styles = StyleSheet.create({
 
     },
     Text: {
-        alignSelf: 'center',
+        //alignSelf: 'center',
         color: 'rgba(255,255,255, 0.68);',
         paddingTop: 20,
         paddingBottom: 20,
         paddingRight: 25,
         paddingLeft: 25
     },
+    Title: {
+        fontSize: 25,
+        color: WHITE,
+    }
 });

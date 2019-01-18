@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Text, TouchableHighlight, View, Alert, Image, StyleSheet } from 'react-native';
 import { CustomLargeButton } from "../common/CustomLargeButton"
+import { PRIMARY, SECONDARY } from "../styles/Colors";
 class MonumentModal extends Component {
   state = {
     modalVisible: false,
@@ -27,7 +28,7 @@ class MonumentModal extends Component {
           transparent={true}
           animationType="fade"
           visible={this.state.modalVisible}
-          onRequestClose={() => { Alert.alert('Modal has been closed.'); }}
+          onRequestClose={() => { this.setModalVisible(!this.state.modalVisible) }}
         >
 
 
@@ -36,9 +37,16 @@ class MonumentModal extends Component {
               <View></View>
               <Image style={styles.image} source={{ uri: `${this.props.imageUri}` }} />
               {/* blurRadius={this.props.blur} */}
-              <Text style={styles.Text} > {this.props.data}</Text>
+              <Text style={styles.Text} > {this.props.monumentName}</Text>
 
-              < CustomLargeButton onPress={() => { this.startGameSession() }} >LET'S GO</CustomLargeButton>
+              < CustomLargeButton
+                color={PRIMARY}
+                onPress={() => { this.startGameSession() }} >
+                LET'S GO</CustomLargeButton>
+              < CustomLargeButton
+                color={SECONDARY}
+                onPress={() => { this.setModalVisible(!this.state.modalVisible) }} >
+                CANCEL</CustomLargeButton>
 
             </View>
           </View>
