@@ -1,6 +1,6 @@
 var image = require('./NextCheckpointController')
 
-let resultCameraImgLabels;
+var resultCameraImgLabels;
  
 
  
@@ -14,6 +14,7 @@ exports.getImageLabels =function(req,res){
         .then(res => res.json())
         .then(json => {
             resultCameraImgLabels = json.responses[0].webDetection.webEntities
+            console.log(image.i)
             console.log(image.resultBingImgLabels)
             image.resultBingImgLabels.forEach((e1) => resultCameraImgLabels.forEach((e2) => {
                 if (e1.description == e2.description)
