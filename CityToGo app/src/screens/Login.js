@@ -8,11 +8,6 @@ import SInfo from "react-native-sensitive-info";
 import RNRestart from "react-native-restart";
 import { CustomLargeButton, CardSection } from "./../common"
 
-import {
-  headerColorStyle,
-  headerTextColorStyle,
-  buttonStyle
-} from "../styles/colors";
 
 import styles from "../styles/Login";
 import Config from "../config/config"
@@ -26,17 +21,7 @@ const auth0 = new Auth0({
 
 export default class uniLogin extends Component {
 
-  static navigationOptions = ({ navigation }) => {
-    return {
-      headerTitle: "Login",
-      headerStyle: {
-        backgroundColor: headerColorStyle
-      },
-      headerTitleStyle: {
-        color: headerTextColorStyle
-      }
-    };
-  };
+
 
   constructor(props) {
     super(props)

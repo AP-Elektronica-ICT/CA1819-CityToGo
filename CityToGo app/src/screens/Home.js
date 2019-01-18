@@ -59,6 +59,7 @@ class Home extends Component {
             blurpercentage: 5,
             canShowCheckpointPhoto: false,
             isCurrentSessionStarted: false,
+            modalStartButtonVisible: false,
 
             markers: [{
                 coordinate: { latitude: 45.013, longitude: -122.6749817 },
@@ -86,15 +87,16 @@ class Home extends Component {
                 allMonument: monument,
                 monumentsProps: monument.properties,
                 polygons: monument.geometry.coordinates[0],
-                data: monument.properties.imageUrl,
-                Name: monument.properties.imageUrl,
-                Name: monument.properties.Naam,
-                isStartPopupVisible: true,
-                isCurrentSessionStarted: true
+                monumentImageUrl: monument.properties.imageUrl,
+                monumentName: monument.properties.Naam
+                // Name: monument.properties.imageUrl,
+                // Name: monument.properties.Naam,
+                // isStartPopupVisible: true,
+                //  isCurrentSessionStarted: true
             })
 
-            this.refs.refMonumentModal.setModalVisible(true, true);
-            this.getRandomQuizes();
+            //  this.refs.refMonumentModal.setModalVisible(true);
+            //  this.getRandomQuizes();
         }
 
     }
@@ -169,7 +171,7 @@ class Home extends Component {
     getQuizpopup = async (lat, long) => {
         distanceToQuiz = randomLocation.distance(currentLocation, { latitude: parseFloat(lat), longitude: parseFloat(long) })
         console.log("Distance to this quiz is " + parseInt(distanceToQuiz) + " meters")
-        if (parseInt(distanceToQuiz) < 100) {
+        if (parseInt(distanceToQuiz) < 300) {
             console.log("Quiz unlocked")
             this.setState({ quiz_visible: true });
             this.refs.quizchild.setModalVisible(this.state.quiz_visible);
@@ -294,30 +296,26 @@ class Home extends Component {
 
 
     startSession() {
+        const { monument } = this.props.monumentState;
+
         let userProfielData = this.props.navigation.getParam("userData");
         let userId = userProfielData.sub
-
-        const { fetched, monument } = this.props.monumentState;
-
         let time = new Date().valueOf()
 
-
+        this.getRandomQuizes();
         this.props.postUserSession(userId, true, time, 0, false, monument)
-
+        this.refs.refMonumentModal.setModalVisible(false)
+        this.setState({ isCurrentSessionStarted: true })
     }
 
     stopSession() {
-        // const { _id } = this.props.postUserSessionState.response
-
-
-        //  this.props.createUserSubsession(false, _id)
+        const { _id } = this.props.postUserSessionState.response
+        this.props.createUserSubsession(false, _id)
+        this.setState({ isCurrentSessionStarted: false })
+        this.refs.refStopModal.setModalVisible(false)
         console.log('STOP')
 
     }
-
-
-
-
 
     getMonument() {
         const { latitude, longitude } = this.props.currentLocationState.coords;
@@ -325,9 +323,10 @@ class Home extends Component {
         this.props.monument(latitude, longitude);
     }
 
-    showStartPopup() {
-        this.getMonument()
-    }
+
+
+
+
 
     renderStartStopButton() {
         const { isCurrentSessionStarted } = this.state
@@ -341,8 +340,9 @@ class Home extends Component {
                         widthIcon={34}
                         children={require('./../assets/icons/Play.png')}
                         onPress={() => {
-                            this.showStartPopup();
-                            this.setState({ canShowCheckpointPhoto: true })
+                            this.getMonument()
+                            this.setState({modalStartButtonVisible: true})
+                            this.refs.refMonumentModal.setModalVisible(true);
                         }} />
                 </View>
             )
@@ -350,15 +350,24 @@ class Home extends Component {
             return (
                 <View>
                     <CustomShortButton
+                        color={WHITE}
+                        heightIcon={30}
+                        widthIcon={30}
+                        children={require('./../assets/icons/Museum.png')}
+                        onPress={() => {
+                            this.setState({modalStartButtonVisible: false})
+                            this.refs.refMonumentModal.setModalVisible(true)}
+                        }
+                    />
+
+                    <CustomShortButton
                         color={SECONDARY}
                         heightIcon={34}
                         widthIcon={34}
                         children={require('./../assets/icons/stop.png')}
-                        onPress={() => {
-                            this.setState({ isCurrentSessionStarted: false })
-                            this.refs.refStopModal.setModalVisible(true)
-
-                            console.log('hellooooooo')
+                        onPress={() => { 
+                            
+                            this.refs.refStopModal.setModalVisible(true) 
                         }}
                     />
                 </View>
@@ -366,23 +375,16 @@ class Home extends Component {
         }
     }
 
-    renderCheckPointPhoto() {
-        if (this.state.canShowCheckpointPhoto == true) {
-            return (
-                <View >
-                    <CustomShortButton
-                        color={WHITE}
-                        heightIcon={30}
-                        widthIcon={30}
-                        children={require('./../assets/icons/Museum.png')}
-                        onPress={() => this.refs.refMonumentModal.setModalVisible(true, false)}
-                    />
-                </View>
+    // renderCheckPointPhoto() {
+    //     if (this.state.canShowCheckpointPhoto == true) {
+    //         return (
+    //             <View >
+    //             </View>
 
-            )
+    //         )
 
-        }
-    }
+    //     }
+    // }
 
 
 
@@ -433,13 +435,14 @@ class Home extends Component {
 
                 <MonumentModal
                     ref='refMonumentModal'
-                    imageUri={this.state.data}
-                    blur={this.state.blurpercentage}
-                    monumentName={this.state.Name}
-
-                    startGameSession={this.startSession.bind(this)}
-
+                    imageUrl={this.state.monumentImageUrl}
+                    // blur={this.state.blurpercentage}
+                    monumentName={this.state.monumentName}
+                    onPress={() => this.startSession()}
+                    modalContentVisible={fetched}
+                    modalStartButtonVisible={this.state.modalStartButtonVisible}
                 />
+
                 <Quiz_popUp ref='quizchild'
                     imageUri={this.state.data}
                     data={this.state.Name}
@@ -447,7 +450,7 @@ class Home extends Component {
                 <View style={styles.buttonsContainer}>
 
                     <View style={styles.buttonsGroup1}>
-                        {this.renderCheckPointPhoto()}
+                        {/* {this.renderCheckPointPhoto()} */}
                         {this.renderStartStopButton()}
                     </View>
 

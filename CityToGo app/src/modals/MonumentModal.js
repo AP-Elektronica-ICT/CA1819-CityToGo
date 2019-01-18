@@ -1,24 +1,54 @@
 import React, { Component } from 'react';
-import { Modal, Text, TouchableHighlight, View, Alert, Image, StyleSheet } from 'react-native';
+import { Modal, Text, View, Image, StyleSheet } from 'react-native';
 import { CustomLargeButton } from "../common/CustomLargeButton"
-import { PRIMARY, SECONDARY } from "../styles/Colors";
+import { PRIMARY, SECONDARY, WHITE } from "../styles/Colors";
+
+
 class MonumentModal extends Component {
   state = {
     modalVisible: false,
-    showButton: true
+
   };
 
-  setModalVisible(visible, btnvisible) {
+  setModalVisible(visible) {
     this.setState({ modalVisible: visible })
-    this.setState({ showButton: btnvisible })
   }
 
-  startGameSession() {
-    this.setModalVisible(false);
-    if (this.state.showButton) {
-      this.props.startGameSession()
+  renderStartButton() {
+    if (this.props.modalStartButtonVisible)
+      return (
+
+          < CustomLargeButton
+            color={PRIMARY}
+            onPress={this.props.onPress} >
+            LET'S GO</CustomLargeButton>
+ 
+      )
+  }
+
+
+
+  renderModalContent() {
+    if (this.props.modalContentVisible) {
+      return (
+
+        <View style={styles.Model}>
+          <View style={styles.background}>
+            <Image style={styles.image} source={{ uri: `${this.props.imageUrl}` }} />
+            {/* blurRadius={this.props.blur} */}
+            <Text style={styles.Text} > {this.props.monumentName}</Text>
+            {this.renderStartButton()}
+            < CustomLargeButton
+              color={SECONDARY}
+              onPress={() => { this.setModalVisible(!this.state.modalVisible) }} >
+              CANCEL</CustomLargeButton>
+          </View>
+        </View >
+      )
+
     }
   }
+
 
   render() {
 
@@ -26,30 +56,11 @@ class MonumentModal extends Component {
       <View style={styles.container}>
         <Modal
           transparent={true}
-          animationType="fade"
+          animationType="slide"
           visible={this.state.modalVisible}
           onRequestClose={() => { this.setModalVisible(!this.state.modalVisible) }}
         >
-
-
-          <View style={styles.Model}>
-            <View style={styles.background}>
-              <View></View>
-              <Image style={styles.image} source={{ uri: `${this.props.imageUri}` }} />
-              {/* blurRadius={this.props.blur} */}
-              <Text style={styles.Text} > {this.props.monumentName}</Text>
-
-              < CustomLargeButton
-                color={PRIMARY}
-                onPress={() => { this.startGameSession() }} >
-                LET'S GO</CustomLargeButton>
-              < CustomLargeButton
-                color={SECONDARY}
-                onPress={() => { this.setModalVisible(!this.state.modalVisible) }} >
-                CANCEL</CustomLargeButton>
-
-            </View>
-          </View>
+          {this.renderModalContent()}
 
         </Modal>
 
@@ -103,5 +114,5 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingRight: 25,
     paddingLeft: 25
-  },
+  }
 });
