@@ -9,7 +9,7 @@ import {
     StyleSheet
 } from 'react-native';
 import { CustomLargeButton } from "../common/CustomLargeButton"
-import { PRIMARY, SECONDARY, WHITE } from '../styles/Colors'
+import { PRIMARY, SECONDARY, WHITE } from '../styles/colors'
 import { bold } from "ansi-colors";
 
 

@@ -10,7 +10,7 @@ import Quiz_popUp from "./Quiz_popup";
 import randomLocation from 'random-location';
 import geolib from "geolib";
 import Config from '../config/config'
-import { PRIMARY, SECONDARY, WHITE } from "../styles/Colors";
+import { PRIMARY, SECONDARY, WHITE } from "../styles/colors";
 
 //Redux
 import { monument } from '../redux/actions/monumentAction'

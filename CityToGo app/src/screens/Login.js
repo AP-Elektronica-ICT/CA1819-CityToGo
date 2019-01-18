@@ -12,6 +12,7 @@ import { CustomLargeButton, CardSection } from "./../common"
 import styles from "../styles/Login";
 import Config from "../config/config"
 import { Button2 } from "../common/Button2";
+import { PRIMARY, SECONDARY, WHITE } from "../styles/colors";
 
 const auth0 = new Auth0({
   domain: Config.AUTH0_DOMAIN,
@@ -86,7 +87,7 @@ export default class uniLogin extends Component {
           </CardSection>
           {this.state.hasInitialized && (
             <CardSection>
-              <CustomLargeButton onPress={this.login}>CONTINUE</CustomLargeButton>
+              <CustomLargeButton color={PRIMARY} onPress={this.login}>CONTINUE</CustomLargeButton>
             </CardSection>
 
           )}

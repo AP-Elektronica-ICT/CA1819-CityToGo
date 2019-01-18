@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Text, View, Image, StyleSheet } from 'react-native';
 import { CustomLargeButton } from "../common/CustomLargeButton"
-import { PRIMARY, SECONDARY, WHITE } from "../styles/Colors";
+import { PRIMARY, SECONDARY, WHITE } from "../styles/colors";
 
 
 class MonumentModal extends Component {
