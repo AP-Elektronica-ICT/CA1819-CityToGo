@@ -313,7 +313,6 @@ class Home extends Component {
         this.props.createUserSubsession(false, _id)
         this.setState({ isCurrentSessionStarted: false })
         this.refs.refStopModal.setModalVisible(false)
-        console.log('STOP')
 
     }
 

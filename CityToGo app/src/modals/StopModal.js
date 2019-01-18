@@ -2,15 +2,11 @@ import React, { Component } from "react";
 import {
     Modal,
     Text,
-    TouchableHighlight,
     View,
-    Alert,
-    Image,
     StyleSheet
 } from 'react-native';
 import { CustomLargeButton } from "../common/CustomLargeButton"
 import { PRIMARY, SECONDARY, WHITE } from '../styles/Colors'
-import { bold } from "ansi-colors";
 
 
 class StopModal extends Component {
@@ -94,7 +90,7 @@ const styles = StyleSheet.create({
         //alignSelf: 'center',
         color: 'rgba(255,255,255, 0.68);',
         paddingTop: 20,
-        paddingBottom: 20,
+        paddingBottom: 10,
         paddingRight: 25,
         paddingLeft: 25
     },

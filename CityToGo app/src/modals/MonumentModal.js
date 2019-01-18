@@ -18,18 +18,17 @@ class MonumentModal extends Component {
     if (this.props.modalStartButtonVisible)
       return (
 
-          < CustomLargeButton
-            color={PRIMARY}
-            onPress={this.props.onPress} >
-            LET'S GO</CustomLargeButton>
- 
+        < CustomLargeButton
+          color={PRIMARY}
+          onPress={this.props.onPress} >
+          LET'S GO</CustomLargeButton>
       )
   }
 
 
 
   renderModalContent() {
-    if (this.props.modalContentVisible) {
+    if (this.props.modalContentVisible)
       return (
 
         <View style={styles.Model}>
@@ -46,7 +45,7 @@ class MonumentModal extends Component {
         </View >
       )
 
-    }
+
   }
 
 
@@ -111,7 +110,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: 'rgba(255,255,255, 0.68);',
     paddingTop: 20,
-    paddingBottom: 20,
+    paddingBottom: 10,
     paddingRight: 25,
     paddingLeft: 25
   }
