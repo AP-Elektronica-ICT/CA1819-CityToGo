@@ -20,7 +20,7 @@ class LearnMore extends Component {
 {"\n"}
 
 Om CityToGo te kunnen spelen, moet je een account aanmaken of je facebook/google account gebruiken. Na aanmelden moet je op  <Image source={require('./../assets/Start.png')} style={styles.imageText}></Image> drukken om het spel te starten.
-De checkpoint (monument)  <Image source={require('./../assets/checkpoint.png')} style={styles.imageText}></Image>verschijnt op de map enkel als je in de range (15 meters)bent van de checkpoint. Om bonussen te verdienen kan je de quizjes   <Image source={require('./../assets/quiz.png')} style={styles.imageText}></Image> oplossen, quizjes zijn klikbaar enkel als je in de afstand van 15 meter bent.  Na het vinden van checkpoint moet je erop tikken en een foto te trekken om je jackpot bonus te unlocken  en een Unique AR te ervaren.
+De checkpoint (monument)  <Image source={require('./../assets/icons/checkpoint.png')} style={styles.imageText}></Image>verschijnt op de map enkel als je in de range (15 meters)bent van de checkpoint. Om bonussen te verdienen kan je de quizjes   <Image source={require('./../assets/icons/quiz.png')} style={styles.imageText}></Image> oplossen, quizjes zijn klikbaar enkel als je in de afstand van 15 meter bent.  Na het vinden van checkpoint moet je erop tikken en een foto te trekken om je jackpot bonus te unlocken  en een Unique AR te ervaren.
 </Text>
     
         
