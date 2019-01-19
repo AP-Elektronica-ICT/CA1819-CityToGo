@@ -10,6 +10,7 @@
   "dependencies": {
     "@babel/runtime": "^7.1.2",
     "@shoutem/ui": "^0.23.9",
+    "axios": "^0.18.0",
     "geolib": "^2.0.24",
     "haversine": "^1.1.1",
     "random-location": "^1.0.12",
@@ -28,6 +29,11 @@
     "react-native-simple-radio-button": "^2.7.3",
     "react-native-vector-icons": "^6.0.2",
     "react-navigation": "^2.18.0",
+    "react-redux": "^6.0.0",
+    "redux": "^4.0.1",
+    "redux-logger": "^3.0.6",
+    "redux-promise-middleware": "^5.1.1",
+    "redux-thunk": "^2.3.0",
     "react-viro": "2.12.0"
   },
   "devDependencies": {

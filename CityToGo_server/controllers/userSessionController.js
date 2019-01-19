@@ -1,9 +1,47 @@
 var UserSession = require('../models/userSessionModel');
 
-//Simple version, without validation or sanitation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//.
+
+
+
+
+
+
+
+
+
+
+
+
+
 exports.test = function (req, res) {
     res.send('Greetings from the Test controller!');
 };
+
+
+
+
+
+
 
 exports.session_create = function (req, res) {
     var userSession = new UserSession(
@@ -37,8 +75,8 @@ exports.session_getAll = function (req, res) {
         });
 
         return res.status(200).json(userSessionMap)
-        
-    }).catch(err => next(err))
+
+    }).catch(err =>console.log(err))
 }
 
 exports.session_find = function (req, res) {
@@ -47,7 +85,7 @@ exports.session_find = function (req, res) {
         if (!doc) return res.status(404).end()
         return res.status(200).json(doc)
     })
-        .catch(err => next(err))
+        .catch(err => console.log(err))
 }
 
 exports.session_update = function (req, res) {
@@ -58,6 +96,9 @@ exports.session_update = function (req, res) {
             if (!doc) return res.status(404).end()
             return res.status(200).json(doc)
         })
-        .catch(err => next(err))
+        .catch(err => console.log(err))
 
 }
+
+
+

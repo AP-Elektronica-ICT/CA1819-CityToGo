@@ -1,18 +1,14 @@
 import React, { Component } from "react";
-import { View, Text, ActivityIndicator,ImageBackground} from "react-native";
+import { View, Text, ActivityIndicator, ImageBackground } from "react-native";
 import { NavigationActions, StackActions } from "react-navigation";
 import Auth0 from "react-native-auth0";
 //import Config from "react-native-config";
 //import DeviceInfo from "react-native-device-info";
 import SInfo from "react-native-sensitive-info";
 import RNRestart from "react-native-restart";
-import {Button,CardSection} from "./../common"
+import { CustomLargeButton, CardSection } from "./../common"
+import { PRIMARY, SECONDARY } from "../styles/Colors";
 
-import {
-  headerColorStyle,
-  headerTextColorStyle,
-  buttonStyle
-} from "../styles/colors";
 
 import styles from "../styles/Login";
 import Config from "../config/config"
@@ -26,17 +22,7 @@ const auth0 = new Auth0({
 
 export default class uniLogin extends Component {
 
-  static navigationOptions = ({ navigation }) => {
-    return {
-      headerTitle: "Login",
-      headerStyle: {
-        backgroundColor: headerColorStyle
-      },
-      headerTitleStyle: {
-        color: headerTextColorStyle
-      }
-    };
-  };
+
 
   constructor(props) {
     super(props)
@@ -90,25 +76,30 @@ export default class uniLogin extends Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-      <ImageBackground source={require('./../assets/background.jpg')} style={styles.container}>
-        <ActivityIndicator
-          size="large"
-          color="#05a5d1"
-          animating={!this.state.hasInitialized}
-        />
-        <CardSection>
-          <Text style={styles.textStyle}>Welcome to CityToGO</Text>
-        </CardSection>
-        {this.state.hasInitialized && (
-          <CardSection>
-          <Button onPress={this.login}>CONTINUE</Button>
-          </CardSection>
- 
-        )}
-         <CardSection>
-             <Button2 onPress={() => navigate('LearnMore')}>LEARN MORE</Button2>
-             </CardSection>
-        </ImageBackground> 
+        <ImageBackground source={require('./../assets/background.jpg')} style={styles.imageBackground} opacity={0.6}>
+    
+            <ActivityIndicator
+              size="large"
+              color="#05a5d1"
+              animating={!this.state.hasInitialized}
+            />
+            <CardSection>
+              <Text style={styles.titleStyle}>Welcome to CityToGO</Text>
+            </CardSection>
+            <CardSection>
+              <Text style={styles.subTitleStyle}>The best way to explore your city and discover new places. Let's get started!</Text>
+            </CardSection>
+            {this.state.hasInitialized && (
+              <CardSection>
+                <CustomLargeButton color={PRIMARY} onPress={this.login}>CONTINUE</CustomLargeButton>
+              </CardSection>
+
+            )}
+            <CardSection>
+              <Button2 onPress={() => navigate('LearnMore')}>LEARN MORE</Button2>
+            </CardSection>
+   
+        </ImageBackground>
       </View>
     );
   }

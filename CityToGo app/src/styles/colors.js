@@ -1,5 +1,4 @@
-const headerColorStyle = "#333";
-const headerTextColorStyle = "#FFF";
-const buttonStyle = "#555";
-
-export { headerColorStyle, headerTextColorStyle, buttonStyle };
+export const PRIMARY= '#3ACCE1';
+export const SECONDARY= '#454F63';
+export const WHITE= '#FFFFFF';
+export const GREY= '#78849E';
