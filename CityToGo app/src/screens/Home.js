@@ -10,7 +10,7 @@ import Quiz_popUp from "./Quiz_popup";
 import randomLocation from 'random-location';
 import geolib from "geolib";
 import Config from '../config/config'
-import { PRIMARY, SECONDARY, WHITE } from "../styles/colors";
+import { PRIMARY, SECONDARY, WHITE } from "../styles/Colors";
 
 //Redux
 import { monument } from '../redux/actions/monumentAction'
@@ -313,7 +313,6 @@ class Home extends Component {
         this.props.createUserSubsession(false, _id)
         this.setState({ isCurrentSessionStarted: false })
         this.refs.refStopModal.setModalVisible(false)
-        console.log('STOP')
 
     }
 

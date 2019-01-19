@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { RNCamera } from 'react-native-camera';
-import Config from '../config/config'
+import CameraModal from "../modals/CameraModal";
 
 import { fetchRecognitionImage } from "../redux/actions/imageRecognitionAction";
 import { connect } from "react-redux"
@@ -14,19 +14,76 @@ import {
 
 class Camera extends Component {
 
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            isFound: false,
+            modalVisible: false
+        }
+    }
+
+    takePicture = async () => {
+        if (this.camera) {
+            const options = { quality: 0.5, base64: true };
+            const data = await this.camera.takePictureAsync(options)
+
+            this.props.fetchRecognitionImage(data.base64)
+        }
+    };
+
+
+    takeAction() {
+        const { navigate } = this.props.navigation;
+
+        navigate('Home')
+
+    }
+
+    componentDidUpdate(prevProps) {
+        const { fetched, data } = this.props.imageRecognition;
+
+        if (prevProps.imageRecognition.fetched !== fetched) {
+            if (data == "match") {
+                this.setState({
+                    isFound: true,
+                    modalVisible: true
+                })
+                console.log('match !!!!!!!!')
+            }
+            else {
+                this.setState({
+                    isFound: false,
+                    modalVisible: true
+                })
+                console.log('not match !!!!!!!!')
+            }
+
+        }
+    }
+
     render() {
-        let { fetching } = this.props.imageRecognition;
+        const { fetching, fetched } = this.props.imageRecognition;
+        const { isFound } = this.state
+
 
         if (fetching) {
             return (
                 <View style={styles.horizontal}>
-                    <ActivityIndicator size="large" color="#454F63"/>
+                    <ActivityIndicator size="large" color="#454F63" />
                 </View>
             )
         }
 
         return (
             <View style={styles.container}>
+                <CameraModal
+                    ref={ref => { this.CameraModal = ref; }}
+                    isFound={isFound}
+                    modalVisible={this.state.modalVisible}
+                    onPress={() => this.takeAction()}
+                    onPressYes={() => this.setState({ modalVisible: false })}
+                />
                 <RNCamera
                     ref={(ref) => {
                         this.camera = ref;
@@ -38,34 +95,16 @@ class Camera extends Component {
                 >
                     <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center', }}>
                         <TouchableOpacity
-                            onPress={this.takePicture.bind(this)}
+                            onPress={() => this.takePicture()}
                             style={styles.capture}
                         >
                         </TouchableOpacity>
                     </View>
                 </RNCamera>
+
+
             </View>
         );
-    }
-
-    takePicture = async () => {
-        if (this.camera) {
-            const options = { quality: 0.5, base64: true };
-            const data = await this.camera.takePictureAsync(options)
-
-            this.getImageLabels(data.base64)
-        }
-    };
-
-    getImageLabels = async (imageBase64) => {
-        const { navigate } = this.props.navigation;
-
-        this.props.fetchRecognitionImage(imageBase64)
-
-        if (this.props.imageRecognition.data == "match")
-            navigate('Home')
-        else
-            console.log(this.props.imageRecognition.data)
     }
 }
 

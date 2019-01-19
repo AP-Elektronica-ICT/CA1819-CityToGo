@@ -12,7 +12,8 @@ const getImageRecognition = (state = initialState, action) => {
         case FETCHING_IMAGE_RECOGNITION + _PENDING: {
             state = {
                 ...state,
-                fetching: true
+                fetching: true,
+                fetched: false,
             }
             break;
         }
