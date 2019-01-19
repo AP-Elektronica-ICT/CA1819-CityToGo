@@ -12,7 +12,10 @@ var userSessionSchema = new Schema({
     userId: { type: String, required: true },
     isRunning: { type: Boolean, required: true },
     subSession: [subSessionSchema]
-})
+});
 
+
+//.
 // Export the model
+
 module.exports = mongoose.model('userSession', userSessionSchema);

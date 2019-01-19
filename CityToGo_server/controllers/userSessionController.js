@@ -1,9 +1,47 @@
 var UserSession = require('../models/userSessionModel');
 
-//Simple version, without validation or sanitation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//.
+
+
+
+
+
+
+
+
+
+
+
+
+
 exports.test = function (req, res) {
     res.send('Greetings from the Test controller!');
 };
+
+
+
+
+
+
 
 exports.session_create = function (req, res) {
     var userSession = new UserSession(
@@ -61,3 +99,6 @@ exports.session_update = function (req, res) {
         .catch(err => console.log(err))
 
 }
+
+
+
