@@ -313,6 +313,7 @@ class Home extends Component {
 
     startSession() {
         const { monument } = this.props.monumentState;
+        console.log('START')
 
         let userProfielData = this.props.navigation.getParam("userData");
         let userId = userProfielData.sub
@@ -425,6 +426,7 @@ class Home extends Component {
                     getmarker={this.state.markers}
                     monumentVisibility={this.state.showMonument}
                     profilePic={userProfielData.picture}
+                    isCurrentSessionStarted ={this.state.isCurrentSessionStarted}
                 />
 
 
