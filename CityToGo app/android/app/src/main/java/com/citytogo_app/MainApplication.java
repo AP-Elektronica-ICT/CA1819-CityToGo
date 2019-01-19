@@ -5,7 +5,7 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.avishayil.rnrestart.ReactNativeRestartPackage;
 import br.com.classapp.RNSensitiveInfo.RNSensitiveInfoPackage;
-import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
+// import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.auth0.react.A0Auth0Package;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.facebook.react.ReactNativeHost;
@@ -32,7 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new ReactNativeRestartPackage(),
             new RNSensitiveInfoPackage(),
-            new ReactNativeConfigPackage(),
+            // new ReactNativeConfigPackage(),
             new A0Auth0Package(),
             new MapsPackage(),
             new SensorManagerPackage(),
