@@ -185,12 +185,14 @@ class Home extends Component {
     }
 
     getQuizpopup = async (lat, long) => {
+        const { navigate } = this.props.navigation;
         distanceToQuiz = randomLocation.distance(currentLocation, { latitude: parseFloat(lat), longitude: parseFloat(long) })
         console.log("Distance to this quiz is " + parseInt(distanceToQuiz) + " meters")
         if (parseInt(distanceToQuiz) < 300) {
             console.log("Quiz unlocked")
-            this.setState({ quiz_visible: true });
-            this.refs.quizchild.setModalVisible(this.state.quiz_visible);
+            navigate('ARclass', {ARSceneName: 'ARQuiz'})
+            //this.setState({ quiz_visible: true });
+           // this.refs.quizchild.setModalVisible(this.state.quiz_visible);
         }
     }
 
