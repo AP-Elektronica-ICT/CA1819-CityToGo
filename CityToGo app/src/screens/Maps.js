@@ -13,7 +13,6 @@ const LONGITUDE_DELTA = 0.003;
 const LATITUDE = 0;
 const LONGITUDE = 0;
 
-
 class Maps extends Component {
 
     componentWillMount() {
@@ -56,8 +55,9 @@ class Maps extends Component {
 
                     <MapView.Marker
                         coordinate={{ latitude: this.props.lat, longitude: this.props.long }}
-                        image={require('../assets/icons/checkpoint.png')}
+                        //image={require('../assets/icons/checkpoint.png')}
                         onPress={this.Camera}>
+                         <View><Image source={{ uri: `${this.props.CheckpointImage}` }} style={styles.checkpoint} /></View>
                     </MapView.Marker>
                 </View>
             )
@@ -129,9 +129,9 @@ class Maps extends Component {
                             key={marker.latitude}
                             coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
                             //title={"Quiz"}
-                            image={require('../assets/icons/quiz.png')}
-                            // description={"description"}
+                           // image={require('../assets/icons/quiz.png')}  
                             onPress={() => this.props.Quiz2(marker.latitude, marker.longitude)} >
+                            <View><Image source={require('../assets/icons/quiz.png')} style={{ width: 40, height: 40}}/></View>
                         </MapView.Marker>
                     ))}
                     {this.props.getmarker.map(mark => (
@@ -187,6 +187,13 @@ const styles = StyleSheet.create({
         width: 28,
         height: 28,
         borderRadius: 63,
+        borderWidth: 2,
+        borderColor: "#78849E"
+    },
+    checkpoint: {
+        width: 50,
+        height: 50,
+        borderRadius: 20,
         borderWidth: 2,
         borderColor: "#78849E"
     }

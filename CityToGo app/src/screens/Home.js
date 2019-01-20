@@ -22,6 +22,7 @@ import { connect } from "react-redux";
 import { CardSection } from "./../common"
 import { Button_White } from "./../common/Button_White"
 import { CustomShortButton } from "../common/CustomShortButton"
+import { ToastAndroid} from 'react-native'
 
 //#endregion
 const LATITUDE = 0;
@@ -32,6 +33,7 @@ var center;
 var distanceToCheckpoint;
 var distanceToQuiz;
 var stral;
+let  foundedQuizes=[7.222565,8.26688];
 
 class Home extends Component {
     //#region Constructor
@@ -60,7 +62,6 @@ class Home extends Component {
             canShowCheckpointPhoto: false,
             isCurrentSessionStarted: false,
             modalStartButtonVisible: false,
-
             markers: [{
                 coordinate: { latitude: 45.013, longitude: -122.6749817 },
                 image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Berchem_Basiliek3.JPG/220px-Berchem_Basiliek3.JPG",
@@ -172,12 +173,25 @@ class Home extends Component {
         distanceToQuiz = randomLocation.distance(currentLocation, { latitude: parseFloat(lat), longitude: parseFloat(long) })
         console.log("Distance to this quiz is " + parseInt(distanceToQuiz) + " meters")
         if (parseInt(distanceToQuiz) < 300) {
-            console.log("Quiz unlocked")
-            this.setState({ quiz_visible: true });
-            this.refs.quizchild.setModalVisible(this.state.quiz_visible);
+            
+            quiz=false;
+            console.log("new array "+ foundedQuizes);
+            for (let i = 0; i < foundedQuizes.length; i++) {
+                if(foundedQuizes[i]==lat){
+                    quiz=true;
+                    console.log("founded")
+                    ToastAndroid.show("THIS QUIZ IS LOCKED !", ToastAndroid.LONG)
+                }
+                
+            };
+            if(quiz==false){
+                console.log("Quiz unlocked")
+                this.setState({ quiz_visible: true });
+                this.refs.quizchild.setModalVisible(true);       
+                foundedQuizes.push(lat);
+            }
         }
     }
-
     ShowMonument = () => {
         this.getVisitedMonuments();
         this.setState({ showMonument: true })
@@ -408,6 +422,7 @@ class Home extends Component {
                     getmarker={this.state.markers}
                     monumentVisibility={this.state.showMonument}
                     profilePic={userProfielData.picture}
+                    CheckpointImage={this.state.monumentImageUrl}
                 />
 
 
@@ -445,6 +460,7 @@ class Home extends Component {
                 <Quiz_popUp ref='quizchild'
                     imageUri={this.state.data}
                     data={this.state.Name}
+                    quizArr={this.state.randomQuizes}
                 />
                 <View style={styles.buttonsContainer}>
 
