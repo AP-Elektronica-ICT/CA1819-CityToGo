@@ -3,7 +3,7 @@ import axios from "axios";
 import { FETCHING_QUIZ } from "./types";
 
 export function getQuiz(category) {
-    body = JSON.stringify({
+   let body = JSON.stringify({
         category: category,
     })
 
@@ -15,7 +15,7 @@ export function getQuiz(category) {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             }
-        }).then(res => res.data)
+        }).then(res => res)
     }
 
 }

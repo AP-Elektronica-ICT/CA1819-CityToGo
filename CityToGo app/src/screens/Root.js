@@ -63,7 +63,7 @@ const Root = createStackNavigator(
         }
     },
     {
-        initialRouteName: "ARclass" // show the login screen by default
+        initialRouteName: "Login" // show the login screen by default
     }
 );
 

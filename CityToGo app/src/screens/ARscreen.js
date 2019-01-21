@@ -5,6 +5,9 @@ import {
     StyleSheet,
 } from "react-native";
 
+import QuizAR from "../components/QuizAR";
+import PortalAR from "../components/PortalAR";
+
 import {
     ViroARSceneNavigator,
 } from 'react-viro';
@@ -12,11 +15,9 @@ import {
 var apiKey = "29D8811D-4B5A-4BE1-B17F-82EDDDCF3A73";
 
 var arScenes = {
-    'ARQuiz': require('../components/QuizAR'),
-    'ARPortal': require('../components/PortalAR')
+    'ARQuiz': QuizAR,
+    'ARPortal': PortalAR
 }
-
-var showARScene = false;
 
 class ARscreen extends Component {
     render() {

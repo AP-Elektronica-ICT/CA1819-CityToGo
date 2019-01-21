@@ -46,14 +46,14 @@ class QuizAR extends Component {
   }
 
   componentDidMount(){
-    this.props.monument(51.54646, 4.56465);
+    this.props.getQuiz('Politics');
   }
 
   generateRandomint(min, max) {
     return Math.random() * (max - min) + min;
   }
 
-  QuizCategory = async () => {
+  QuizCategory = async (category) => {
     fetch(`http://${Config.MY_IP_ADRES}:3000/api/QuizCategory`, {
       method: 'POST',
       headers: {
@@ -61,10 +61,11 @@ class QuizAR extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        category: this.state.category,
+        category: category,
 
       })
     }).then((response) => response.json()).then((data) => {
+      console.log(data)
       random = this.generateRandomint(1, 9);
       this.setState({
         question: data[parseInt(random)].question,
@@ -297,6 +298,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  monument,
   getQuiz
 })(QuizAR)
