@@ -4,7 +4,7 @@ CityToGo is een ARG (Alternate Reality Game).CityToGo is een ARG (Alternate Real
 
 ## Spelregel
 
-Om CityToGo te kunnen spelen, moet je een account aanmaken of je facebook/google account gebruiken. Na aanmelden moet je op ![alt text](https://github.com/AP-Elektronica-ICT/CA1819-CityToGo/tree/master/CityToGo%20app/src/assets/icons/quiz.png) drukken om het spel te starten.
+Om CityToGo te kunnen spelen, moet je een account aanmaken of je facebook/google account gebruiken. Na aanmelden moet je op ![start](https://github.com/AP-Elektronica-ICT/CA1819-CityToGo/blob/master/CityToGo%20app/src/assets/icons/quiz.png) drukken om het spel te starten.
 De checkpoint (monument) {checkpoint image} verschijnt op de map enkel als je in de range (15 meters)bent van de checkpoint. Om bonussen te verdienen kan je de quizjes {quiz image} oplossen, quizjes zijn klikbaar enkel als je in de afstand van 15 meter bent.  Na het vinden van checkpoint moet je erop tikken en een foto te trekken om je jackpot bonus te unlocken  en een Unique AR te ervaren
 
 ### Gebruikte tools en libraries:
