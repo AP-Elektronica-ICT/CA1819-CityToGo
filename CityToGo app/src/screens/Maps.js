@@ -63,10 +63,6 @@ class Maps extends Component {
                         onPress={this.goToCameraRecognition}
                         image={require('../assets/icons/checkpoint.png')}
                         >
-                        {/* <View>
-                            <Image source={{ uri: `${this.props.CheckpointImage}` }} style={styles.checkpoint} />
-                        </View> */}
-                        {/* //image={require('../assets/icons/checkpoint.png')} */}
                     </MapView.Marker>
                 </View>
             )
