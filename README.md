@@ -29,6 +29,6 @@ De checkpoint (monument) ![checkpoint](https://github.com/AP-Elektronica-ICT/CA1
 \CityToGo app\src\screens\Maps.js
 
 #### Developers
-Mohammed Laghzaoui
-Shakir Pathman
-Imad Hamroun
+Mohammed Laghzaoui<br />
+Shakir Pathman<br /><br />
+Imad Hamroun<br />
