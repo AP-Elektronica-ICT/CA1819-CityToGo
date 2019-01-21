@@ -42,7 +42,6 @@ class Maps extends Component {
         })
     }
 
-
     //Trigger Camera
     goToCameraRecognition = () => {
         console.log("Map afstand " + this.props.triggerCamera)
@@ -50,9 +49,6 @@ class Maps extends Component {
             this.props.navigate('Camera')
         }
     }
-
-
-
 
     renderCheckpoint() {
         if (this.props.isCurrentSessionStarted)
