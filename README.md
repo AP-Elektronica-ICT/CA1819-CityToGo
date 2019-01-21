@@ -4,7 +4,7 @@ CityToGo is een ARG (Alternate Reality Game).CityToGo is een ARG (Alternate Real
 
 ## Spelregel
 
-Om CityToGo te kunnen spelen, moet je een account aanmaken of je facebook/google account gebruiken. Na aanmelden moet je op [Stap 1](https://github.com/AP-Elektronica-ICT/CA1819-CityToGo/tree/master/CityToGo%20app/src/assets/Start.png) drukken om het spel te starten.
+Om CityToGo te kunnen spelen, moet je een account aanmaken of je facebook/google account gebruiken. Na aanmelden moet je op ![alt text](https://github.com/AP-Elektronica-ICT/CA1819-CityToGo/tree/master/CityToGo%20app/src/assets/Start.png) drukken om het spel te starten.
 De checkpoint (monument) {checkpoint image} verschijnt op de map enkel als je in de range (15 meters)bent van de checkpoint. Om bonussen te verdienen kan je de quizjes {quiz image} oplossen, quizjes zijn klikbaar enkel als je in de afstand van 15 meter bent.  Na het vinden van checkpoint moet je erop tikken en een foto te trekken om je jackpot bonus te unlocken  en een Unique AR te ervaren
 
 ### Gebruikte tools en libraries:
@@ -19,13 +19,13 @@ De checkpoint (monument) {checkpoint image} verschijnt op de map enkel als je in
 
 ### Code en Instelling:
 
-Auth0 domain  en server link (of localhost) wordt hier gegeven.
+- Auth0 domain  en server link (of localhost) wordt hier gegeven. <br />
 \CityToGo app\src\config.js
-Aantal quizes per afstand wordt hier bepaalt op kaart getRandomQuizes()
+- Aantal quizes per afstand wordt hier bepaalt op kaart getRandomQuizes() <br />
 \CityToGo app\src\screens\Home.js
-Gebruikers kunnen op een bepaalde afstand (in meter)van Quizes, AR quizes kunnen triggeren door op  te tikken. Het afstand wordt hier bepaalt getQuizpopup()
+- Gebruikers kunnen op een bepaalde afstand (in meter)van Quizes, AR quizes kunnen triggeren door op  te tikken. Het afstand wordt hier bepaalt getQuizpopup()  <br />
 \CityToGo app\src\screens\Home.js
-Gebruikers kunnen op een bepaalde afstand(in meter) van Checkpoint de Camera kunnen triggeren door op checkpoint marker te tikken. Het afstand wordt hier bepaalt goToCameraRecognition()
+- Gebruikers kunnen op een bepaalde afstand(in meter) van Checkpoint de Camera kunnen triggeren door op checkpoint marker te tikken. Het afstand wordt hier bepaalt goToCameraRecognition()  <br />
 \CityToGo app\src\screens\Maps.js
 
 #### Developers
