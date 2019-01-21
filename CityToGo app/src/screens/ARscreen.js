@@ -20,7 +20,8 @@ var showARScene = false;
 
 class ARscreen extends Component {
     render() {
-        const ARSceneName = this.props.navigation.getParam('ARSceneName');
+       // const ARSceneName = this.props.navigation.getParam('ARSceneName');
+       const ARSceneName = 'ARQuiz'
         switch (ARSceneName) {
             case 'ARQuiz':
                 return (
@@ -50,6 +51,7 @@ class ARscreen extends Component {
                 )
 
             default:
+
                 break;
         }
     }

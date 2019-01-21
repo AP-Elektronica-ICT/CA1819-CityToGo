@@ -6,6 +6,7 @@ import imageRecognition from "./imageRecognitionReducer";
 import getUserSession from "./getUserSessionReducer";
 import postUserSession from "./postUserSessionReducer";
 import putUserSession from './putUserSubSessionReducer'
+import quiz from './quizReducer'
 
 const reducers = combineReducers({
     monument,
@@ -13,7 +14,8 @@ const reducers = combineReducers({
     imageRecognition,
     getUserSession,
     postUserSession,
-    putUserSession
+    putUserSession,
+    quiz
 })
 
 export default reducers;

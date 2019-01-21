@@ -1,5 +1,3 @@
-'use strict';
-
 import React, { Component } from 'react';
 
 import {
@@ -25,9 +23,13 @@ import {
   ViroButton
 } from 'react-viro';
 
+import { getQuiz } from "../redux/actions/quizAction";
+import { monument } from '../redux/actions/monumentAction'
+import { connect } from "react-redux";
+
 var random;
 
-export default class QuizAR extends Component {
+class QuizAR extends Component {
 
   constructor(props) {
     super(props);
@@ -41,6 +43,10 @@ export default class QuizAR extends Component {
       category_is_selected: false,
     }
 
+  }
+
+  componentDidMount(){
+    this.props.monument(51.54646, 4.56465);
   }
 
   generateRandomint(min, max) {
@@ -283,4 +289,14 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = QuizAR;
+function mapStateToProps(state) {
+  return {
+    quiz: state.quiz
+
+  }
+}
+
+export default connect(mapStateToProps, {
+  monument,
+  getQuiz
+})(QuizAR)
