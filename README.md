@@ -30,5 +30,5 @@ De checkpoint (monument) ![checkpoint](https://github.com/AP-Elektronica-ICT/CA1
 
 #### Developers
 Mohammed Laghzaoui<br />
-Shakir Pathman<br /><br />
+Shakir Pathman<br />
 Imad Hamroun<br />
