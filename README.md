@@ -9,23 +9,23 @@ De checkpoint (monument) ![checkpoint](https://github.com/AP-Elektronica-ICT/CA1
 
 ### Gebruikte tools en libraries:
 
-- ViroAR  : Het ideale alternatief voor gespecialiseerde game-engines, ViroAR is een platform voor het snel bouwen van ARKit- en ARCore-apps.
-- Geolib: Dit npm package wordt gebruikt om afstand en middelpunt  tussen checkpoint en gebruikers te bepalen.
-- RandomLocation : Dit npm package wordt gebruikt om random quizes te plaatsen op een cirkel rond de middelpunt tussen de gebruiker en checkpoint. Zo gaan de gebruikers quizes te zien krijgen op de map onderweg naar checkpoint.
-- Google vision API : Wordt gebruikt om afbeelding van bezochte checkpoint te vergelijken met de google vision api databank.- 
-- React-native Modal : Pop ups
-- Auth0: Authenticatie server.
-- React-native Maps : 
+- **ViroAR**  : Het ideale alternatief voor gespecialiseerde game-engines, ViroAR is een platform voor het snel bouwen van ARKit- en ARCore-apps.
+- **Geolib**: Dit npm package wordt gebruikt om afstand en middelpunt  tussen checkpoint en gebruikers te bepalen.
+- **RandomLocation** : Dit npm package wordt gebruikt om random quizes te plaatsen op een cirkel rond de middelpunt tussen de gebruiker en checkpoint. Zo gaan de gebruikers quizes te zien krijgen op de map onderweg naar checkpoint.
+- **Google vision API** : Wordt gebruikt om afbeelding van bezochte checkpoint te vergelijken met de google vision api databank.- 
+- **React-native Modal** : Pop ups
+- **Auth0**: Authenticatie server.
+- **React-native Maps** : 
 
 ### Code en Instelling:
 
 - Auth0 domain  en server link (of localhost) wordt hier gegeven. <br />
 \CityToGo app\src\config.js
-- Aantal quizes per afstand wordt hier bepaalt op kaart getRandomQuizes() <br />
+- Aantal quizes per afstand wordt hier bepaalt op kaart **getRandomQuizes()** <br />
 \CityToGo app\src\screens\Home.js
-- Gebruikers kunnen op een bepaalde afstand (in meter)van Quizes, AR quizes kunnen triggeren door op  te tikken. Het afstand wordt hier bepaalt getQuizpopup()  <br />
+- Gebruikers kunnen op een bepaalde afstand (in meter)van Quizes, AR quizes kunnen triggeren door op  te tikken. Het afstand wordt hier bepaalt **getQuizpopup()**  <br />
 \CityToGo app\src\screens\Home.js
-- Gebruikers kunnen op een bepaalde afstand(in meter) van Checkpoint de Camera kunnen triggeren door op checkpoint marker te tikken. Het afstand wordt hier bepaalt goToCameraRecognition()  <br />
+- Gebruikers kunnen op een bepaalde afstand(in meter) van Checkpoint de Camera kunnen triggeren door op checkpoint marker te tikken. Het afstand wordt hier bepaalt **goToCameraRecognition()**  <br />
 \CityToGo app\src\screens\Maps.js
 
 #### Developers
