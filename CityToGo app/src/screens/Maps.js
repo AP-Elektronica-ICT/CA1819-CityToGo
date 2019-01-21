@@ -81,18 +81,6 @@ class Maps extends Component {
                     </MapView.Marker>
                 ))
             )
-        // return (
-        //     this.props.getRandom.map(marker => (
-        //         <MapView.Marker
-        //             key={marker.latitude}
-        //             coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-        //             //title={"Quiz"}
-        //             image={require('../assets/icons/quiz.png')}
-        //             // description={"description"}
-        //             onPress={() => this.props.Quiz2(marker.latitude, marker.longitude)} >
-        //         </MapView.Marker>
-        //     ))
-        // )
 
     }
 
@@ -151,16 +139,6 @@ class Maps extends Component {
                         </View>
                     </Marker>
 
-                    {/* {this.props.getRandom.map(marker => (
-                        <MapView.Marker
-                            key={marker.latitude}
-                            coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-                            //title={"Quiz"}
-                           // image={require('../assets/icons/quiz.png')}  
-                            onPress={() => this.props.Quiz2(marker.latitude, marker.longitude)} >
-                            <View><Image source={require('../assets/icons/quiz.png')} style={{ width: 40, height: 40}}/></View>
-                        </MapView.Marker>
-                    ))} */}
 
                     {this.renderCheckpoint()}
 
