@@ -61,7 +61,7 @@ class Maps extends Component {
                     <MapView.Marker
                         coordinate={{ latitude: this.props.lat, longitude: this.props.long }}
                         onPress={this.goToCameraRecognition}
-                        // image={require('../assets/icons/checkpoint.png')}
+                        image={require('../assets/icons/checkpoint.png')}
                         >
                         {/* <View>
                             <Image source={{ uri: `${this.props.CheckpointImage}` }} style={styles.checkpoint} />
