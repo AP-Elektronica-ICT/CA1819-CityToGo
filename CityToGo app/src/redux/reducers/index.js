@@ -7,6 +7,7 @@ import getUserSession from "./getUserSessionReducer";
 import postUserSession from "./postUserSessionReducer";
 import putUserSession from './putUserSubSessionReducer'
 import quiz from './quizReducer'
+import poly from "./polyReducer";
 
 const reducers = combineReducers({
     monument,
@@ -15,7 +16,8 @@ const reducers = combineReducers({
     getUserSession,
     postUserSession,
     putUserSession,
-    quiz
+    quiz,
+    poly
 })
 
 export default reducers;

@@ -9,6 +9,7 @@ import Maps from './Maps'
 import LearnMore from './LearnMore'
 import ListSubSessions from "./ListSubSessions";
 import ARscreen from './ARscreen'
+import QuizAR from "../components/QuizAR";
 
 
 const Root = createStackNavigator(
@@ -61,6 +62,8 @@ const Root = createStackNavigator(
                 header: null
             }
         }
+        
+
     },
     {
         initialRouteName: "Login" // show the login screen by default

@@ -36,7 +36,10 @@ class Camera extends Component {
     takeAction() {
         const { navigate } = this.props.navigation;
 
-        navigate('Home')
+        if (this.state.isFound)
+            navigate('ARclass', { ARSceneName: 'ARPortal' })
+
+        // navigate('Home')
 
     }
 
@@ -81,7 +84,10 @@ class Camera extends Component {
                     ref={ref => { this.CameraModal = ref; }}
                     isFound={isFound}
                     modalVisible={this.state.modalVisible}
-                    onPress={() => this.takeAction()}
+                    onPress={() => {
+                        this.setState({ modalVisible: false })
+                        this.takeAction()
+                    }}
                     onPressYes={() => this.setState({ modalVisible: false })}
                 />
                 <RNCamera

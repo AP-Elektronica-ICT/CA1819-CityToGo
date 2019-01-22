@@ -20,12 +20,17 @@ import {
   ViroARCamera,
   ViroScene,
   ViroConstants,
-  ViroButton
+  ViroButton,
+  ViroSpinner
 } from 'react-viro';
 
 import { getQuiz } from "../redux/actions/quizAction";
 import { monument } from '../redux/actions/monumentAction'
 import { connect } from "react-redux";
+
+import emptyAR from "./emptyAR";
+import ExplorerAR from "./ExplorerAR";
+
 
 var random;
 
@@ -41,19 +46,21 @@ class QuizAR extends Component {
       given_answer: "",
       category: "",
       category_is_selected: false,
+      showQuestion: false
     }
 
   }
 
-  componentDidMount(){
-    this.props.getQuiz('Politics');
+  componentDidMount() {
+
   }
 
   generateRandomint(min, max) {
     return Math.random() * (max - min) + min;
   }
 
-  QuizCategory = async (category) => {
+
+  QuizCategory = async () => {
     fetch(`http://${Config.MY_IP_ADRES}:3000/api/QuizCategory`, {
       method: 'POST',
       headers: {
@@ -61,11 +68,10 @@ class QuizAR extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        category: category,
+        category: this.state.category,
 
       })
     }).then((response) => response.json()).then((data) => {
-      console.log(data)
       random = this.generateRandomint(1, 9);
       this.setState({
         question: data[parseInt(random)].question,
@@ -81,20 +87,63 @@ class QuizAR extends Component {
     this.QuizCategory();
   }
 
-  checkAnswer() {
-    if (this.state.given_answer == this.state.answer) {
+  checkAnswer(answer) {
+    //  const { navigate } = this.props.navigation;
+    // const { navigate } = this.props.navigation;
+    console.log('correct anwer is: ' + this.state.answer)
+    if (answer == this.state.answer) {
       console.log("Correct Answer bro !")
-      this.setState({ category_is_selected: false, modalVisible: false })
+      this.setState({
+        question: 'Correct!'
+      })
+      // this.setState({ category_is_selected: false, modalVisible: false })
+      setInterval(() => {
+        this.setState({showQuestion: false})
+        this.props.sceneNavigator.jump('ExplorerAR',{ scene: ExplorerAR });
+      }, 3000);
     }
     else {
       console.log("Wrong answer bro !")
-      this.setState({ category_is_selected: false, modalVisible: false })
+      this.setState({
+        question: 'Wrong'
+      })
+      // this.setState({ category_is_selected: false, modalVisible: false })
+      setInterval(() => {
+        this.setState({showQuestion: false})
+        this.props.sceneNavigator.jump('ExplorerAR',{ scene: emptyAR });
+        
+      }, 3000);
+    }
+  }
+
+  getQuestions(quizzes) {
+    let length = quizzes.length
+    random = this.generateRandomint(1, length);
+    this.setState({
+      question: quizzes[parseInt(random)].question,
+      answer: quizzes[parseInt(random)].correct_answer
+    })
+  }
+
+  getQuiz(categoryNummer, numOfquistions) {
+    this.props.getQuiz(categoryNummer, numOfquistions)
+    console.log(this.props.quiz)
+
+  }
+
+  componentDidUpdate(prevProps) {
+    const { fetched, quiz } = this.props.quiz
+    if (prevProps.quiz.fetched !== fetched) {
+      this.getQuestions(quiz)
+      this.setState({
+        showQuestion: fetched
+      })
     }
   }
 
 
 
-  onHoveringCategory = (isHovering, categoryName) => {
+  _onHoveringCategory = (isHovering, categoryName) => {
 
     if (isHovering) {
 
@@ -111,6 +160,37 @@ class QuizAR extends Component {
             isClickableGeography: true
           });
           break;
+        case 'HISTORY':
+          this.setState({
+            opacityHistory: 0.5,
+            isClickableHistory: true
+          });
+          break;
+        case 'SCIENCE&COMPUTER':
+          this.setState({
+            opacityScienceCumputer: 0.5,
+            isClickableScienceCumputer: true
+          });
+          break;
+        case 'SPORTS':
+          this.setState({
+            opacitySports: 0.5,
+            isClickableSports: true
+          });
+          break;
+        case 'TRUE':
+          this.setState({
+            opacityTrue: 0.5,
+            isClickableTrue: true
+          });
+          break;
+        case 'FALSE':
+          this.setState({
+            opacityFalse: 0.5,
+            isClickableFalse: true
+          });
+          break;
+
 
         default:
           break;
@@ -124,13 +204,39 @@ class QuizAR extends Component {
         opacityPolitics: 1,
         isClickablePolitics: false,
         opacityGeography: 1,
-        isClickableGeography: false
+        isClickableGeography: false,
+        opacityHistory: 1,
+        isClickableHistory: false,
+        opacityScienceCumputer: 1,
+        isClickableScienceCumputer: false,
+        opacitySports: 1,
+        isClickableSports: false,
+        opacityTrue: 1,
+        isClickableTrue: false,
+        opacityFalse: 1,
+        isClickableFalse: false
+
+
       });
   }
 
   render() {
+    const { fetched, fetching } = this.props.quiz
 
-    if (this.state.category_is_selected) {
+
+
+    if (fetching)
+      return (
+        <ViroARScene >
+          <ViroSpinner
+            type='light'
+            position={[0, 0.5, -4]}
+          />
+        </ViroARScene>
+      )
+
+
+    if (this.state.showQuestion) {
       return (
 
         <ViroARScene >
@@ -145,28 +251,36 @@ class QuizAR extends Component {
           />
 
           <ViroImage
+            onClick={() => {
+              if (this.state.isClickableTrue)
+                this.checkAnswer('True')
+            }}
             height={1}
             width={1}
             position={[-1.2, -0.5, -4]}
             source={require("../assets/quiz_category_icons/true_icon.png")}
+            onHover={(isHovering) => this._onHoveringCategory(isHovering, 'TRUE')}
+            opacity={this.state.opacityTrue}
           />
 
           <ViroImage
+            onClick={() => {
+              if (this.state.isClickableFalse)
+                this.checkAnswer('False')
+            }}
             height={1}
             width={1}
             position={[1.2, -0.5, -4]}
             source={require("../assets/quiz_category_icons/false_icon.png")}
+            onHover={(isHovering) => this._onHoveringCategory(isHovering, 'FALSE')}
+            opacity={this.state.opacityFalse}
           />
 
         </ViroARScene>
       );
     }
     else {
-
-
       return (
-
-
         <ViroARScene >
           {/* <ViroAmbientLight color={"#aaaaaa"} />
           <ViroSpotLight innerAngle={5} outerAngle={90} direction={[0, -1, -.2]} position={[0, 3, 1]} color="#ffffff" castsShadow={true} /> */}
@@ -178,17 +292,12 @@ class QuizAR extends Component {
             position={[0, 1, -4]}
             style={styles.textStyle}
           />
-
-
-
           <ViroImage
             onClick={() => {
               if (this.state.isClickablePolitics)
-                console.log('politic clicked')
-              this.setState({ category: '24' })
-              this.confirmCategory();
+                this.getQuiz(24, 17)
             }}
-            onHover={(isHovering) => this.onHoveringCategory(isHovering, 'POLITICS')}
+            onHover={(isHovering) => this._onHoveringCategory(isHovering, 'POLITICS')}
             height={1}
             width={1}
             position={[-2.4, 0, -4]}
@@ -205,7 +314,11 @@ class QuizAR extends Component {
           />
 
           <ViroImage
-            onHover={(isHovering) => this.onHoveringCategory(isHovering, 'GEOGRAPHY')}
+            onClick={() => {
+              if (this.state.isClickableGeography)
+                this.getQuiz(22, 37)
+            }}
+            onHover={(isHovering) => this._onHoveringCategory(isHovering, 'GEOGRAPHY')}
             height={1}
             width={1}
             position={[-1.2, 0, -4]}
@@ -222,10 +335,16 @@ class QuizAR extends Component {
           />
 
           <ViroImage
+            onClick={() => {
+              if (this.state.isClickableHistory)
+                this.getQuiz(23, 39)
+            }}
+            onHover={(isHovering) => this._onHoveringCategory(isHovering, 'HISTORY')}
             height={1}
             width={1}
             position={[0, 0, -4]}
             source={require("../assets/quiz_category_icons/history_icon.png")}
+            opacity={this.state.opacityHistory}
           />
           <ViroText
             text='History'
@@ -236,10 +355,16 @@ class QuizAR extends Component {
           />
 
           <ViroImage
+            onClick={() => {
+              if (this.state.isClickableScienceCumputer)
+                this.getQuiz(18, 32)
+            }}
+            onHover={(isHovering) => this._onHoveringCategory(isHovering, 'SCIENCE&COMPUTER')}
             height={1}
             width={1}
             position={[1.2, 0, -4]}
             source={require("../assets/quiz_category_icons/science_computer_icon.png")}
+            opacity={this.state.opacityScienceCumputer}
           />
 
           <ViroText
@@ -251,10 +376,16 @@ class QuizAR extends Component {
           />
 
           <ViroImage
+            onClick={() => {
+              if (this.state.isClickableSports)
+                this.getQuiz(21, 11)
+            }}
+            onHover={(isHovering) => this._onHoveringCategory(isHovering, 'SPORTS')}
             height={1}
             width={1}
             position={[2.4, 0, -4]}
             source={require("../assets/quiz_category_icons/sports_icon.png")}
+            opacity={this.state.opacitySports}
           />
           <ViroText
             text='Sports'
@@ -298,5 +429,6 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  getQuiz
+  getQuiz,
+  monument
 })(QuizAR)

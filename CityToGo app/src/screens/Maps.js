@@ -47,7 +47,7 @@ class Maps extends Component {
     //Trigger Camera
     goToCameraRecognition = () => {
         console.log("Map afstand " + this.props.triggerCamera)
-        if (this.props.triggerCamera < 1000) {
+        if (this.props.triggerCamera < 200) {
             this.props.navigate('Camera')
         }
     }

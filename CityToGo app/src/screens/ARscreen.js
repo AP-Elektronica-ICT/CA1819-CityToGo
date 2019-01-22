@@ -7,6 +7,8 @@ import {
 
 import QuizAR from "../components/QuizAR";
 import PortalAR from "../components/PortalAR";
+import ExplorerAR from "../components/ExplorerAR";
+import emptyAR from '../components/emptyAR'
 
 import {
     ViroARSceneNavigator,
@@ -16,13 +18,15 @@ var apiKey = "29D8811D-4B5A-4BE1-B17F-82EDDDCF3A73";
 
 var arScenes = {
     'ARQuiz': QuizAR,
-    'ARPortal': PortalAR
+    'ARPortal': PortalAR,
+    'ExplorerAR': ExplorerAR,
+    'emptyAR': emptyAR
 }
 
 class ARscreen extends Component {
     render() {
-       // const ARSceneName = this.props.navigation.getParam('ARSceneName');
-       const ARSceneName = 'ARQuiz'
+        const ARSceneName = this.props.navigation.getParam('ARSceneName');
+        //const ARSceneName = 'ARPortal'
         switch (ARSceneName) {
             case 'ARQuiz':
                 return (
@@ -47,6 +51,24 @@ class ARscreen extends Component {
                     <ViroARSceneNavigator
                         initialScene={{
                             scene: arScenes['ARPortal'],
+                        }}
+                        apiKey={apiKey} />
+                )
+            case 'ExplorerAR':
+
+                return (
+                    <ViroARSceneNavigator
+                        initialScene={{
+                            scene: arScenes['ExplorerAR'],
+                        }}
+                        apiKey={apiKey} />
+                )
+            case 'emptyAR':
+
+                return (
+                    <ViroARSceneNavigator
+                        initialScene={{
+                            scene: arScenes['emptyAR'],
                         }}
                         apiKey={apiKey} />
                 )
