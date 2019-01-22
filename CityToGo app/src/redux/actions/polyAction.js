@@ -7,7 +7,7 @@ export function getPoly() {
 
     return {
         type: FETCHING_POLY,
-        payload: axios.get(`http://${Config.MY_IP_ADRES}:3000/api/v1/poly`)
+        payload: axios.get(`${Config.MY_IP_ADRES}/api/v1/poly`)
         .then(res => res.data)
     }
 }

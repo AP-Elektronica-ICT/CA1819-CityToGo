@@ -10,7 +10,7 @@ import axios from "axios";
 export function getUserSession(userID) {
     return {
         type: FETCHING_GET_USER_SESSION,
-        payload: axios.get(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/find/${userID}`)
+        payload: axios.get(`${Config.MY_IP_ADRES}/api/v1/userSession/find/${userID}`)
             .then((res) => res.data)
     }
 }
@@ -29,7 +29,7 @@ export function postUserSession(userId, isRunning, startTime, stopTime, isFound,
 
     return {
         type: FETCHING_POST_USER_SESSION,
-        payload: axios.post(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/create`, body, {
+        payload: axios.post(`${Config.MY_IP_ADRES}/api/v1/userSession/create`, body, {
             headers: {
                 // authorization: 'Bearer ' + global.token,
                 // Accept: 'application/json',
@@ -46,7 +46,7 @@ export function createUserSubsession(isRunning, sessionID) {
 
     return {
         type: FETCHING_PUT_USER_SUBSESSION,
-        payload: axios.put(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/update/${sessionID}`, body, {
+        payload: axios.put(`${Config.MY_IP_ADRES}/api/v1/userSession/update/${sessionID}`, body, {
             headers: {
                 authorization: 'Bearer ' + global.token,
                 Accept: 'application/json',

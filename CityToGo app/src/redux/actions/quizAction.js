@@ -10,7 +10,7 @@ export function getQuiz(category, number) {
 
     return {
         type: FETCHING_QUIZ,
-        payload: axios.post(`http://${Config.MY_IP_ADRES}:3000/api/QuizCategory`, body, {
+        payload: axios.post(`${Config.MY_IP_ADRES}/api/QuizCategory`, body, {
             headers: {
                 authorization: 'Bearer ' + global.token,
                 Accept: 'application/json',

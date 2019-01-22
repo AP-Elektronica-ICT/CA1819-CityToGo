@@ -24,7 +24,7 @@ class SubSessions extends Component {
         let userId = userProfielData.sub
         console.log(userId);
 
-        fetch(`http://${Config.MY_IP_ADRES}:3000/api/v1/userSession/find/${userId}`)
+        fetch(`${Config.MY_IP_ADRES}/api/v1/userSession/find/${userId}`)
             .then((response) => response.json())
             .then((responseJson) => {
                 console.log(responseJson);

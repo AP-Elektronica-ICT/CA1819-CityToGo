@@ -14,7 +14,6 @@ import { connect } from "react-redux";
 const LATITUDE_DELTA = 0.003;
 const LONGITUDE_DELTA = 0.003;
 
-
 class Maps extends Component {
 
     componentWillMount() {
@@ -43,7 +42,6 @@ class Maps extends Component {
         })
     }
 
-
     //Trigger Camera
     goToCameraRecognition = () => {
         console.log("Map afstand " + this.props.triggerCamera)
@@ -52,17 +50,15 @@ class Maps extends Component {
         }
     }
 
-
-
-
     renderCheckpoint() {
         if (this.props.isCurrentSessionStarted)
             return (
                 <View>
                     <MapView.Marker
                         coordinate={{ latitude: this.props.lat, longitude: this.props.long }}
+                        onPress={this.goToCameraRecognition}
                         image={require('../assets/icons/checkpoint.png')}
-                        onPress={this.goToCameraRecognition}>
+                        >
                     </MapView.Marker>
                 </View>
             )
@@ -71,13 +67,12 @@ class Maps extends Component {
     renderQuizzes() {
         if (this.props.isCurrentSessionStarted)
             return (
+
                 this.props.getRandom.map(marker => (
                     <MapView.Marker
                         key={marker.latitude}
                         coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-                        //title={"Quiz"}
-                        image={require('../assets/icons/quiz.png')}
-                        // description={"description"}
+                        image={require('../assets/icons/quiz.png')}  
                         onPress={() => this.props.Quiz2(marker.latitude, marker.longitude)} >
                     </MapView.Marker>
                 ))
@@ -126,7 +121,7 @@ class Maps extends Component {
                     //pitchEnabled={false}
                     //zoomEnabled={false}
                     //rotateEnabled={false}
-                    //customMapStyle={mapStyle}
+                    customMapStyle={mapStyle}
                     ref={ref => { this.map = ref; }}>
 
 
@@ -198,6 +193,13 @@ const styles = StyleSheet.create({
         width: 28,
         height: 28,
         borderRadius: 63,
+        borderWidth: 2,
+        borderColor: "#78849E"
+    },
+    checkpoint: {
+        width: 50,
+        height: 50,
+        borderRadius: 20,
         borderWidth: 2,
         borderColor: "#78849E"
     }

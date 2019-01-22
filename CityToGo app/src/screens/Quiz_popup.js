@@ -72,6 +72,7 @@ class Quiz_popUp extends Component {
     if(this.state.given_answer==this.state.answer){
     console.log("Correct Answer bro !")
     this.setState({category_is_selected:false,modalVisible:false})
+
   }
   else{
     console.log("Wrong answer bro !")
