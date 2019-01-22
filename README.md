@@ -1,6 +1,6 @@
 # CityToGo
 
-CityToGo is een ARG (Alternate Reality Game). Het is een leuke interactieve spel om nieuwe steden te ontdekken. CItyToGo is de eerste city game waarin de nieuwe technologieën zoals AR(Augmented Reality),Image recagnation, realtime maps enz geïmplementeerd zijn. De interactie tussen gebruiker en het spel maakt CityToGo bijzonder speciaal maar niet alleen dat, het bouwt ook je algemene kennis op door vragen te stellen over verschillende thema's zoals kunst,geschiedenis,sport,techonolgie enz. 
+CityToGo is een ARG (Alternate Reality Game). Het is een leuke interactieve spel om nieuwe steden te ontdekken. CItyToGo is de eerste city game waarin de nieuwe technologieën zoals AR(Augmented Reality),Image recognition, realtime maps enz geïmplementeerd zijn. De interactie tussen gebruiker en het spel maakt CityToGo bijzonder speciaal maar niet alleen dat, het bouwt ook je algemene kennis op door vragen te stellen over verschillende thema's zoals kunst, geschiedenis, sport, techonolgie enz. 
 
 ## Spelregel
 
