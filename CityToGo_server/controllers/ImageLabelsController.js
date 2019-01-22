@@ -1,15 +1,15 @@
 var image = require('./NextCheckpointController')
 
 var resultCameraImgLabels;
- 
 
- 
 
-exports.getImageLabels =function(req,res){
+
+
+exports.getImageLabels = function (req, res) {
 
     var imgBase64 = req.body.image
     let resultMatch = 0
-    
+
     image.getVisionImgLabels(imgBase64)
         .then(res => res.json())
         .then(json => {
@@ -17,6 +17,8 @@ exports.getImageLabels =function(req,res){
             console.log(image.i)
             console.log(image.resultBingImgLabels)
             image.resultBingImgLabels.forEach((e1) => resultCameraImgLabels.forEach((e2) => {
+                console.log('resultBingImgLabels ' + e1.description)
+                console.log('resultCameraImgLabels ' + e2.description)
                 if (e1.description == e2.description)
                     resultMatch += 1
             }))

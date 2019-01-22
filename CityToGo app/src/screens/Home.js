@@ -24,6 +24,8 @@ import { Button_White } from "./../common/Button_White"
 import { CustomShortButton } from "../common/CustomShortButton"
 import { ToastAndroid} from 'react-native'
 
+import { PermissionsAndroid } from 'react-native';
+
 //#endregion
 const LATITUDE = 0;
 const LONGITUDE = 0;
@@ -102,17 +104,31 @@ class Home extends Component {
 
     }
 
-    componentWillMount() {
-        navigator.geolocation.getCurrentPosition(
-            error => alert(error.message),
-            {
-                enableHighAccuracy: true,
-                timeout: 20000,
-                maximumAge: 1000
+    requestLocationPermission = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                {
+                    'title': 'CityToGo',
+                    'message': 'CityToGo needs access to your location ' +
+                        'so you can explore your city.'
+                }
+            )
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log("You can use the location")
+                this.props.location();
+            } else {
+                console.log("Location permission denied")
             }
-        );
+        } catch (err) {
+            console.warn(err)
+        }
+    }
 
-        this.props.location()
+    componentWillMount() {
+
+        this.requestLocationPermission()
+
     }
 
 
@@ -311,6 +327,7 @@ class Home extends Component {
 
     startSession() {
         const { monument } = this.props.monumentState;
+        console.log('START')
 
         let userProfielData = this.props.navigation.getParam("userData");
         let userId = userProfielData.sub
@@ -354,7 +371,7 @@ class Home extends Component {
                         children={require('./../assets/icons/Play.png')}
                         onPress={() => {
                             this.getMonument()
-                            this.setState({modalStartButtonVisible: true})
+                            this.setState({ modalStartButtonVisible: true })
                             this.refs.refMonumentModal.setModalVisible(true);
                         }} />
                 </View>
@@ -368,8 +385,9 @@ class Home extends Component {
                         widthIcon={30}
                         children={require('./../assets/icons/Museum.png')}
                         onPress={() => {
-                            this.setState({modalStartButtonVisible: false})
-                            this.refs.refMonumentModal.setModalVisible(true)}
+                            this.setState({ modalStartButtonVisible: false })
+                            this.refs.refMonumentModal.setModalVisible(true)
+                        }
                         }
                     />
 
@@ -378,9 +396,9 @@ class Home extends Component {
                         heightIcon={34}
                         widthIcon={34}
                         children={require('./../assets/icons/stop.png')}
-                        onPress={() => { 
-                            
-                            this.refs.refStopModal.setModalVisible(true) 
+                        onPress={() => {
+
+                            this.refs.refStopModal.setModalVisible(true)
                         }}
                     />
                 </View>
@@ -423,6 +441,7 @@ class Home extends Component {
                     monumentVisibility={this.state.showMonument}
                     profilePic={userProfielData.picture}
                     CheckpointImage={this.state.monumentImageUrl}
+                    isCurrentSessionStarted ={this.state.isCurrentSessionStarted}
                 />
 
 
