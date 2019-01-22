@@ -1,4 +1,9 @@
-import { FETCHING_MONUMENTS, _FULFILLED, _REJECTED, _PENDING } from "../actions/types";
+import {
+    FETCHING_MONUMENTS,
+    _FULFILLED,
+    _REJECTED,
+    _PENDING,
+} from "../actions/types";
 
 const initialState = {
     fetching: false,
@@ -12,6 +17,7 @@ const monument = (state = initialState, action) => {
         case FETCHING_MONUMENTS + _PENDING:
             state = {
                 ...state,
+                fetched: false,
                 fetching: true
             }
             break;
@@ -33,7 +39,8 @@ const monument = (state = initialState, action) => {
             }
             break;
 
-            
+
+
     }
     return state;
 }

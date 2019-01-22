@@ -10,8 +10,6 @@ const CustomLargeButton = ({ onPress, children, color }) => {
                 alignSelf: 'stretch',
                 backgroundColor: color,
                 borderRadius: 15,
-                borderWidth: 1,
-                borderColor: 'color',
                 marginLeft: 8,
                 marginRight: 8,
                 marginTop: 10

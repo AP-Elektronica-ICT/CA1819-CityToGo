@@ -22,6 +22,9 @@ import { connect } from "react-redux";
 import { CardSection } from "./../common"
 import { Button_White } from "./../common/Button_White"
 import { CustomShortButton } from "../common/CustomShortButton"
+import { ToastAndroid} from 'react-native'
+
+import { PermissionsAndroid } from 'react-native';
 
 //#endregion
 const LATITUDE = 0;
@@ -32,6 +35,7 @@ var center;
 var distanceToCheckpoint;
 var distanceToQuiz;
 var stral;
+let  foundedQuizes=[7.222565,8.26688];
 
 class Home extends Component {
     //#region Constructor
@@ -60,7 +64,6 @@ class Home extends Component {
             canShowCheckpointPhoto: false,
             isCurrentSessionStarted: false,
             modalStartButtonVisible: false,
-
             markers: [{
                 coordinate: { latitude: 45.013, longitude: -122.6749817 },
                 image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Berchem_Basiliek3.JPG/220px-Berchem_Basiliek3.JPG",
@@ -101,17 +104,31 @@ class Home extends Component {
 
     }
 
-    componentWillMount() {
-        navigator.geolocation.getCurrentPosition(
-            error => alert(error.message),
-            {
-                enableHighAccuracy: true,
-                timeout: 20000,
-                maximumAge: 1000
+    requestLocationPermission = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                {
+                    'title': 'CityToGo',
+                    'message': 'CityToGo needs access to your location ' +
+                        'so you can explore your city.'
+                }
+            )
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log("You can use the location")
+                this.props.location();
+            } else {
+                console.log("Location permission denied")
             }
-        );
+        } catch (err) {
+            console.warn(err)
+        }
+    }
 
-        this.props.location()
+    componentWillMount() {
+
+        this.requestLocationPermission()
+
     }
 
 
@@ -172,12 +189,25 @@ class Home extends Component {
         distanceToQuiz = randomLocation.distance(currentLocation, { latitude: parseFloat(lat), longitude: parseFloat(long) })
         console.log("Distance to this quiz is " + parseInt(distanceToQuiz) + " meters")
         if (parseInt(distanceToQuiz) < 300) {
-            console.log("Quiz unlocked")
-            this.setState({ quiz_visible: true });
-            this.refs.quizchild.setModalVisible(this.state.quiz_visible);
+            
+            quiz=false;
+            console.log("new array "+ foundedQuizes);
+            for (let i = 0; i < foundedQuizes.length; i++) {
+                if(foundedQuizes[i]==lat){
+                    quiz=true;
+                    console.log("founded")
+                    ToastAndroid.show("THIS QUIZ IS LOCKED !", ToastAndroid.LONG)
+                }
+                
+            };
+            if(quiz==false){
+                console.log("Quiz unlocked")
+                this.setState({ quiz_visible: true });
+                this.refs.quizchild.setModalVisible(true);       
+                foundedQuizes.push(lat);
+            }
         }
     }
-
     ShowMonument = () => {
         this.getVisitedMonuments();
         this.setState({ showMonument: true })
@@ -297,6 +327,7 @@ class Home extends Component {
 
     startSession() {
         const { monument } = this.props.monumentState;
+        console.log('START')
 
         let userProfielData = this.props.navigation.getParam("userData");
         let userId = userProfielData.sub
@@ -340,7 +371,7 @@ class Home extends Component {
                         children={require('./../assets/icons/Play.png')}
                         onPress={() => {
                             this.getMonument()
-                            this.setState({modalStartButtonVisible: true})
+                            this.setState({ modalStartButtonVisible: true })
                             this.refs.refMonumentModal.setModalVisible(true);
                         }} />
                 </View>
@@ -354,8 +385,9 @@ class Home extends Component {
                         widthIcon={30}
                         children={require('./../assets/icons/Museum.png')}
                         onPress={() => {
-                            this.setState({modalStartButtonVisible: false})
-                            this.refs.refMonumentModal.setModalVisible(true)}
+                            this.setState({ modalStartButtonVisible: false })
+                            this.refs.refMonumentModal.setModalVisible(true)
+                        }
                         }
                     />
 
@@ -364,9 +396,9 @@ class Home extends Component {
                         heightIcon={34}
                         widthIcon={34}
                         children={require('./../assets/icons/stop.png')}
-                        onPress={() => { 
-                            
-                            this.refs.refStopModal.setModalVisible(true) 
+                        onPress={() => {
+
+                            this.refs.refStopModal.setModalVisible(true)
                         }}
                     />
                 </View>
@@ -408,6 +440,8 @@ class Home extends Component {
                     getmarker={this.state.markers}
                     monumentVisibility={this.state.showMonument}
                     profilePic={userProfielData.picture}
+                    CheckpointImage={this.state.monumentImageUrl}
+                    isCurrentSessionStarted ={this.state.isCurrentSessionStarted}
                 />
 
 
@@ -445,6 +479,7 @@ class Home extends Component {
                 <Quiz_popUp ref='quizchild'
                     imageUri={this.state.data}
                     data={this.state.Name}
+                    quizArr={this.state.randomQuizes}
                 />
                 <View style={styles.buttonsContainer}>
 
