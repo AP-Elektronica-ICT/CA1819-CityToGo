@@ -365,6 +365,15 @@ class Home extends Component {
         this.props.monument(latitude, longitude);
     }
 
+    skipSession(){
+
+        stopSession();
+        getMonument();
+        this.refs.refMonumentModal.setModalVisible(true);
+        CreateSubSession();
+
+    }
+
 
 
 

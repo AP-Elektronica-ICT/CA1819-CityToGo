@@ -1,6 +1,6 @@
 # CityToGo
 
-CityToGo is een ARG (Alternate Reality Game). Het is een leuke interactieve spel om nieuwe steden te ontdekken. CItyToGo is de eerste city game waarin de nieuwe technologieën zoals AR(Augmented Reality),Image recagnation, realtime maps enz geïmplementeerd zijn. De interactie tussen gebruiker en het spel maakt CityToGo bijzonder speciaal maar niet alleen dat, het bouwt ook je algemene kennis op door vragen te stellen over verschillende thema's zoals kunst,geschiedenis,sport,techonolgie enz. 
+CityToGo is een ARG (Alternate Reality Game). Het is een leuke interactieve spel om nieuwe steden te ontdekken. CItyToGo is de eerste city game waarin de nieuwe technologieën zoals AR(Augmented Reality),Image recognition, realtime maps enz geïmplementeerd zijn. De interactie tussen gebruiker en het spel maakt CityToGo bijzonder speciaal maar niet alleen dat, het bouwt ook je algemene kennis op door vragen te stellen over verschillende thema's zoals kunst, geschiedenis, sport, techonolgie enz. 
 
 ## Spelregel
 
@@ -30,6 +30,10 @@ Front-end is ontwikkelt in cross-platform framework, React Native. Om data effic
 \CityToGo app\src\screens\Home.js
 - Gebruikers kunnen op een bepaalde afstand(in meter) van Checkpoint de Camera kunnen triggeren door op checkpoint marker te tikken. Het afstand wordt hier bepaalt **goToCameraRecognition()**  <br />
 \CityToGo app\src\screens\Maps.js
+
+## Back-end
+De backend draait op een nodejs server, we maken gebruik van het express framework. De backend speelt een zeer belangerijke rol in heel onze applicatie omdat daar alle api calls worden doorgevoerd, alsook worden alle berekeningen in de backend uitgevoerd.
+De server.js file bevat minimaal aan code, want we maken gebruik van controllers en routes. Onze server bestaat uit vier mappen in de eerste map routes bevindt zich een file met alle api routes dit zijn de routes die vanuit de app worden gecalled. De tweede maps is models hierin bevindt zich een file die ervoor zorgt dat de data die vanuit de app wordt gestuurd in een bepaald model wordt gezet, deze model wordt gebruikt voor het lezen en schrijven van en naar de mongodb database. En de laatste map is de controllers map, hierin zitten vier controllers die elk op hun beurt hun eigen logica bevatten. Hierin worden de api calls doorgevoerd naar externe api's, alsook worden alle berekeningen uitgevoerd, foto's omgezet naar base64 enz. De server bevat ook nog een map maar deze wordt niet in github geplaatst, deze map bevat alle api keys van de belangrijkste api die we gebruiken. De google api, deze wordt gebruikt voor imaga recognition, bing api deze api geeft een afbeelding weer voor een bepaalde zoekterm. 
 
 #### Developers
 Mohammed Laghzaoui<br />

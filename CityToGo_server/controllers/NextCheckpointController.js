@@ -28,6 +28,23 @@ let response_handler = function (response) {
         else{
             
         shortest.properties.imageUrl = obj.value[0].contentUrl;
+        console.log("shortest  wordt gelogd");
+        console.log(shortest.properties.OBJECTID);
+        let index =0;
+        for(let z of arr)
+        {   
+            if(z.properties.OBJECTID ==shortest.properties.OBJECTID)
+            {
+                arr.splice(index,1);
+
+            }
+
+            index++;
+        }
+
+
+        //arr.splice()
+       
         sqr.json(shortest);
         
         
