@@ -29,7 +29,7 @@ import { PermissionsAndroid } from 'react-native';
 //#endregion
 const LATITUDE = 0;
 const LONGITUDE = 0;
-var currentLocation;
+//var currentLocation;
 const R = 500;
 var center;
 var distanceToCheckpoint;
@@ -187,9 +187,15 @@ class Home extends Component {
 
     getQuizpopup = async (lat, long) => {
         const { navigate } = this.props.navigation;
+  
+        const { latitude, longitude } = this.props.currentLocationState.coords;
+
+        currentLocation = { latitude: latitude, longitude: longitude }
+
+     
         distanceToQuiz = randomLocation.distance(currentLocation, { latitude: parseFloat(lat), longitude: parseFloat(long) })
         console.log("Distance to this quiz is " + parseInt(distanceToQuiz) + " meters")
-        if (parseInt(distanceToQuiz) < 300) {
+        if (parseInt(distanceToQuiz) < 100) {
 
             quiz = false;
             console.log("new array " + foundedQuizes);
@@ -197,7 +203,7 @@ class Home extends Component {
                 if (foundedQuizes[i] == lat) {
                     quiz = true;
                     console.log("founded")
-                    ToastAndroid.show("THIS QUIZ IS LOCKED !", ToastAndroid.LONG)
+                    ToastAndroid.show("THIS QUIZ IS LOCKED !",ToastAndroid.LONG)
                 }
 
             };
@@ -208,6 +214,10 @@ class Home extends Component {
                 navigate('ARclass', { ARSceneName: 'ARQuiz' })
                 foundedQuizes.push(lat);
             }
+        }
+        else{
+            ToastAndroid.show("Too far to unlock. Distance: "+ parseInt(distanceToQuiz)+"m",ToastAndroid.LONG)
+           
         }
     }
     ShowMonument = () => {

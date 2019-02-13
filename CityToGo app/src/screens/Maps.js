@@ -10,6 +10,7 @@ import Mycard from "./Cardcomponent"
 //Redux
 import { monument } from '../redux/actions/monumentAction'
 import { connect } from "react-redux";
+import { ToastAndroid } from 'react-native'
 
 const LATITUDE_DELTA = 0.003;
 const LONGITUDE_DELTA = 0.003;
@@ -45,8 +46,12 @@ class Maps extends Component {
     //Trigger Camera
     goToCameraRecognition = () => {
         console.log("Map afstand " + this.props.triggerCamera)
-        if (this.props.triggerCamera < 200) {
+        if (this.props.triggerCamera < 100) {
             this.props.navigate('Camera')
+        }
+        else {
+            ToastAndroid.show("Too far from the monument. Distance: " + this.props.triggerCamera + "m", ToastAndroid.LONG)
+
         }
     }
 
@@ -58,7 +63,7 @@ class Maps extends Component {
                         coordinate={{ latitude: this.props.lat, longitude: this.props.long }}
                         onPress={this.goToCameraRecognition}
                         image={require('../assets/icons/checkpoint.png')}
-                        >
+                    >
                     </MapView.Marker>
                 </View>
             )
@@ -72,7 +77,7 @@ class Maps extends Component {
                     <MapView.Marker
                         key={marker.latitude}
                         coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-                        image={require('../assets/icons/quiz.png')}  
+                        image={require('../assets/icons/quiz.png')}
                         onPress={() => this.props.Quiz2(marker.latitude, marker.longitude)} >
                     </MapView.Marker>
                 ))
@@ -117,9 +122,9 @@ class Maps extends Component {
                     showsMyLocationButton
                     followUserLocation
                     loadingEnabled
-                    //scrollEnabled={false}
-                    //pitchEnabled={false}
-                    //zoomEnabled={false}
+                    scrollEnabled={false}
+                    pitchEnabled={false}
+                    zoomEnabled={false}
                     //rotateEnabled={false}
                     customMapStyle={mapStyle}
                     ref={ref => { this.map = ref; }}>

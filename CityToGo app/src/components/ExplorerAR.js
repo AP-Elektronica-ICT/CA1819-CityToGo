@@ -40,9 +40,9 @@ class ExplorerAR extends Component {
         this._onInitialized = this._onInitialized.bind(this);
     }
 
-     componentDidMount() {
+    componentDidMount() {
         let random = this.generateRandomint(1, 20);
-     }
+    }
 
     generateRandomint(min, max) {
         return parseInt(Math.random() * (max - min) + min);
